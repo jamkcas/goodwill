@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20131209014730) do
 
   create_table "deeds", :force => true do |t|
     t.string   "category"
-    t.string   "type"
+    t.string   "deed_type"
     t.string   "title"
     t.text     "description"
     t.string   "deadline"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(:version => 20131209014730) do
     t.integer  "votable_id"
     t.string   "votable_type"
     t.integer  "user_id"
-    t.boolean  "type"
+    t.boolean  "vote_type"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end

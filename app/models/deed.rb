@@ -1,5 +1,5 @@
 class Deed < ActiveRecord::Base
-  attr_accessible :category, :contact, :contact_type, :deadline, :description, :location, :picture, :title, :type, :user_id
+  attr_accessible :category, :contact, :contact_type, :deadline, :description, :location, :picture, :title, :deed_type, :user_id
 
   belongs_to :user
   has_many :posts
@@ -8,7 +8,7 @@ class Deed < ActiveRecord::Base
   has_many :favorites
 
   validates :category, presence: true
-  validates :type, presence: true
+  validates :deed_type, presence: true
   validates :title, presence: true
   validates :description, presence: true
   validates :user_id, presence: true

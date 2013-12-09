@@ -2,7 +2,7 @@ class CreateDeeds < ActiveRecord::Migration
   def change
     create_table :deeds do |t|
       t.string :category
-      t.string :type
+      t.string :deed_type
       t.string :title
       t.text :description
       t.string :deadline

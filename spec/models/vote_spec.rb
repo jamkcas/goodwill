@@ -8,5 +8,5 @@ describe Vote do
   # Validation tests
   it {should validate_presence_of(:user_id)}
   it {should validate_presence_of(:votable_id)}
-  it {should validate_presence_of(:type)}
+  it {should validate_presence_of(:vote_type)}
 end
