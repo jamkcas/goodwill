@@ -3,8 +3,8 @@ class Deed < ActiveRecord::Base
 
   belongs_to :user
   has_many :posts
-  has_many :comments
-  has_many :votes
+  has_many :votes, as: :votable
+  has_many :comments, as: :commentable
   has_many :favorites
 
   validates :category, presence: true

@@ -14,14 +14,12 @@
 ActiveRecord::Schema.define(:version => 20131209014730) do
 
   create_table "comments", :force => true do |t|
+    t.integer  "commentable_id"
     t.integer  "user_id"
-    t.integer  "post_id"
-    t.integer  "deed_id"
-    t.integer  "comment_id"
-    t.string   "content"
-    t.string   "text"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "commentable_type"
+    t.text     "content"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "deeds", :force => true do |t|
@@ -69,11 +67,12 @@ ActiveRecord::Schema.define(:version => 20131209014730) do
   end
 
   create_table "votes", :force => true do |t|
+    t.integer  "votable_id"
+    t.string   "votable_type"
     t.integer  "user_id"
-    t.integer  "deed_id"
     t.boolean  "type"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
 end
