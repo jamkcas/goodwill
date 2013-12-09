@@ -1,0 +1,2 @@
+module GoodwillHelper
+end

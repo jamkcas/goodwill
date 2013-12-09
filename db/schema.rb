@@ -11,7 +11,52 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131208085556) do
+ActiveRecord::Schema.define(:version => 20131209014730) do
+
+  create_table "comments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "post_id"
+    t.integer  "deed_id"
+    t.integer  "comment_id"
+    t.string   "content"
+    t.string   "text"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "deeds", :force => true do |t|
+    t.string   "category"
+    t.string   "type"
+    t.string   "title"
+    t.text     "description"
+    t.string   "deadline"
+    t.string   "location"
+    t.string   "contact"
+    t.string   "contact_type"
+    t.string   "picture"
+    t.integer  "user_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "favorites", :force => true do |t|
+    t.integer  "deed_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "posts", :force => true do |t|
+    t.string   "title"
+    t.text     "content"
+    t.string   "picture"
+    t.integer  "thread_id"
+    t.boolean  "complete",   :default => false
+    t.integer  "user_id"
+    t.integer  "deed_id"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "provider"
@@ -21,6 +66,14 @@ ActiveRecord::Schema.define(:version => 20131208085556) do
     t.datetime "oauth_expires_at"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+  end
+
+  create_table "votes", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "deed_id"
+    t.boolean  "type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end
