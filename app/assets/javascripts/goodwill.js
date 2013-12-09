@@ -31,9 +31,16 @@ var populatePage = function() {
   });
 };
 
+var getCurrent = function() {
+  $.get('/posts/current').done(function(data) {
+    console.log(data);
+  });
+};
+
 
 
 $(function() {
   // Populating all the lists with deeds from the db
   populatePage();
+  getCurrent();
 });
