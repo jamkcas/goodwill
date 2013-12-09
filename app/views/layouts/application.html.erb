@@ -9,12 +9,14 @@
 <body>
 <div id="user_nav">
   <% if current_user %>
-    Signed in as <strong><%= current_user.name %></strong>!
-    <%= link_to "Sign out", signout_path, id: "sign_out" %>
+    <p>Welcome, <%= current_user.name %></p>
+    <%= link_to "Sign out", signout_path, id: "signout" %>
   <% else %>
-    <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
+    <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
+    <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>
   <% end %>
 </div>
+
 <%= yield %>
 
 </body>
