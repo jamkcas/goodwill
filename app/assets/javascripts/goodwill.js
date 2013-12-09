@@ -5,9 +5,9 @@ var addDeedToList = function(data, id) {
   $(id).append(template);
 };
 
-var getDeeds = function() {
+var populatePage = function() {
   // Getting all the deeds from the db
-  $.get('/goodwill.json').done(function(data) {
+  $.get('/deeds').done(function(data) {
 
     // Populating each list with the deed list returned from the db
     _.each(data, function(d) {
@@ -28,11 +28,12 @@ var getDeeds = function() {
         }
       }
     });
-
   });
 };
 
+
+
 $(function() {
   // Populating all the lists with deeds from the db
-  getDeeds();
+  populatePage();
 });

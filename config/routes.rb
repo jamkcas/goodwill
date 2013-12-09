@@ -9,4 +9,6 @@ GoodwillTracker::Application.routes.draw do
 
   root to: 'goodwill#index'
   resources :goodwill, only: :index
+  resources :deeds, only: :index
+
 end

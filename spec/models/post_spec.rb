@@ -13,5 +13,5 @@ describe Post do
   it {should validate_presence_of(:thread_id)}
   it {should validate_presence_of(:user_id)}
   it {should validate_presence_of(:content)}
-  it {should validate_presence_of(:complete)}
+  # it {should validate_presence_of(:complete)}
 end

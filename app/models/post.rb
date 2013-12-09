@@ -6,7 +6,7 @@ class Post < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :votes, as: :votable
 
-  validates :complete, presence: true
+  # validates :complete, presence: true
   validates :content, presence: true
   validates :deed_id, presence: true
   validates :user_id, presence: true

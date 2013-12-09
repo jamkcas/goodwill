@@ -1,10 +1,13 @@
 class GoodwillController < ApplicationController
   def index
-    @deeds = Deed.all()
+
+    if current_user
+      post = Post.where(params[current_user.id]).where(complete: false)
+    end
 
     respond_to do |format|
       format.html
-      format.json { render json: @deeds }
+      format.json
     end
   end
 end

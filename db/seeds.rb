@@ -10,3 +10,7 @@ Deed.create(category: 'deed', deed_type: 'service', title: 'Help a kid', descrip
 Deed.create(category: 'help', deed_type: 'donation', title: 'Levons Light', description: 'Donate to a bring awareness to film', deadline: 'jan 1, 2014', location: 'san mateo, ca, 94402', contact: 'j@j.com', contact_type: 'email', picture: 'null', user_id: 1)
 Deed.create(category: 'help', deed_type: 'service', title: 'My Grandfather', description: 'help my grandfather with chores', deadline: 'ongoing', location: 'san mateo, ca, 94401', contact: '555-555-5555', contact_type: 'phone', picture: 'null', user_id: 1)
 
+Post.create(user_id: 1, deed_id: 1, complete: true, thread_id: 1, title: 'Fed a chick!', content: 'Gave some chick at the bus stop some eats.')
+Post.create(user_id: 1, deed_id: 1, thread_id: 2, title: 'Fed a homeless dude!', content: 'I met a nice guy and gave him some food.')
+Post.create(user_id: 2, deed_id: 3, thread_id: 2, title: 'Helped Levon', content: 'Gave $20 to Levons Light foundation')
+
