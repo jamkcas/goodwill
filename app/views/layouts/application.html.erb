@@ -8,22 +8,31 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=<%= CONFIG[:google_api_key] %>&sensor=true">
   </script>
 </head>
+
 <body>
 <div id='overlay'></div>
-<div id='overlayWindow'>
-  <p>Hi</p>
-</div>
-<div id="user_nav">
-  <% if current_user %>
-    <p>Welcome, <%= current_user.name %></p>
-    <%= link_to "Sign out", signout_path, id: "signout" %>
-  <% else %>
-    <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
-    <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>
-  <% end %>
-</div>
+<!-- Background for modal -->
+<div class='container'>
+  <!-- Modal window -->
+  <div id='overlayWindow'>
+    <button id='closeModal'>X</button>
+    <p>Hi</p>
+  </div>
 
-<%= yield %>
+  <!-- Login Controls -->
+  <div id="user_nav">
+    <% if current_user %>
+      <p>Welcome, <%= current_user.name %></p>
+      <%= link_to "Sign out", signout_path, id: "signout" %>
+    <% else %>
+      <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
+      <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>
+    <% end %>
+  </div>
 
+  <%= yield %>
+
+</div> <!-- end container -->
 </body>
+
 </html>
