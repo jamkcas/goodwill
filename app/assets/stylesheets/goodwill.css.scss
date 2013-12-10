@@ -66,3 +66,8 @@ $modalWidth: $containerWidth * 0.7;
   text-align: center;
   z-index: 2000;
 }
+
+#closeModal {
+  float: right;
+  display: inline-block;
+}

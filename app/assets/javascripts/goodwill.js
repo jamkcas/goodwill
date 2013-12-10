@@ -25,6 +25,7 @@ $(function() {
   $('#thread').on('click', '#postComplete', function(e) {
     e.preventDefault();
     // Creating a popup modal to display form for submitting a completed deed
+    template = JST['templates/post_complete']
     $('#overlay').css('visibility', 'visible');
     $('#overlayWindow').fadeIn(500).animate({'top': '50px'}, {duration: 300, queue: false});
   });
