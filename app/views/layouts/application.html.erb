@@ -5,8 +5,14 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= CONFIG[:google_api_key] %>&sensor=true">
+  </script>
 </head>
 <body>
+<div id='overlay'></div>
+<div id='overlayWindow'>
+  <p>Hi</p>
+</div>
 <div id="user_nav">
   <% if current_user %>
     <p>Welcome, <%= current_user.name %></p>

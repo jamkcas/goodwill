@@ -2,10 +2,11 @@
 var getCurrent = function() {
   $.get('/posts/current').done(function(data) {
     if(data.length === 0) {
-      $('#threadMap').append("<button id='startThread'>Start a Thread</button>")
+      $('#thread').append("<button id='startThread'>Start a Thread</button>")
     } else {
       template = JST['templates/current_deed']({current: data});
-      $('#threadMap').append(template);
+      $('#thread').append(template);
     }
   });
 };
+

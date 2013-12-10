@@ -15,4 +15,12 @@ class PostsController < ApplicationController
 
     render json: @current_post
   end
+
+  def create
+    if current_user
+      @post = Post.create(params[:post])
+    end
+
+    render json: @post
+  end
 end

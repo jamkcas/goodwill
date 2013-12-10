@@ -24,7 +24,6 @@ end
 group :development, :test do
   gem 'shoulda-matchers'
   gem 'rspec-rails'
-  gem 'factory_girl'
   gem 'pry'
 end
 

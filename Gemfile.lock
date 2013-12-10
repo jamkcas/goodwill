@@ -42,8 +42,6 @@ GEM
     ejs (1.1.1)
     erubis (2.7.0)
     execjs (2.0.2)
-    factory_girl (4.3.0)
-      activesupport (>= 3.0.0)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
     hashie (2.0.5)
@@ -149,7 +147,6 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   ejs
-  factory_girl
   jquery-rails
   omniauth-facebook
   pg
