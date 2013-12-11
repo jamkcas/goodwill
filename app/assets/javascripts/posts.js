@@ -15,17 +15,19 @@ var getCurrent = function() {
   // When the user wants to post that they have finished the deed and hit Post as Complete
   $('#thread').on('click', '#postComplete', function(e) {
     e.preventDefault();
+    $.get('/posts/friends').done(function(data) {
+      // Creating a popup modal to display form for submitting a completed deed, passing in current deed info and friends list
+      template = JST['templates/post_complete']({current: currentDeed, friends: data});
+      $('#overlayWindow').append(template);
+    });
 
-    // Creating a popup modal to display form for submitting a completed deed
-    template = JST['templates/post_complete']({current: currentDeed});
-    $('#overlayWindow').append(template);
-
+    // Making popup modal visible and moving it into position on the screen
     $('#overlay').css('visibility', 'visible');
     $('#overlayWindow').fadeIn(500).animate({'top': '50px'}, {duration: 300, queue: false});
   });
 
   // Close modal
-  $('#overlayWindow').on('click', '#closeModal', function(e) {
+  $('#overlayWindow').on('click', '.closeModal', function(e) {
     e.preventDefault();
     // Hiding the popup modal
     $('#overlay').css('visibility', 'hidden');

@@ -42,7 +42,7 @@ $modalWidth: $containerWidth * 0.7;
 
 #overlay {
   visibility: hidden;
-  position: absolute;
+  position: fixed;
   left: 0px;
   top: 0px;
   width: 100%;
@@ -61,13 +61,55 @@ $modalWidth: $containerWidth * 0.7;
   left: center($containerWidth, $modalWidth);
   top: -1000px;
   max-height: 1000px;
-  overflow: hidden;
-  padding: 20px;
+  overflow: auto;
+  padding: 40px;
   text-align: center;
   z-index: 2000;
 }
 
-#closeModal {
+.closeModal {
   float: right;
   display: inline-block;
+}
+
+
+
+// ****** Post Modal ******
+
+.currentPostModal {
+  width: 100%;
+}
+
+.friendsWindow {
+  width: 100%;
+  max-height: 310px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.friendsList {
+  width: 100%;
+}
+
+.friends {
+  width: 33.33333333333%;
+  float: left;
+  padding: 10px;
+}
+
+.friendsEntry {
+  box-shadow: 1px 1px 3px black;
+  display: block;
+  padding: 5px;
+}
+
+.friendsEntry img {
+  float: left;
+  width: 33%;
+}
+
+.friendsEntry h5 {
+  float: left;
+  width: 67%;
+  margin-bottom: 10px;
 }

@@ -12,15 +12,26 @@ class PostsController < ApplicationController
       @current_post[:id] = current_post
       @current_post[:details] = deed
     end
-
+    # Pass back the current_post hash
     render json: @current_post
   end
 
   def create
+    # If there is a current_user, a new post is created using the params given
     if current_user
       @post = Post.create(params[:post])
     end
-
+    # Pass back the newly created post hash
     render json: @post
+  end
+
+  def get_friends
+    # If there is a current user, a call is made to the graph.facebook.com api to get the friends list
+    if current_user
+      api = Koala::Facebook::API.new(current_user.oauth_token)
+      @friends = api.get_connections("me", "friends?fields=id,name,picture.height(100).width(100)")
+    end
+    # Pass back the friends hash
+    render json: @friends
   end
 end

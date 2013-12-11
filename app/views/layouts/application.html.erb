@@ -14,8 +14,7 @@
 <!-- Background for modal -->
 <div class='container'>
   <!-- Modal window -->
-  <div id='overlayWindow'>
-  </div>
+  <div id='overlayWindow'></div>
 
   <!-- Login Controls -->
   <div id="user_nav">
@@ -26,7 +25,7 @@
       <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
       <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>
     <% end %>
-  </div>
+  </div> <!-- end user-nav -->
 
   <%= yield %>
 

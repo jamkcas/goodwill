@@ -1,4 +1,29 @@
-<div class='modalCurrentDeed'>
-  <button id='closeModal'>X</button>
-  <h3><%= current.details.title %></h3>
-</div>
+<div class='currentPostModal'>
+  <button class='closeModal'>X</button>
+  <header class='modalHeader'>
+    <hgroup>
+      <h3><%= current.details.title %></h3>
+      <h1>Great Job! Thanks For Helping!!</h1>
+      <h3>Now keep this thread of good deeds going across the globe.</h3>
+    </hgroup>
+  </header> <!-- end modalHeader -->
+  <div class='modalMain'>
+    <h4>Invite your friends to take part...</h4>
+    <div class='friendsWindow'>
+      <ul class='friendsList clearfix'>
+        <!-- Looping through each entry on the friends list and creating an invite entry -->
+        <% _.each(friends, function(f) { %>
+          <li class='friends'>
+            <div class='friendsEntry clearfix'>
+              <img src='<%= f.picture.data.url %>'>
+              <h5><%= f.name %></h5>
+              <!-- On submit it will send an invite via Facebook -->
+              <button class='invite'>Invite</button>
+            </div> <!-- end friendsEntry -->
+          </li>
+        <% }); %>
+      </ul>
+    </div> <!-- end friendsWindow -->
+    <button class='updatePost'>Done</button>
+  </div> <!-- end modalMain -->
+</div> <!-- end currentPostModal -->
