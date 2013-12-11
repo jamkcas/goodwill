@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  attr_accessible :google_token
+
   has_many :deeds
   has_many :posts
   has_many :favorites

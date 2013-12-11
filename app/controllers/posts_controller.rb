@@ -34,4 +34,10 @@ class PostsController < ApplicationController
     # Pass back the friends hash
     render json: @friends
   end
+
+  def invite_friends
+    api = Koala::Facebook::API.new(current_user.oauth_token)
+    api.put_object("747771671", "apprequests", {:message=>'Welcome to my app'})
+    render text: 'Ok'
+  end
 end

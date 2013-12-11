@@ -33,5 +33,27 @@ var getCurrent = function() {
     $('#overlay').css('visibility', 'hidden');
     $('#overlayWindow').fadeOut(500).animate({'top': '-1000px'}, {duration: 300, queue: false});
   })
+
+  $('#overlayWindow').on('click', '.invite', function(e) {
+    e.preventDefault();
+    // $.ajax('/posts/invite', {
+    //   data: {feed: '747771671'},
+    //   method: 'POST'
+    // }).done(function(data) {
+    //   console.log(data);
+    // });
+    // FB.ui({method: 'send',
+    //   // invite: "true",
+    //         // type: "Invite",
+    //         // content: 'Welcome to MyApp',
+    //   message: 'My Great Request',
+    //   link: 'http://www.jamkcas.com',
+    //   title: 'Give a flower to some of your friends',
+    //   to: '747771671'
+    // }, function(response){
+    //   console.log('hello');
+    // });
+
+  });
 };
 

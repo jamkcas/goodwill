@@ -9,6 +9,8 @@ var mapInit = function() {
 }
 
 
+
+
 // Start of Javascript when page loads
 $(function() {
   // Hiding the modal on page load
@@ -19,4 +21,5 @@ $(function() {
   getCurrent(); // In posts.js
   // Add the map to the map canvas
   google.maps.event.addDomListener(window, 'load', mapInit);
+
 });
