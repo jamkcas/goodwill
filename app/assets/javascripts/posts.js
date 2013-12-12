@@ -34,25 +34,17 @@ var getCurrent = function() {
     $('#overlayWindow').fadeOut(500).animate({'top': '-1000px'}, {duration: 300, queue: false});
   })
 
-  $('#overlayWindow').on('click', '.invite', function(e) {
+  $('#overlayWindow').on('click', '.googleContacts', function(e) {
     e.preventDefault();
-    // $.ajax('/posts/invite', {
-    //   data: {feed: '747771671'},
-    //   method: 'POST'
-    // }).done(function(data) {
-    //   console.log(data);
-    // });
-    // FB.ui({method: 'send',
-    //   // invite: "true",
-    //         // type: "Invite",
-    //         // content: 'Welcome to MyApp',
-    //   message: 'My Great Request',
-    //   link: 'http://www.jamkcas.com',
-    //   title: 'Give a flower to some of your friends',
-    //   to: '747771671'
-    // }, function(response){
-    //   console.log('hello');
-    // });
+    // Ajax call to get authorization code and then access token for user
+    $.ajax('/contacts/google').done(function(data) {
+      // If a url is returned then a call is made to get an access token, otherwise the current user already has an access token
+      console.log(data);
+      if(data.url != 'null') {
+        // Makes a popup window for Permissions page for google (auto-closes when done)
+        window.open(data.url, "popupWindow", "width=600,height=600,scrollbars=yes");
+      }
+    });
 
   });
 };

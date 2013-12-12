@@ -11,6 +11,7 @@ gem 'ejs'
 gem 'koala'
 gem 'typhoeus'
 gem 'json'
+gem 'gon'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -9,21 +9,9 @@
   </header> <!-- end modalHeader -->
   <div class='modalMain'>
     <h4>Invite your friends to take part...</h4>
-    <div class='friendsWindow'>
-      <ul class='friendsList clearfix'>
-        <!-- Looping through each entry on the friends list and creating an invite entry -->
-        <% _.each(friends, function(f) { %>
-          <li class='friends'>
-            <div class='friendsEntry clearfix'>
-              <img src='<%= f.picture.data.url %>'>
-              <h5><%= f.name %></h5>
-              <!-- On submit it will send an invite via Facebook -->
-              <button class='invite'>Invite</button>
-            </div> <!-- end friendsEntry -->
-          </li>
-        <% }); %>
-      </ul>
-    </div> <!-- end friendsWindow -->
+    <h5>Bring in contacts from your Google account</h5>
+    <button class='googleContacts'>Import Contacts</button>
+
     <button class='updatePost'>Done</button>
   </div> <!-- end modalMain -->
 </div> <!-- end currentPostModal -->
