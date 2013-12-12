@@ -39,13 +39,18 @@ var getCurrent = function() {
     // Ajax call to get authorization code and then access token for user
     $.ajax('/contacts/google').done(function(data) {
       // If a url is returned then a call is made to get an access token, otherwise the current user already has an access token
-      console.log(data);
+      // console.log(data);
       if(data.url != 'null') {
+        console.log(data);
         // Makes a popup window for Permissions page for google (auto-closes when done)
         window.open(data.url, "popupWindow", "width=600,height=600,scrollbars=yes");
       }
     });
-
+    $.ajax('/contacts/get_contacts').done(function(data){
+      console.log(data);
+      template = JST['templates/contacts_entry']({contacts: data});
+      $('.contactsList').append(template);
+    })
   });
 };
 
