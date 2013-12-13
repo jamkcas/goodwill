@@ -22,4 +22,5 @@ GoodwillTracker::Application.routes.draw do
   get '/posts/current', to: 'posts#get_current'
   get '/posts/friends', to: 'posts#get_friends'
   get '/posts/invite', to: 'posts#invite_friend'
+  get 'posts/join_thread/:id', to: 'posts#join_thread'
 end
