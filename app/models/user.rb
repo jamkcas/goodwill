@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :favorites
   has_many :votes, as: :votable
   has_many :comments, as: :commentable
+  has_many :contacts
 
   def self.from_omniauth(auth)
     # slice method extracts one hash out of another, looking for the first entry that matches that provider and uid in the db, or creating a new entry in the db

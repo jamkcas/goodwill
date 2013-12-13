@@ -79,4 +79,11 @@ module ContactsHelper
 
     all_contacts
   end
+
+  def save_contact_list(contacts)
+    # Saving each of the user's contacts to the db
+    contacts.each do |c|
+      Contact.create(name: c[:name], email: c[:email], user_id: current_user.id)
+    end
+  end
 end

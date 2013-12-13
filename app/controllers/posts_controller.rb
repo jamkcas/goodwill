@@ -35,9 +35,11 @@ class PostsController < ApplicationController
     render json: @friends
   end
 
-  def invite_friends
-    api = Koala::Facebook::API.new(current_user.oauth_token)
-    api.put_object("747771671", "apprequests", {:message=>'Welcome to my app'})
+  def invite_friend
+    friend = Contact.find(params[:friend])
+    thread = params[:thread]
+
+    invite = InviteMailer.invite(friend, thread).deliver
     render text: 'Ok'
   end
 end

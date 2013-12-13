@@ -30,10 +30,11 @@ class ContactsController < ApplicationController
     current_user.update_attributes(google_token: google)
 
     # Rendering the auth_approve page instead of the normal application page, so it will self close
-    render 'auth_approve', :layout => false
+    # render 'auth_approve', :layout => false
+    redirect_to contacts_save_contacts_path
   end
 
-  def get_contacts
+  def save_contacts
     # Getting the current user's access token for google
     access = current_user.google_token
 
@@ -46,6 +47,17 @@ class ContactsController < ApplicationController
     # Taking the Nokogiri object and turning into a json response
     response = noko_parse(noko)
 
-    render json: response
+    # Saving the contacts to the db
+    save_contact_list(response)
+
+    # render text: 'Contacts saved.'
+    render 'save_contacts', :layout => false
+  end
+
+  def get_contacts
+    # Fetching the user's contacts
+    contacts = current_user.contacts
+
+    render json: contacts
   end
 end

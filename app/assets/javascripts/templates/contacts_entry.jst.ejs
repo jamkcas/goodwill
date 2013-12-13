@@ -1,10 +1,10 @@
-<!-- Looping through each entry on the friends list and creating an invite entry -->
-        <% _.each(contacts, function(c) { %>
-          <li class='friends'>
-            <div class='friendsEntry clearfix'>
-              <h5><%= c.email %></h5>
-              <!-- On submit it will send an invite via Facebook -->
-              <button class='invite'>Invite</button>
-            </div> <!-- end friendsEntry -->
-          </li>
-        <% }); %>
+<!-- Looping through each entry on the contacts list and creating an invite entry -->
+<% _.each(contacts, function(c) { %>
+  <li class='friends'>
+    <div class='friendsEntry clearfix'>
+      <h5><%= c.name %></h5>
+      <!-- On submit it will send an invite to this google contact -->
+      <button class='invite' data-id='<%= c.id %>'>Invite</button>
+    </div> <!-- end friendsEntry -->
+  </li>
+<% }); %>
