@@ -1,0 +1,10 @@
+<h3>Deed Details</h3>
+<button class='back'>Back</button>
+<% if(details.location != 'null') { %><img src='<%= details.picture %>'</><% } %>
+<h4><%= details.title %></h4>
+<h5>Category: <%= capitalize(details.category) %> <%= capitalize(details.deed_type) %></h5>
+<p>Description: <%= details.description %></p>
+<% if(details.location != 'null') { %><p>Location: <%= details.location %></p><% } %>
+<% if(details.deadline != 'null') { %><p>Deadline: <%= details.deadline %></p><% } %>
+<% if(details.contact != 'null') { %><p>Contact: <%= details.contact %></p><% } %>
+<button class='submitPost' data-id='<%= details.id %>'>Start a Post</button>

@@ -16,6 +16,8 @@ class SessionsController < ApplicationController
   def destroy
     # Destroying a session by setting the session id to nil
     session[:user_id] = nil
+    # Clearing the queue
+    session[:queue] = nil
     # Redirect it back to the index page
     redirect_to root_url
   end

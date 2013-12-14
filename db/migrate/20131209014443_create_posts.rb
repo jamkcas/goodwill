@@ -4,7 +4,7 @@ class CreatePosts < ActiveRecord::Migration
       t.string :title
       t.text :content
       t.string :picture
-      t.integer :thread_id
+      t.string :thread_id
       t.boolean :complete, default: false
       t.integer :user_id
       t.integer :deed_id

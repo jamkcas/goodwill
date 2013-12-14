@@ -4,6 +4,6 @@ class Contact < ActiveRecord::Base
   belongs_to :User
 
   validates :email, presence: true
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
   validates :user_id, presence: true
 end

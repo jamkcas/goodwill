@@ -1,6 +1,6 @@
 // Function to add a contact contacts to the contacts list window
 var addContacts = function(data) {
-  template = JST['templates/contacts_entry']({contacts: data});
+  var template = JST['templates/contacts_entry']({contacts: data});
   $('.contactsList').append(template);
 };
 
@@ -31,7 +31,8 @@ var importGoogle = function() {
     });
     // Makes a call to get the contacts and append them to contacts list page
     getContacts();
-    $('.googleContacts').remove();
+    // Removing the add contacts function
+    $('.importGoogle').remove();
   });
 };
 
@@ -40,7 +41,7 @@ var fetchContacts = function() {
   $.ajax('/contacts/get_contacts').done(function(data) {
     // If no contacts exist in the db then add a prompt and a button to import them
     if(data.length === 0) {
-      template = JST['templates/import'];
+      var template = JST['templates/import'];
       $('.contacts').append(template);
       // Importing google contacts
       importGoogle();
@@ -53,55 +54,86 @@ var fetchContacts = function() {
 
 // Function to set the modal with details to complete the post
 var makePostModal = function(currentDeed) {
-  template = JST['templates/post_complete']({current: currentDeed});
+  var template = JST['templates/post_complete']({current: currentDeed});
   $('#overlayWindow').append(template);
+};
+
+// Function to grab post details, update the Post db, and make a post on facebook
+var finishPost = function(current) {
+  var details = $('#deedDetails').val();
+  var title = $('#postTitle').val();
+  var id = current.id;
+  // Ajax call to update the current post as done in the db
+  $.ajax('/posts/finish_post/' + id, {
+    method: 'PUT',
+    data: {
+      title: title,
+      details: details
+    }
+  }).done(function(data) {
+    // Hiding the popup modal
+    hideModal();
+    // Resetting the thread window on the index page
+    $('#thread').empty();
+    // Adding the start a new thread on the window
+    fetchCurrent(setCurrent);
+  });
+};
+
+// Setting current thread details or a button if not currently on a thread
+var setCurrent = function(data) {
+  // If not currently on a thread, a new button is appended
+  if(data.id === 'null') {
+    $('#thread').append("<button id='startThread'>Start a Thread</button>")
+  } else { // If on a current thread the post details are displayed
+    var template = JST['templates/current_deed']({current: data});
+    $('#thread').append(template);
+  }
+};
+
+// Getting the current post, then performing the passed in function with the data returned
+var fetchCurrent = function(setCurrent) {
+  $.get('/posts/current').done(function(data) {
+    setCurrent(data);
+  });
 };
 
 // Make a call to the posts/current to find the user's current post and thread
 var getCurrent = function() {
-  var currentDeed;
-  $.get('/posts/current').done(function(data) {
-    currentDeed = data;
-    // If not currently on a thread, a new button is appended
-    if(data.length === 0) {
-      $('#thread').append("<button id='startThread'>Start a Thread</button>")
-    } else { // If on a current thread the post details are displayed
-      template = JST['templates/current_deed']({current: data});
-      $('#thread').append(template);
-    }
-  });
+  fetchCurrent(setCurrent);
 
   // When the user wants to post that they have finished the deed and hit Post as Complete
   $('#thread').on('click', '#postComplete', function(e) {
     e.preventDefault();
     // Adding the complete post modal
-    makePostModal(currentDeed);
+    fetchCurrent(makePostModal);
     // Adding the person's contacts if they exist or the import google button
     fetchContacts();
-
     // Making popup modal visible and moving it into position on the screen
-    $('#overlay').css('visibility', 'visible');
-    $('#overlayWindow').fadeIn(500).animate({'top': '50px'}, {duration: 300, queue: false});
+    showModal();
   });
 
   // Close modal
   $('#overlayWindow').on('click', '.closeModal', function(e) {
     e.preventDefault();
     // Hiding the popup modal
-    $('#overlay').css('visibility', 'hidden');
-    $('#overlayWindow').fadeOut(500).animate({'top': '-1000px'}, {duration: 300, queue: false});
-    // Resetting the modal
-    $('#overlayWindow').empty();
+    hideModal();
   })
 
+  // Finish a Post
+  $('#overlayWindow').on('click', '.updatePost', function(e) {
+    e.preventDefault();
+    // Getting the current post and passing in a function to update the finished post
+    fetchCurrent(finishPost);
+  });
 
   // When an invite is clicked, an ajax call is made to email an invite to the corresponding contact
   $('#overlayWindow').on('click', '.invite', function() {
     // Setting the current button to a variable
-    current = $(this);
+    var current = $(this);
     // Getting the id of the contact, as well as the id of the thread the user is currently on
-    friend_id = current.data('id');
-    thread_id = $('#currentDeed').data('id');
+    var friend_id = current.data('id');
+    var thread_id = $('#currentDeed').data('id');
     // Making the ajax call to send the email for this person
     $.ajax('/posts/invite', {
       data: {
@@ -114,5 +146,68 @@ var getCurrent = function() {
       current.remove();
     });
   });
+
+  // When clicked, a modal pops up with a start a new thread form
+  $('#thread').on('click', '#startThread', function(e) {
+    e.preventDefault();
+    // Appending the new post template
+    var template = JST['templates/new_post']
+    $('#overlayWindow').append(template);
+    // Getting all the deeds from the db
+    populatePage(modalLists);
+    showModal();
+  });
+
+  // When clicked, the deeds lists are hidden and the deed details of deed clicked are made visible
+  $('#overlayWindow').on('click', '.deedEntry', function(e) {
+    e.preventDefault();
+    var current = $(this);
+    var id = current.data('id');
+    // Making a call to the db and getting the deed details
+    $.get('/deeds/' + id).done(function(data) {
+      // Hiding the lists of deeds div
+      $('.lists').hide();
+      // Creating and appending the deed details to the entry details div
+      var template = JST['templates/deed_details']({ details: data });
+      $('.entryDetails').append(template);
+      // debugger
+    });
+  });
+
+  // When clicked the deeds list is shown again and the entry details div is emptied
+  $('#overlayWindow').on('click', '.back', function(e) {
+    e.preventDefault();
+    $('.lists').show();
+    $('.entryDetails').empty();
+  });
+
+  // When clicked the an ajax call is made to save the new post to the db
+  $('#overlayWindow').on('click', '.submitPost', function(e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax('/posts/create', {
+      method: 'POST',
+      data: {
+              data_id: id
+            }
+    }).done(function(data) {
+      // The modal is hidden
+      hideModal();
+      // The thread div is emptied (start thread button removed)
+      $('#thread').empty();
+      // The fetch current function is called to set the contents of the thread div to the current posts details
+      fetchCurrent(setCurrent);
+    });
+  });
+
+  // If there is a current queue a modal is triggered
+  if(gon.queue == true) {
+    var template = JST['templates/new_post']
+    $('#overlayWindow').append(template);
+    // Getting all the deeds from the db
+    populatePage(modalLists);
+    showModal();
+  }
 };
+
 

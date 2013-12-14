@@ -16,11 +16,12 @@ GoodwillTracker::Application.routes.draw do
 
   root to: 'goodwill#index'
   resources :goodwill, only: :index
-  resources :deeds, only: :index
+  resources :deeds, only: [:index, :show]
 
   # Posts controller routes
   get '/posts/current', to: 'posts#get_current'
-  get '/posts/friends', to: 'posts#get_friends'
   get '/posts/invite', to: 'posts#invite_friend'
-  get 'posts/join_thread/:id', to: 'posts#join_thread'
+  get '/posts/join_thread/:id', to: 'posts#join_thread'
+  put '/posts/finish_post/:id', to: 'posts#finish_post'
+  post '/posts/create', to: 'posts#create'
 end

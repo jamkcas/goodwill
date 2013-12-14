@@ -2,12 +2,13 @@
   <button class='closeModal'>X</button>
   <header class='modalHeader'>
     <hgroup>
-      <h3><%= current.details.title %></h3>
       <h1>Great Job! Thanks For Helping!!</h1>
       <h3>Now keep this thread of good deeds going across the globe.</h3>
     </hgroup>
   </header> <!-- end modalHeader -->
   <div class='modalMain'>
+    <input type='text' id='postTitle' value='<%= current.details.title %>' />
+    <textarea id='deedDetails'><%= current.details.description %></textarea>
     <h4>Invite your friends to take part...</h4>
     <div class='contacts'>
       <ul class='contactsList'>

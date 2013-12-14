@@ -5,4 +5,9 @@ class DeedsController < ApplicationController
 
     render json: @deeds
   end
+
+  def show
+    deed = Deed.find(params[:id])
+    render json: deed
+  end
 end
