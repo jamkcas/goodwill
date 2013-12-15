@@ -42,4 +42,31 @@ class PostsController < ApplicationController
     redirect_to root_path
   end
 
+  def populate_map
+    thread = Post.find(params[:post_id]).thread_id
+    posts = Post.find_all_by_thread_id(thread)
+    new_posts = []
+    posts.each do |p|
+      new_hash = {
+        name: p.user.name,
+        title: p.title,
+        content: p.content,
+        lat: p.lat,
+        lon: p.lon,
+        thread_id: p.thread_id,
+        deed_id: p.deed_id,
+        complete: p.complete,
+        id: p.id,
+        created_at: p.created_at,
+        updated_at: p.updated_at
+      }
+      new_posts << new_hash
+    end
+    # binding.pry
+
+    p ('*') * 50
+    p new_posts
+    render json: new_posts
+  end
+
 end

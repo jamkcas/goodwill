@@ -1,20 +1,15 @@
-
+var map
 // Creating an intial map
 var mapInit = function() {
-  var mapOptions = {
-    center: new google.maps.LatLng(-34.397, 150.644),
-    zoom: 8
-  };
-  var map = new google.maps.Map($('#map-canvas')[0],
-      mapOptions);
-
   if(navigator.geolocation) {
     browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(position) {
       initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      map.setCenter(initialLocation);
-    }, function() {
-      handleNoGeolocation(browserSupportFlag);
+      var mapOptions = {
+        center: initialLocation,
+        zoom: 8
+      };
+      map = new google.maps.Map($('#map-canvas')[0], mapOptions);
     });
   }
 }
@@ -37,6 +32,9 @@ var capitalize = function(word) {
 
 // Start of Javascript when page loads
 $(function() {
+  // Add the map to the map canvas
+  google.maps.event.addDomListener(window, 'load', mapInit);
+
   // Hiding the modal on page load
   $('#overlayWindow').fadeOut();
 
@@ -59,6 +57,4 @@ $(function() {
     // Auto-triggering the sign-in from the invite link redirect
     $('#signin').click();
   }
-  // Add the map to the map canvas
-  google.maps.event.addDomListener(window, 'load', mapInit);
 });

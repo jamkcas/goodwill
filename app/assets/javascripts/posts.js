@@ -87,6 +87,16 @@ var finishPost = function(current) {
 
 };
 
+// Adds a pin on the map(passing in a title, icon and location)
+var placeMarker = function(loc, title, mapIcon) {
+  var marker = new google.maps.Marker({
+    position: loc,
+    map: map,
+    title: title,
+    icon: mapIcon
+  });
+};
+
 // Setting current thread details or a button if not currently on a thread
 var setCurrent = function(data) {
   // If not currently on a thread, a new button is appended
@@ -95,6 +105,33 @@ var setCurrent = function(data) {
   } else { // If on a current thread the post details are displayed
     var template = JST['templates/current_deed']({current: data});
     $('#thread').append(template);
+    $.ajax('/posts/populate_map', {
+      data: { post_id: data.id },
+      method: 'GET'
+    }).done(function(data) {
+      // Creating a function to make sure map is loaded then add markers
+      var checkMap = function() {
+        var mapIcon;
+        // Setting the map icon based on whether deed is current or already completed
+        _.each(data, function(d) {
+          if(d.complete === true) {
+            mapIcon = 'marker_heart.png';
+          } else {
+            mapIcon = 'current_marker_heart.png';
+          }
+          // Setting the location where deed was or is being done
+          var location = new google.maps.LatLng(d.lat, d.lon)
+          // Calling the placeMarker function to add a marker at the location
+          placeMarker(location, d.name, mapIcon);
+        });
+        // Checking to see if map is loaded, and recalling itself if the page isnt loaded
+        if(map === undefined) {
+          setTimeout(checkMap, 200);
+        }
+      }
+      // Calling the checkMap function to place all the locations for the thread
+      checkMap();
+    });
   }
 };
 

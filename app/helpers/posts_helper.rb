@@ -52,10 +52,21 @@ module PostsHelper
     # Updating the content only if title and content were given
     post.update_attributes(title: title) if title
     post.update_attributes(content: content) if content
+    # Updating the user's location
     post.update_attributes(lat: params[:lat])
     post.update_attributes(lon: params[:lon])
     # Updating the post's complete status to true
     post.update_attributes(complete: true)
+
+    if post.complete == true
+      api = Koala::Facebook::API.new(current_user.oauth_token)
+      api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
+        "name" => "Goodwill Tracking",
+       "link"=> "http://www.jamkcas.com",
+       "caption"=> "Keep the kindness going!",
+       "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!",
+       "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
+    end
   end
 
   def send_invite
