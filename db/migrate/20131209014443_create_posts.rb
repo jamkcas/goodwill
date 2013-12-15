@@ -8,6 +8,8 @@ class CreatePosts < ActiveRecord::Migration
       t.boolean :complete, default: false
       t.integer :user_id
       t.integer :deed_id
+      t.float :lat
+      t.float :lon
 
       t.timestamps
     end

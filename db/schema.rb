@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
     t.boolean  "complete",   :default => false
     t.integer  "user_id"
     t.integer  "deed_id"
+    t.float    "lat"
+    t.float    "lon"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
@@ -71,7 +73,6 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
     t.string   "google_token"
-    t.string   "queue"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
   end

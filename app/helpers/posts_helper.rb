@@ -52,6 +52,8 @@ module PostsHelper
     # Updating the content only if title and content were given
     post.update_attributes(title: title) if title
     post.update_attributes(content: content) if content
+    post.update_attributes(lat: params[:lat])
+    post.update_attributes(lon: params[:lon])
     # Updating the post's complete status to true
     post.update_attributes(complete: true)
   end
@@ -69,7 +71,5 @@ module PostsHelper
     unless Post.find_all_by_thread_id(params[:id]).empty?
       session[:queue] = params[:id]
     end
-    p ('*') * 50
-    p session[:queue]
   end
 end

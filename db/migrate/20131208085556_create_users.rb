@@ -7,7 +7,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :oauth_token
       t.datetime :oauth_expires_at
       t.string :google_token
-      t.string :queue
 
       t.timestamps
     end

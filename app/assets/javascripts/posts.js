@@ -63,21 +63,28 @@ var finishPost = function(current) {
   var details = $('#deedDetails').val();
   var title = $('#postTitle').val();
   var id = current.id;
-  // Ajax call to update the current post as done in the db
-  $.ajax('/posts/finish_post/' + id, {
-    method: 'PUT',
-    data: {
-      title: title,
-      details: details
-    }
-  }).done(function(data) {
-    // Hiding the popup modal
-    hideModal();
-    // Resetting the thread window on the index page
-    $('#thread').empty();
-    // Adding the start a new thread on the window
-    fetchCurrent(setCurrent);
+  // Getting the user's current location then making an update to the db to complete the post
+  navigator.geolocation.getCurrentPosition(function(position) {
+    initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+    // Ajax call to update the current post as done in the db
+    $.ajax('/posts/finish_post/' + id, {
+      method: 'PUT',
+      data: {
+        title: title,
+        details: details,
+        lat: initialLocation.nb,
+        lon: initialLocation.ob
+      }
+    }).done(function(data) {
+      // Hiding the popup modal
+      hideModal();
+      // Resetting the thread window on the index page
+      $('#thread').empty();
+      // Adding the start a new thread on the window
+      fetchCurrent(setCurrent);
+    });
   });
+
 };
 
 // Setting current thread details or a button if not currently on a thread

@@ -24,4 +24,5 @@ GoodwillTracker::Application.routes.draw do
   get '/posts/join_thread/:id', to: 'posts#join_thread'
   put '/posts/finish_post/:id', to: 'posts#finish_post'
   post '/posts/create', to: 'posts#create'
+
 end

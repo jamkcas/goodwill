@@ -1,3 +1,4 @@
+
 // Creating an intial map
 var mapInit = function() {
   var mapOptions = {
@@ -6,6 +7,16 @@ var mapInit = function() {
   };
   var map = new google.maps.Map($('#map-canvas')[0],
       mapOptions);
+
+  if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      map.setCenter(initialLocation);
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  }
 }
 
 var showModal = function() {
@@ -28,7 +39,7 @@ var capitalize = function(word) {
 $(function() {
   // Hiding the modal on page load
   $('#overlayWindow').fadeOut();
-console.log(gon.queue)
+
   // Populating all the lists with deeds from the db
   populatePage(pageLists); // In deeds.js
 
