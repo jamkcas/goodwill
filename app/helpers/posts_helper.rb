@@ -32,13 +32,16 @@ module PostsHelper
     else
       id = session[:queue]
     end
-    # Creates a hash passing in the new thread id and deed details
-    post_params = {title: deed.title, content: deed.description, deed_id: deed.id, user_id: current_user.id, thread_id: id}
-    # Clearing the queue
-    session[:queue] = nil
+    # Creates a hash passing in the new thread id, lat and lon, and deed details
+    post_params = {title: deed.title, content: deed.description, deed_id: deed.id, user_id: current_user.id, thread_id: id, lat: params[:lat], lon: params[:lon]}
     # Creates a new post with the created hash
     post = Post.create(post_params)
-
+    # Clearing the queue
+    session[:queue] = nil if post.save
+    # If post isnt save a post status of false is returned
+    post = 'false' if !post.save
+    # Returns the post
+    post
   end
 
   def update_post
@@ -57,28 +60,55 @@ module PostsHelper
     post.update_attributes(lon: params[:lon])
     # Updating the post's complete status to true
     post.update_attributes(complete: true)
+    # Only posts to facebook if the post is saved as complete
+    # if post.complete == true
+    #   api = Koala::Facebook::API.new(current_user.oauth_token)
+    #   # Need to change the link for production
+    #   api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
+    #     "name" => "Goodwill Tracking",
+    #    "link"=> "http://www.jamkcas.com",
+    #    "caption"=> "Keep the kindness going!",
+    #    "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!",
+    #    "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
+    # end
+  end
 
-    if post.complete == true
-      api = Koala::Facebook::API.new(current_user.oauth_token)
-      api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
-        "name" => "Goodwill Tracking",
-       "link"=> "http://www.jamkcas.com",
-       "caption"=> "Keep the kindness going!",
-       "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!",
-       "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
+  def get_locations
+    # Finds the current post thread id with the post id
+    thread = Post.find(params[:post_id]).thread_id
+    # Finds all the posts with current post thread id
+    posts = Post.find_all_by_thread_id(thread)
+    # Creating a new array of post hashes adding the the poster's name to each hash
+    new_posts = []
+    posts.each do |p|
+      new_hash = {
+        name: p.user.name,
+        title: p.title,
+        content: p.content,
+        lat: p.lat,
+        lon: p.lon,
+        thread_id: p.thread_id,
+        deed_id: p.deed_id,
+        complete: p.complete,
+        id: p.id,
+        created_at: p.created_at,
+        updated_at: p.updated_at
+      }
+      new_posts << new_hash
     end
+    # Returns the new posts hash
+    new_posts
   end
 
   def send_invite
     friend = Contact.find(params[:friend])
     thread = Post.find(params[:thread]).thread_id
-
     # Send email passing in the user's current thread and the contact's email
     invite = InviteMailer.invite(friend, thread).deliver
   end
 
   def setQueue
-
+    # Setting a session variable to temporarily save the thread id, while user is directed through login process
     unless Post.find_all_by_thread_id(params[:id]).empty?
       session[:queue] = params[:id]
     end

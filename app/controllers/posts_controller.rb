@@ -23,6 +23,7 @@ class PostsController < ApplicationController
   def invite_friend
     # Call method to send out the invitation
     send_invite
+    # Need to figure out error message handling for action mailer
     render text: 'ok'
   end
 
@@ -43,30 +44,11 @@ class PostsController < ApplicationController
   end
 
   def populate_map
-    thread = Post.find(params[:post_id]).thread_id
-    posts = Post.find_all_by_thread_id(thread)
-    new_posts = []
-    posts.each do |p|
-      new_hash = {
-        name: p.user.name,
-        title: p.title,
-        content: p.content,
-        lat: p.lat,
-        lon: p.lon,
-        thread_id: p.thread_id,
-        deed_id: p.deed_id,
-        complete: p.complete,
-        id: p.id,
-        created_at: p.created_at,
-        updated_at: p.updated_at
-      }
-      new_posts << new_hash
-    end
-    # binding.pry
+    # Getting all the locations with the current thread id
+    locations = get_locations if current_user
 
-    p ('*') * 50
-    p new_posts
-    render json: new_posts
+    # Returning the locations
+    render json: locations
   end
 
 end

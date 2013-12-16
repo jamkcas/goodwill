@@ -19,21 +19,18 @@ var getContacts = function() {
 
 // Call to google to get permissions and ask for contacts list
 var importGoogle = function() {
-  $('#overlayWindow').on('click', '.googleContacts', function(e) {
-    e.preventDefault();
-    // Ajax call to get authorization code and then access token for user
-    $.ajax('/contacts/google').done(function(data) {
-      // If a url is returned then a call is made to get an access token, otherwise the current user already has an access token
-      if(data.url != 'null') {
-        // Makes a popup window for Permissions page for google (auto-closes when done)
-        window.open(data.url, "popupWindow", "width=600,height=600,scrollbars=yes");
-      }
-    });
-    // Makes a call to get the contacts and append them to contacts list page
-    getContacts();
-    // Removing the add contacts function
-    $('.importGoogle').remove();
+  // Ajax call to get authorization code and then access token for user
+  $.ajax('/contacts/google').done(function(data) {
+    // If a url is returned then a call is made to get an access token, otherwise the current user already has an access token
+    if(data.url != 'null') {
+      // Makes a popup window for Permissions page for google (auto-closes when done)
+      window.open(data.url, "popupWindow", "width=600,height=600,scrollbars=yes");
+    }
   });
+  // Makes a call to get the contacts and append them to contacts list page
+  getContacts();
+  // Removing the add contacts function
+  $('.importGoogle').remove();
 };
 
 // Call to get contacts if they exist on page load or add a button to get from google
@@ -44,7 +41,10 @@ var fetchContacts = function() {
       var template = JST['templates/import'];
       $('.contacts').append(template);
       // Importing google contacts
-      importGoogle();
+      $('#overlayWindow').on('click', '.googleContacts', function(e) {
+        e.preventDefault();
+        importGoogle();
+      });
     } else {
       // Appending the contacts to the contacts list
       addContacts(data);
@@ -145,7 +145,7 @@ var fetchCurrent = function(setCurrent) {
 // Make a call to the posts/current to find the user's current post and thread
 var getCurrent = function() {
   fetchCurrent(setCurrent);
-
+  var inviteCounter = 0;
   // When the user wants to post that they have finished the deed and hit Post as Complete
   $('#thread').on('click', '#postComplete', function(e) {
     e.preventDefault();
@@ -162,13 +162,19 @@ var getCurrent = function() {
     e.preventDefault();
     // Hiding the popup modal
     hideModal();
+    inviteCounter = 0;
   })
 
   // Finish a Post
   $('#overlayWindow').on('click', '.updatePost', function(e) {
     e.preventDefault();
-    // Getting the current post and passing in a function to update the finished post
-    fetchCurrent(finishPost);
+    $('.postErrors').empty();
+    if(inviteCounter === 0) {
+      $('.postErrors').append('<p>Sorry! You must invite at least one person</p>')
+    } else {
+      // Getting the current post and passing in a function to update the finished post
+      fetchCurrent(finishPost);
+    }
   });
 
   // When an invite is clicked, an ajax call is made to email an invite to the corresponding contact
@@ -178,6 +184,9 @@ var getCurrent = function() {
     // Getting the id of the contact, as well as the id of the thread the user is currently on
     var friend_id = current.data('id');
     var thread_id = $('#currentDeed').data('id');
+    // Hiding the invite button and giving inital send message
+    current.parent().append('<h4 class="sent">Invite being sent!</h4>');
+    current.hide();
     // Making the ajax call to send the email for this person
     $.ajax('/posts/invite', {
       data: {
@@ -185,9 +194,13 @@ var getCurrent = function() {
               friend: friend_id
             }
     }).done(function(data) {
-      // Removing the invite button and adding a sent message once the invitation was sent (need to check for success still)
-      current.parent().append('<h4>Invite Sent!</h4>');
-      current.remove();
+      if(data === 'ok') {
+        // Removing the invite button and adding a sent message once the invitation was sent (need to check for success still)
+        $('.sent').text('Invite sent!');
+        inviteCounter += 1;
+        current.remove();
+        $('.postErrors').empty();
+      }
     });
   });
 
@@ -229,18 +242,33 @@ var getCurrent = function() {
   $('#overlayWindow').on('click', '.submitPost', function(e) {
     e.preventDefault();
     var id = $(this).data('id');
-    $.ajax('/posts/create', {
-      method: 'POST',
-      data: {
-              data_id: id
-            }
-    }).done(function(data) {
-      // The modal is hidden
-      hideModal();
-      // The thread div is emptied (start thread button removed)
-      $('#thread').empty();
-      // The fetch current function is called to set the contents of the thread div to the current posts details
-      fetchCurrent(setCurrent);
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      $.ajax('/posts/create', {
+        method: 'POST',
+        data: {
+                data_id: id,
+                lat: initialLocation.nb,
+                lon: initialLocation.ob
+              }
+      }).done(function(data) {
+        // The modal is hidden
+        hideModal();
+        // If a false status is returned then an error message is returned
+        if(data === false) {
+          // Removes any previous error messages
+          $('.error').remove();
+          // Adds a new error message
+          $('#thread').prepend("<p class='error'>Post was unable to be saved. Please try again</p>")
+        } else {
+          // Sets the queue to false if a post was created
+          gon.queue = false;
+          // The thread div is emptied (start thread button removed)
+          $('#thread').empty();
+          // The fetch current function is called to set the contents of the thread div to the current posts details
+          fetchCurrent(setCurrent);
+        }
+      });
     });
   });
 

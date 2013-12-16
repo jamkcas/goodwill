@@ -6,6 +6,6 @@ module GoodwillHelper
 
   def checkQueue
     # Setting status of the queue
-    gon.queue = session[:queue] == nil ? false : true
+    gon.watch.queue = session[:queue] == nil ? false : true
   end
 end

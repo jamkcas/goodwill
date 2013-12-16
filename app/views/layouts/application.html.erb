@@ -16,12 +16,10 @@
   window.fbAsyncInit = function() {
     // init the FB JS SDK
     FB.init({
-      appId      : "<%= CONFIG[:facebook_app_id] %>",                        // App ID from the app dashboard
-      status     : true,                                 // Check Facebook Login status
-      xfbml      : true                                  // Look for social plugins on the page
+      appId      : "<%= CONFIG[:facebook_app_id] %>",
+      status     : true,
+      xfbml      : true
     });
-
-    // Additional initialization code such as adding Event Listeners goes here
   };
 
   // Load the SDK asynchronously
@@ -33,6 +31,7 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 </script>
+
 <div id='overlay'></div>
 <!-- Background for modal -->
 <div class='container'>
@@ -42,7 +41,7 @@
   <!-- Login Controls -->
   <div id="user_nav">
     <% if current_user %>
-      <p>Welcome, <%= current_user.name %></p>
+      <p>Welcome, <%= current_user.name %></p><img src='<%= current_user.profile_pic %>'>
       <%= link_to "Sign out", signout_path, id: "signout" %>
     <% else %>
       <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->

@@ -6,7 +6,7 @@
       <h3>Now keep this thread of good deeds going across the globe.</h3>
     </hgroup>
   </header> <!-- end modalHeader -->
-  <div class='modalMain'>
+  <div class='modalMain' data-id='<%= current.id %>'>
     <input type='text' id='postTitle' value='<%= current.details.title %>' />
     <textarea id='deedDetails'><%= current.details.description %></textarea>
     <h4>Invite your friends to take part...</h4>
@@ -15,6 +15,7 @@
 
       </ul>
     </div>
+    <div class='postErrors'></div>
     <button class='updatePost'>Done</button>
   </div> <!-- end modalMain -->
 </div> <!-- end currentPostModal -->
