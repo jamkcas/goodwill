@@ -1,4 +1,18 @@
-<li class='deedEntry' data-id='<%= data.id %>'>
-  <h4><%= data.title %></h4>
-  <p><%= data.description %></p>
+<li class='deed' data-id='<%= data.deed.id %>'>
+  <div class='deedEntry'>
+    <h4><%= data.deed.title %></h4>
+    <p><%= data.deed.description %></p>
+  </div>
+
+  <!-- Only shows up vote button if the current user hasnt voted on it yet -->
+  <% if(data.voted === false) { %>
+    <button class='upVote'>+</button>
+  <% }; %>
+  <p>Up Votes: </p><p class='upTotal'><%= data.up %></p>
+  <!-- Only shows down vote button if the current user hasnt voted on it yet -->
+
+  <% if(data.voted === false) { %>
+    <button class='downVote'>-</button>
+  <% }; %>
+  <p>Down Votes: </p><p class='downTotal'><%= data.down %></p>
 </li>

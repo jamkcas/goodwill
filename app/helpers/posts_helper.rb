@@ -65,14 +65,15 @@ module PostsHelper
   end
 
   def post_to_fb(post)
-    #   api = Koala::Facebook::API.new(current_user.oauth_token)
-    #   # Need to change the link for production
-    #   api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
-    #     "name" => "Goodwill Tracking",
-    #    "link"=> "http://www.jamkcas.com",
-    #    "caption"=> "Keep the kindness going!",
-    #    "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!",
-    #    "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
+    # Posts to facebook the current users good deed
+    # api = Koala::Facebook::API.new(current_user.oauth_token)
+    # # Need to change the link for production
+    # api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
+    #   "name" => "Goodwill Tracking",
+    #  "link"=> "http://www.jamkcas.com",
+    #  "caption"=> "Keep the kindness going!",
+    #  "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!",
+    #  "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
   end
 
   def get_locations

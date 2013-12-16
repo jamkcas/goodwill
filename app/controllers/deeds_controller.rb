@@ -1,9 +1,11 @@
 class DeedsController < ApplicationController
+  include DeedsHelper
+
   def index
     # Fetches all the deeds from the db
-    @deeds = Deed.all()
+    deeds = fetch_deeds
 
-    render json: @deeds
+    render json: deeds
   end
 
   def show

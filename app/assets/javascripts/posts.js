@@ -262,7 +262,7 @@ var getCurrent = function() {
   $('#overlayWindow').on('click', '.deedEntry', function(e) {
     e.preventDefault();
     var current = $(this);
-    var id = current.data('id');
+    var id = current.parent().data('id');
     // Making a call to the db and getting the deed details
     $.get('/deeds/' + id).done(function(data) {
       // Hiding the lists of deeds div

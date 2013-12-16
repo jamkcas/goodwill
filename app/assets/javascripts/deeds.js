@@ -1,8 +1,8 @@
-var addDeedToList = function(data, id) {
+var addDeedToList = function(data, list) {
   // Creating a new list item by creating a data object and passing it into the deed_entry jst template
   var template = JST['templates/deed_entry']({data: data});
   // Appending the template to the appropriate item
-  $(id).append(template);
+  $(list).append(template);
 };
 
 // Populating the lists for te index page
@@ -10,7 +10,7 @@ var pageLists = function(data) {
   // Populating each list with the deed list returned from the db
   _.each(data, function(d) {
     // if the deed category is a deed then it populates the suggested lists
-    if(d.category === 'suggested') {
+    if(d.deed.category === 'suggested') {
       // if the deed type is a donation then it populates the donations list
       if(d.deed_type === 'donation') {
         addDeedToList(d, '#suggestedDonations');
@@ -33,7 +33,7 @@ var modalLists = function(data) {
   // Populating each list with the deed list returned from the db
   _.each(data, function(d) {
     // if the deed category is a deed then it populates the suggested lists
-    if(d.category === 'suggested') {
+    if(d.deed.category === 'suggested') {
       // if the deed type is a donation then it populates the donations list
       if(d.deed_type === 'donation') {
         addDeedToList(d, '.suggestedDonationsModal');
@@ -58,3 +58,11 @@ var populatePage = function(list) {
     list(data);
   });
 };
+
+var emptyPage = function() {
+  $('#suggestedDonations').empty();
+  $('#suggestedServices').empty();
+  $('#localDonations').empty();
+  $('#localServices').empty();
+}
+
