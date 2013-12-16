@@ -90,14 +90,33 @@ var finishPost = function(current) {
 };
 
 // Adds a pin on the map(passing in a title, icon and location)
-var placeMarker = function(loc, title, mapIcon) {
+var placeMarker = function(loc, data, mapIcon) {
   var marker = new google.maps.Marker({
     position: loc,
     map: map,
-    title: title,
+    title: data.name,
     icon: mapIcon
   });
+  var msg = makeMessage(data);
+  attachMessage(marker, msg);
 };
+
+// Formats the info to be displayed in the info window on the map
+var makeMessage = function(data) {
+  var template = JST['templates/map_info']({data: data});
+  return template;
+};
+
+// Attaches the info window and event handler onto each marker
+function attachMessage(marker, msg) {
+  var infowindow = new google.maps.InfoWindow(
+      { content: msg,
+        size: new google.maps.Size(50,50)
+      });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+}
 
 // Setting current thread details or a button if not currently on a thread
 var setCurrent = function(data) {
@@ -125,7 +144,7 @@ var setCurrent = function(data) {
           // Setting the location where deed was or is being done
           var location = new google.maps.LatLng(d.lat, d.lon)
           // Calling the placeMarker function to add a marker at the location
-          placeMarker(location, d.name, mapIcon);
+          placeMarker(location, d, mapIcon);
         });
         // Checking to see if map is loaded, and recalling itself if the page isnt loaded
         if(map === undefined) {
