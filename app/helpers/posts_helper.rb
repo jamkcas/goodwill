@@ -1,4 +1,11 @@
 module PostsHelper
+  def fetch_recent
+    posts = Post.all
+    # Adding the poster's name to each post
+    all_posts = new_posts(posts)
+    sorted = (all_posts.sort_by { |post| post[:updated_at] }).reverse
+  end
+
   def query_current
     # Starting a new hash to return
     current = {}
@@ -79,16 +86,13 @@ module PostsHelper
     #  "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
   end
 
-  def get_locations
-    # Finds the current post thread id with the post id
-    thread = Post.find(params[:post_id]).thread_id
-    # Finds all the posts with current post thread id
-    posts = Post.find_all_by_thread_id(thread)
+  def new_posts(posts)
     # Creating a new array of post hashes adding the the poster's name to each hash
     new_posts = []
     posts.each do |p|
       new_hash = {
         name: p.user.name,
+        pic: p.user.profile_pic,
         title: p.title,
         content: p.content,
         lat: p.lat,
@@ -104,6 +108,15 @@ module PostsHelper
     end
     # Returns the new posts hash
     new_posts
+  end
+
+  def get_locations
+    # Finds the current post thread id with the post id
+    thread = Post.find(params[:post_id]).thread_id
+    # Finds all the posts with current post thread id
+    posts = Post.find_all_by_thread_id(thread)
+    # Adding the poster's name to each post
+    locations = new_posts(posts)
   end
 
   def send_invite

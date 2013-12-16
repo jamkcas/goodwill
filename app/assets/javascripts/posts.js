@@ -1,5 +1,20 @@
 /********************************/
-/******* Contact Functons *******/
+/******* Recent post functons *******/
+/********************************/
+
+// Function to populate the recent posts
+var populatePosts = function() {
+  $.get('/posts/recent').done(function(data) {
+    _.each(data, function(post) {
+      var template = JST['templates/recent_post']({ data: post });
+      $('#recentList').append(template);
+    });
+  });
+};
+
+
+/********************************/
+/******* Contact functons *******/
 /********************************/
 
 // Function to add a contact contacts to the contacts list window

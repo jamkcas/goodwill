@@ -1,6 +1,12 @@
 class PostsController < ApplicationController
   include PostsHelper
 
+  def get_recent
+    posts = fetch_recent
+
+    render json: posts
+  end
+
   def get_current
     # If there is a current user, then fetch the post the current user is on
     if current_user

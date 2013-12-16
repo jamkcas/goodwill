@@ -16,7 +16,9 @@ module DeedsHelper
       down = 0
       # Cycling through each vote for this deed and updating the count totals, as well as updating the user's vote status if they have voted for this deed already
       d.votes.each do |v|
-        new_deed[:voted] = v.user_id == current_user.id ? true : false
+        if current_user
+          new_deed[:voted] = v.user_id == current_user.id ? true : false
+        end
         up += 1 if v.vote_type == true
         down += 1 if v.vote_type == false
       end
@@ -25,6 +27,8 @@ module DeedsHelper
       new_deed[:down] = down
       # Setting the total score
       new_deed[:score] = up - down
+      # Preventing voting buttons from being displayed if no user
+      new_deed[:voted] = true if !current_user
       # Shoving the new deed into the new deeds has
       new_deeds << new_deed
     end

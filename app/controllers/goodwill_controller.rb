@@ -1,11 +1,16 @@
 class GoodwillController < ApplicationController
   include GoodwillHelper
+  include DeedsHelper
+
   def index
     # Checking to see if a Session queue exists and setting the status as a javascript variable
     checkQueue
 
     # Checking to see if user exists and setting status as a Gon variable for javascript
     checkUser
+
+    # Populating the page if not signed in
+    fetch_deeds
 
     respond_to do |format|
       format.html

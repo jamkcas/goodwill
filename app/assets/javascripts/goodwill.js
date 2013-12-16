@@ -47,6 +47,9 @@ $(function() {
   // Populating the featured local with most popular local cause
   populatePage(featuredLocal); // In deeds.js
 
+  // Populating the recent posts list
+  populatePosts();
+
   // Setting the current project if one exists and User is logged in
   if(gon.logged_in === true) {
     getCurrent(); // In posts.js
@@ -94,6 +97,7 @@ $(function() {
       current_vote.remove();
     });
   });
+
   $('.container').on('click', '.downVote', function(e) {
     e.preventDefault();
     var vote_id = $(this).parent().data('id');
