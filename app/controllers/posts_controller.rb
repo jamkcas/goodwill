@@ -4,10 +4,10 @@ class PostsController < ApplicationController
   def get_current
     # If there is a current user, then fetch the post the current user is on
     if current_user
-      @current = query_current
+      current = query_current
     end
     # Pass back the current_post hash
-    render json: @current
+    render json: current
   end
 
   def create
@@ -40,7 +40,7 @@ class PostsController < ApplicationController
 
   def join_thread
     # Setting a queue with a thread id from the link
-    setQueue
+    set_queue
 
     redirect_to root_path
   end
@@ -53,4 +53,8 @@ class PostsController < ApplicationController
     render json: locations
   end
 
+  def reset_queue
+    clear_queue
+    render text: 'ok'
+  end
 end

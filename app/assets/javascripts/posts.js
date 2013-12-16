@@ -164,6 +164,61 @@ var fetchCurrent = function(setCurrent) {
   });
 };
 
+// Shows the choices of deeds when joining or starting a thread
+var showChoices = function() {
+  var template = JST['templates/new_post']
+  $('#overlayWindow').append(template);
+  // Getting all the deeds from the db
+  populatePage(modalLists);
+  showModal();
+};
+
+
+/*****************************************/
+/******* Confirmation modal events *******/
+/*****************************************/
+
+// Function to clear the queue value on both the client and the server side
+var queueReset = function() {
+  $.get('/posts/reset');
+  gon.queue = false;
+};
+
+// Clears and hides the modal, clears the queue when window is closed with the close window button
+var assignCloseConfirmModal = function() {
+  $('#overlayWindow').on('click', '.closeConfirmModal', function(e) {
+    e.preventDefault();
+    // Hiding the popup modal
+    hideModal();
+    queueReset();
+  });
+};
+
+// Clears and hides the modal, clears the queue when the user declines to change threads
+var assignConfirmDecline = function() {
+  $('#overlayWindow').on('click', '.decline', function(e) {
+    e.preventDefault();
+    // Hiding the popup modal
+    hideModal();
+    queueReset();
+  });
+};
+
+// Clears and hides the modal, clears the queue when the user declines to change threads
+var assignConfirmAccept = function() {
+  $('#overlayWindow').on('click', '.accept', function(e) {
+    e.preventDefault();
+    // Hiding the popup modal
+    $('#overlayWindow').empty();
+    var template = JST['templates/new_post']
+    $('#overlayWindow').append(template);
+    // Getting all the deeds from the db
+    populatePage(modalLists);
+    queueReset();
+  });
+};
+
+
 // Make a call to the posts/current to find the user's current post and thread
 var getCurrent = function() {
   fetchCurrent(setCurrent);
@@ -269,12 +324,7 @@ var getCurrent = function() {
   // When clicked, a modal pops up with a start a new thread form
   $('#thread').on('click', '#startThread', function(e) {
     e.preventDefault();
-    // Appending the new post template
-    var template = JST['templates/new_post']
-    $('#overlayWindow').append(template);
-    // Getting all the deeds from the db
-    populatePage(modalLists);
-    showModal();
+    showChoices();
   });
 
   // When clicked, the deeds lists are hidden and the deed details of deed clicked are made visible
@@ -334,13 +384,23 @@ var getCurrent = function() {
     });
   });
 
+  // Assigning the behaviors for the confirmation modal
+  assignCloseConfirmModal();
+  assignConfirmDecline();
+  assignConfirmAccept();
+
   // If there is a current queue a modal is triggered
   if(gon.queue == true) {
-    var template = JST['templates/new_post']
-    $('#overlayWindow').append(template);
-    // Getting all the deeds from the db
-    populatePage(modalLists);
-    showModal();
+    $.get('/posts/current').done(function(data) {
+      if(data.id === 'null') {
+        showChoices();
+      } else {
+        var template = JST['templates/confirm'];
+        $('#overlayWindow').append(template);
+        showModal();
+      }
+    });
+
   }
 };
 

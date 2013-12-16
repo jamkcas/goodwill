@@ -25,6 +25,7 @@ GoodwillTracker::Application.routes.draw do
   put '/posts/finish_post/:id', to: 'posts#finish_post'
   post '/posts/create', to: 'posts#create'
   get '/posts/populate_map', to: 'posts#populate_map'
+  get '/posts/reset', to: 'posts#reset_queue'
 
   # Votes controller routes
   post '/votes/save_vote', to: 'votes#save_vote'

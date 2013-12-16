@@ -20,6 +20,9 @@ module PostsHelper
   end
 
   def start_post
+    # In the case where a person decides to change threads, their old post is deleted
+    current = current_user.posts.where(complete: false)[0]
+    current.delete if current
     # Searches for the deed the user selected
     deed = Deed.find(params[:data_id])
     if(session[:queue] == nil)
@@ -110,10 +113,14 @@ module PostsHelper
     invite = InviteMailer.invite(friend, thread).deliver
   end
 
-  def setQueue
+  def set_queue
     # Setting a session variable to temporarily save the thread id, while user is directed through login process
     unless Post.find_all_by_thread_id(params[:id]).empty?
       session[:queue] = params[:id]
     end
+  end
+
+  def clear_queue
+    session[:queue] = nil
   end
 end
