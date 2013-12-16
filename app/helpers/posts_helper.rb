@@ -56,12 +56,15 @@ module PostsHelper
     post.update_attributes(title: title) if title
     post.update_attributes(content: content) if content
     # Updating the user's location
-    post.update_attributes(lat: params[:lat])
-    post.update_attributes(lon: params[:lon])
+    post.update_attributes(lat: params[:lat]) if params[:lat]
+    post.update_attributes(lon: params[:lon]) if params[:lon]
     # Updating the post's complete status to true
-    post.update_attributes(complete: true)
-    # Only posts to facebook if the post is saved as complete
-    # if post.complete == true
+    post.update_attributes(complete: true) unless params[:updateType] == 'post'
+
+    post
+  end
+
+  def post_to_fb(post)
     #   api = Koala::Facebook::API.new(current_user.oauth_token)
     #   # Need to change the link for production
     #   api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
@@ -70,7 +73,6 @@ module PostsHelper
     #    "caption"=> "Keep the kindness going!",
     #    "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!",
     #    "picture"=> "http://www.example.com/thumbnail.jpg"}, "me")
-    # end
   end
 
   def get_locations

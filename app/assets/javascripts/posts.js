@@ -60,9 +60,11 @@ var makePostModal = function(currentDeed) {
 
 // Function to grab post details, update the Post db, and make a post on facebook
 var finishPost = function(current) {
+  // Getting the values of te form fields in case the user changed these values
   var details = $('#deedDetails').val();
   var title = $('#postTitle').val();
-  var id = current.id;
+  // Getting the id of the current post
+  var id = $('#currentDeed').data('id');
   // Getting the user's current location then making an update to the db to complete the post
   navigator.geolocation.getCurrentPosition(function(position) {
     initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -73,7 +75,8 @@ var finishPost = function(current) {
         title: title,
         details: details,
         lat: initialLocation.nb,
-        lon: initialLocation.ob
+        lon: initialLocation.ob,
+        updateType: 'complete'
       }
     }).done(function(data) {
       // Hiding the popup modal
@@ -84,7 +87,6 @@ var finishPost = function(current) {
       fetchCurrent(setCurrent);
     });
   });
-
 };
 
 // Adds a pin on the map(passing in a title, icon and location)
@@ -105,6 +107,7 @@ var setCurrent = function(data) {
   } else { // If on a current thread the post details are displayed
     var template = JST['templates/current_deed']({current: data});
     $('#thread').append(template);
+    // Getting the thread locations to be plotted
     $.ajax('/posts/populate_map', {
       data: { post_id: data.id },
       method: 'GET'
@@ -145,6 +148,7 @@ var fetchCurrent = function(setCurrent) {
 // Make a call to the posts/current to find the user's current post and thread
 var getCurrent = function() {
   fetchCurrent(setCurrent);
+  // Initializing a counter to make sure at least one invite is sent when completing a post
   var inviteCounter = 0;
   // When the user wants to post that they have finished the deed and hit Post as Complete
   $('#thread').on('click', '#postComplete', function(e) {
@@ -160,14 +164,31 @@ var getCurrent = function() {
   // Close modal
   $('#overlayWindow').on('click', '.closeModal', function(e) {
     e.preventDefault();
+    // If invite has been sent, then the deed is marked as completed so the thread modal needs to be reset
+    if(inviteCounter > 0) {
+      // If invite is sent then the post needs to be posted on facebook
+      var post_id = $('.modalMain').data('id');
+      $.ajax('/posts/finish_post/' + post_id, {
+        method: 'PUT',
+        data: {
+          updateType: 'complete'
+        }
+      });
+      // Resetting the thread window on the index page
+      $('#thread').empty();
+      // Adding the start a new thread on the window
+      fetchCurrent(setCurrent);
+    }
     // Hiding the popup modal
     hideModal();
+    // Reset the invite counter
     inviteCounter = 0;
   })
 
   // Finish a Post
   $('#overlayWindow').on('click', '.updatePost', function(e) {
     e.preventDefault();
+    // Clearing any existing errors
     $('.postErrors').empty();
     if(inviteCounter === 0) {
       $('.postErrors').append('<p>Sorry! You must invite at least one person</p>')
@@ -194,11 +215,33 @@ var getCurrent = function() {
               friend: friend_id
             }
     }).done(function(data) {
+      // If the invite is successfully sent
       if(data === 'ok') {
+        // Getting the values of te form fields in case the user changed these values
+        var details = $('#deedDetails').val();
+        var title = $('#postTitle').val();
+        // Getting the current post id
+        var current_id = $('.modalMain').data('id');
+        // Making call to update the post as complete, but NOT post to facebook
+        navigator.geolocation.getCurrentPosition(function(position) {
+          initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+          $.ajax('/posts/finish_post/' + current_id, {
+            method: 'PUT',
+            data: {
+              title: title,
+              details: details,
+              lat: initialLocation.nb,
+              lon: initialLocation.ob,
+              updateType: 'invite'
+            }
+          });
+        });
         // Removing the invite button and adding a sent message once the invitation was sent (need to check for success still)
         $('.sent').text('Invite sent!');
-        inviteCounter += 1;
         current.remove();
+        // Updating the counter so the post can be submitted as complete to facebook
+        inviteCounter += 1;
+        // Clearing error messages
         $('.postErrors').empty();
       }
     });

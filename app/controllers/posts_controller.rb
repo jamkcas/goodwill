@@ -30,7 +30,9 @@ class PostsController < ApplicationController
   def finish_post
     if current_user
       # Updating the post if there is a current user
-      update_post
+      post = update_post
+
+      post_to_fb(post) if post.complete == true && params[:updateType] == 'complete' || params[:updateType] == 'post'
     end
 
     render text: 'ok'
