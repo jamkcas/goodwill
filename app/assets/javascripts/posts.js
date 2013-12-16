@@ -1,3 +1,7 @@
+/********************************/
+/******* Contact Functons *******/
+/********************************/
+
 // Function to add a contact contacts to the contacts list window
 var addContacts = function(data) {
   var template = JST['templates/contacts_entry']({contacts: data});
@@ -52,6 +56,45 @@ var fetchContacts = function() {
   });
 }
 
+
+/************************************/
+/******* Google map functions *******/
+/************************************/
+
+// Adds a pin on the map(passing in a title, icon and location)
+var placeMarker = function(loc, data, mapIcon) {
+  var marker = new google.maps.Marker({
+    position: loc,
+    map: map,
+    title: data.name,
+    icon: mapIcon
+  });
+  var msg = makeMessage(data);
+  attachMessage(marker, msg);
+};
+
+// Formats the info to be displayed in the info window on the map
+var makeMessage = function(data) {
+  var template = JST['templates/map_info']({data: data});
+  return template;
+};
+
+// Attaches the info window and event handler onto each marker
+function attachMessage(marker, msg) {
+  var infowindow = new google.maps.InfoWindow(
+      { content: msg,
+        size: new google.maps.Size(50,50)
+      });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+}
+
+
+/**************************************/
+/******* Current post functions *******/
+/**************************************/
+
 // Function to set the modal with details to complete the post
 var makePostModal = function(currentDeed) {
   var template = JST['templates/post_complete']({current: currentDeed});
@@ -89,34 +132,14 @@ var finishPost = function(current) {
   });
 };
 
-// Adds a pin on the map(passing in a title, icon and location)
-var placeMarker = function(loc, data, mapIcon) {
-  var marker = new google.maps.Marker({
-    position: loc,
-    map: map,
-    title: data.name,
-    icon: mapIcon
-  });
-  var msg = makeMessage(data);
-  attachMessage(marker, msg);
+// Shows the choices of deeds when joining or starting a thread
+var showChoices = function() {
+  var template = JST['templates/new_post']
+  $('#overlayWindow').append(template);
+  // Getting all the deeds from the db
+  populatePage(modalLists);
+  showModal();
 };
-
-// Formats the info to be displayed in the info window on the map
-var makeMessage = function(data) {
-  var template = JST['templates/map_info']({data: data});
-  return template;
-};
-
-// Attaches the info window and event handler onto each marker
-function attachMessage(marker, msg) {
-  var infowindow = new google.maps.InfoWindow(
-      { content: msg,
-        size: new google.maps.Size(50,50)
-      });
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.open(map,marker);
-  });
-}
 
 // Setting current thread details or a button if not currently on a thread
 var setCurrent = function(data) {
@@ -164,15 +187,6 @@ var fetchCurrent = function(setCurrent) {
   });
 };
 
-// Shows the choices of deeds when joining or starting a thread
-var showChoices = function() {
-  var template = JST['templates/new_post']
-  $('#overlayWindow').append(template);
-  // Getting all the deeds from the db
-  populatePage(modalLists);
-  showModal();
-};
-
 
 /*****************************************/
 /******* Confirmation modal events *******/
@@ -190,6 +204,7 @@ var assignCloseConfirmModal = function() {
     e.preventDefault();
     // Hiding the popup modal
     hideModal();
+    // Resetting the queue
     queueReset();
   });
 };
@@ -200,6 +215,7 @@ var assignConfirmDecline = function() {
     e.preventDefault();
     // Hiding the popup modal
     hideModal();
+    // Resetting the queue
     queueReset();
   });
 };
@@ -208,23 +224,28 @@ var assignConfirmDecline = function() {
 var assignConfirmAccept = function() {
   $('#overlayWindow').on('click', '.accept', function(e) {
     e.preventDefault();
-    // Hiding the popup modal
+    // Clearing the modal contents
     $('#overlayWindow').empty();
+    // Showing the deed list choices
     var template = JST['templates/new_post']
     $('#overlayWindow').append(template);
     // Getting all the deeds from the db
     populatePage(modalLists);
+    // Resetting the queue
     queueReset();
   });
 };
 
 
-// Make a call to the posts/current to find the user's current post and thread
-var getCurrent = function() {
-  fetchCurrent(setCurrent);
-  // Initializing a counter to make sure at least one invite is sent when completing a post
-  var inviteCounter = 0;
-  // When the user wants to post that they have finished the deed and hit Post as Complete
+/***********************************/
+/******* Current post events *******/
+/***********************************/
+
+// Initializing a counter to make sure at least one invite is sent when completing a post
+var inviteCounter = 0;
+
+// Event for when user initiates a COMPLETED deed post flow
+var assignPostComplete = function() {
   $('#thread').on('click', '#postComplete', function(e) {
     e.preventDefault();
     // Adding the complete post modal
@@ -234,8 +255,10 @@ var getCurrent = function() {
     // Making popup modal visible and moving it into position on the screen
     showModal();
   });
+};
 
-  // Close modal
+// Event for when user hits the close modal button (the core functionality is the hide modal function. The rest of the code refers to the case when a user is closing the modal of the update post flow)
+var assignCloseModal = function() {
   $('#overlayWindow').on('click', '.closeModal', function(e) {
     e.preventDefault();
     // If invite has been sent, then the deed is marked as completed so the thread modal needs to be reset
@@ -257,13 +280,16 @@ var getCurrent = function() {
     hideModal();
     // Reset the invite counter
     inviteCounter = 0;
-  })
+  });
+};
 
-  // Finish a Post
+// Event to submit to the db the final post details and save as complete, ONLY if at least one invite has been sent
+var assignFinish = function() {
   $('#overlayWindow').on('click', '.updatePost', function(e) {
     e.preventDefault();
     // Clearing any existing errors
     $('.postErrors').empty();
+    // Making sure at least one invite is sent
     if(inviteCounter === 0) {
       $('.postErrors').append('<p>Sorry! You must invite at least one person</p>')
     } else {
@@ -271,8 +297,10 @@ var getCurrent = function() {
       fetchCurrent(finishPost);
     }
   });
+};
 
-  // When an invite is clicked, an ajax call is made to email an invite to the corresponding contact
+// Event for when the user invites a contact
+var assignInvite = function() {
   $('#overlayWindow').on('click', '.invite', function() {
     // Setting the current button to a variable
     var current = $(this);
@@ -320,14 +348,18 @@ var getCurrent = function() {
       }
     });
   });
+};
 
-  // When clicked, a modal pops up with a start a new thread form
+// Event for when a user wants to start a thread
+var assignStart = function() {
   $('#thread').on('click', '#startThread', function(e) {
     e.preventDefault();
     showChoices();
   });
+};
 
-  // When clicked, the deeds lists are hidden and the deed details of deed clicked are made visible
+// Event for when a user wants to see the details of a particular deed
+var assignShowDetails = function() {
   $('#overlayWindow').on('click', '.deedEntry', function(e) {
     e.preventDefault();
     var current = $(this);
@@ -342,15 +374,20 @@ var getCurrent = function() {
       // debugger
     });
   });
+};
 
-  // When clicked the deeds list is shown again and the entry details div is emptied
+// Event in the show details flow for when the user hits the back button
+var assignBack = function() {
   $('#overlayWindow').on('click', '.back', function(e) {
     e.preventDefault();
+    // Reshows the lists div and clears out the entry details div
     $('.lists').show();
     $('.entryDetails').empty();
   });
+};
 
-  // When clicked the an ajax call is made to save the new post to the db
+// Event for when user finishes the start thread flow and saves an initial post
+var assignSavePost = function() {
   $('#overlayWindow').on('click', '.submitPost', function(e) {
     e.preventDefault();
     var id = $(this).data('id');
@@ -383,6 +420,35 @@ var getCurrent = function() {
       });
     });
   });
+};
+
+// Make a call to the posts/current to find the user's current post and thread
+var getCurrent = function() {
+  fetchCurrent(setCurrent);
+
+  // When the user wants to post that they have finished the deed and hit Post as Complete
+  assignPostComplete();
+
+  // Close modal
+  assignCloseModal();
+
+  // Finish a Post
+  assignFinish();
+
+  // When an invite is clicked, an ajax call is made to email an invite to the corresponding contact
+  assignInvite();
+
+  // When clicked, a modal pops up with a start a new thread form
+  assignStart();
+
+  // When clicked, the deeds lists are hidden and the deed details of deed clicked are made visible
+  assignShowDetails();
+
+  // When clicked the deeds list is shown again and the entry details div is emptied
+  assignBack();
+
+  // When clicked the an ajax call is made to save the new post to the db
+  assignSavePost();
 
   // Assigning the behaviors for the confirmation modal
   assignCloseConfirmModal();
@@ -391,10 +457,12 @@ var getCurrent = function() {
 
   // If there is a current queue a modal is triggered
   if(gon.queue == true) {
+    // Checking to see if the user is currently on a thread
     $.get('/posts/current').done(function(data) {
       if(data.id === 'null') {
         showChoices();
       } else {
+        // Showing a confirmation modal so user can decide it they want to switch deed threads
         var template = JST['templates/confirm'];
         $('#overlayWindow').append(template);
         showModal();
