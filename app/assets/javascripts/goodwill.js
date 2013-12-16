@@ -41,6 +41,12 @@ $(function() {
   // Populating all the lists with deeds from the db
   populatePage(pageLists); // In deeds.js
 
+  // Populating the featured list with most popular suggested deeds
+  populatePage(featuredLists); // In deeds.js
+
+  // Populating the featured local with most popular local cause
+  populatePage(featuredLocal); // In deeds.js
+
   // Setting the current project if one exists and User is logged in
   if(gon.logged_in === true) {
     getCurrent(); // In posts.js

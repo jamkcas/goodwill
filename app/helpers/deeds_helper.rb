@@ -23,6 +23,8 @@ module DeedsHelper
       # Setting the up and down vote totals for this deed
       new_deed[:up] = up
       new_deed[:down] = down
+      # Setting the total score
+      new_deed[:score] = up - down
       # Shoving the new deed into the new deeds has
       new_deeds << new_deed
     end
