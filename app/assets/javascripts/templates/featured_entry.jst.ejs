@@ -1,3 +1,14 @@
-<li data-id='<%= data.id %>'>
-  <h4><%= data.deed.title %></h4>
-</li>
+<li class='featuredEntry' data-id='<%= data.id %>'>
+  <div class='featuredContainer'>
+    <div class='featuredImage'>
+      <img src='<%= data.deed.picture %>'>
+    </div> <!-- end featuredImage -->
+
+    <h4><%= data.deed.title %></h4>
+
+    <div class='featuredVotes'>
+      <p>Up votes: <%= data.up %> </p>
+      <p>Down votes: <%= data.down %> </p>
+    </div> <!-- end featuredVotes -->
+  </div> <!-- end featuredContainer -->
+</li> <!-- end featuredEntry -->

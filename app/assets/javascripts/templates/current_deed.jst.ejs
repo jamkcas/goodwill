@@ -1,8 +1,14 @@
-<div id='currentDeed' data-id='<%= current.id %>'>
-  <h3><%= current.details.title %></h3>
-  <ul>
-    <li><a href='#'>View Details</a></li>
-    <li><a href='#'>Change Deed</a></li>
-  </ul>
-  <button id='postComplete'>Post As Complete</button>
+<div id='currentDeed' class='clearfix' data-id='<%= current.id %>'>
+  <div class='button' id='postComplete'>
+    <p>Post Deed As Complete</p>
+  </div>
+
+  <div class='currentDetails'>
+    <h5>GOOD DEED TO BE COMPLETED:</h5>
+
+    <h3><%= current.details.title %></h3>
+
+    <p><a href='#'>Change Deed</a></p>
+  </div>
+
 </div>
