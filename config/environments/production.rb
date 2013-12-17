@@ -65,11 +65,15 @@ GoodwillTracker::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'goodwill-tracker.herokuapp.com' }
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default :charset => "utf-8"
   config.action_mailer.smtp_settings = {
     enable_starttls:  :true,
     address:          'smtp.gmail.com',
+    domain:           "goodwill-tracker.herokuapp.com",
     port:             587,
     authentication:   :plain,
     user_name:        ENV['APP_EMAIL_USERNAME'],

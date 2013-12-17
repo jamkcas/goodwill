@@ -30,6 +30,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'rspec-rails'
   gem 'pry'
+  gem 'dotenv'
 end
 
 gem 'jquery-rails'
