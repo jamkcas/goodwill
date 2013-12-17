@@ -9,7 +9,7 @@ module ContactsHelper
           method: :get,
           params: {
                     response_type: 'code', # The type of response google gives back. Needs to be 'code' for web apps.
-                    client_id: CONFIG[:google_client_id], # Id given to my app by google
+                    client_id: ENV['GOOGLE_CLIENT_ID'], # Id given to my app by google
                     redirect_uri: 'http://localhost:3000/contacts/auth_approve', # When the response is received this is where the user is redirected
                     scope: 'https://www.google.com/m8/feeds', # Asking for access to google contacts
                     approval_prompt: 'auto' # When set to auto they only have to give permission once
@@ -30,8 +30,8 @@ module ContactsHelper
       method: :post,
       body: {
                 code: code,
-                client_id: CONFIG[:google_client_id],
-                client_secret: CONFIG[:google_client_secret], # Secret that google provided for the app
+                client_id: ENV['GOOGLE_CLIENT_ID'],
+                client_secret: ENV['GOOGLE_CLIENT_SECRET'], # Secret that google provided for the app
                 redirect_uri: 'http://localhost:3000/contacts/auth_approve', # redirecting the app back to this method after the call is made
                 grant_type: 'authorization_code'
               },

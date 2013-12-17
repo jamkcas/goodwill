@@ -6,7 +6,7 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <script src="https://maps.googleapis.com/maps/api/js?key=<%= CONFIG[:google_api_key] %>&sensor=true">
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&sensor=true">
   </script>
 </head>
 
@@ -16,7 +16,7 @@
   window.fbAsyncInit = function() {
     // init the FB JS SDK
     FB.init({
-      appId      : "<%= CONFIG[:facebook_app_id] %>",
+      appId      : "<%= ENV['FACEBOOK_APP_ID'] %>",
       status     : true,
       xfbml      : true
     });

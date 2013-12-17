@@ -42,8 +42,8 @@ GoodwillTracker::Application.configure do
   address:              'smtp.gmail.com',
   port:                  587,
   domain:               'example.com',
-  user_name:             CONFIG[:user_name],
-  password:              CONFIG[:email_password],
+  user_name:             ENV['APP_EMAIL_USERNAME'],
+  password:              ENV['APP_EMAIL_PASSWORD'],
   authentication:       'plain',
   enable_starttls_auto: true }
 
