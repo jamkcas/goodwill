@@ -172,6 +172,7 @@ var setCurrent = function(data) {
       // Creating a function to make sure map is loaded then add markers
       var checkMap = function() {
         var mapIcon;
+        var locations = [];
         // Setting the map icon based on whether deed is current or already completed
         _.each(data, function(d) {
           if(d.complete === true) {
@@ -183,7 +184,9 @@ var setCurrent = function(data) {
           var location = new google.maps.LatLng(d.lat, d.lon)
           // Calling the placeMarker function to add a marker at the location
           placeMarker(location, d, mapIcon);
+          locations.push(location);
         });
+        console.log(locations)
         // Checking to see if map is loaded, and recalling itself if the page isnt loaded
         if(map === undefined) {
           setTimeout(checkMap, 200);
