@@ -4,6 +4,6 @@ class InviteMailer < ActionMailer::Base
   def invite(user, thread)
     @user = user
     @thread = thread
-    mail(to: @user.email, subject: 'Do something kind today.')
+    mail(to: @user, subject: 'Do something kind today.')
   end
 end

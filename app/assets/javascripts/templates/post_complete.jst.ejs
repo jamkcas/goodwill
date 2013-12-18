@@ -6,16 +6,20 @@
       <h4>Now in order to post your good deed and keep this thread of good deeds going, <span class='dark'>you must invite a friend.</span></h4>
     </hgroup>
   </header> <!-- end modalHeader -->
-  <div class='modalMain' data-id='<%= current.id %>'>
-    <div class='inviteWindow'>
+  <div class='modalMain modalPostMain' data-id='<%= current.id %>'>
+    <div class='inviteMessage'></div>
+    <div class='inviteWindow clearfix'>
       <h4>Invite your friends to take part...</h4>
       <div class='contacts'>
-        <ul class='contactsList'>
+        <ul class='contactsList clearfix'>
 
         </ul>
       </div>
-      <div class='postErrors'></div>
-      <button class='updatePost'>Done</button>
+      <div class='google'></div>
+      <div class='addEmail'>
+        <input type='text' id='email' placeholder='Type in an email...' />
+        <p class='addedEmail invite button'>Invite</p>
+      </div>
     </div>
 
     <div class='postTitleModal clearfix'>
@@ -34,6 +38,7 @@
         <textarea id='deedDetails'><%= current.details.description %></textarea>
       </div>
     </div>
-
+    <div class='postErrors'></div>
+    <p class='button updatePost'>Submit Deed As Complete</p>
   </div> <!-- end modalMain -->
 </div> <!-- end currentPostModal -->

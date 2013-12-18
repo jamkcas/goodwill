@@ -43,7 +43,7 @@ a {
   color: inherit;
 }
 
-a:hover {
+a:hover, button:hover {
   cursor: pointer;
 }
 
@@ -109,6 +109,11 @@ li {
 .modalMain {
   text-align: left;
   padding: 0 30px;
+}
+
+.modalPostMain {
+  text-align: center;
+  padding: 0;
 }
 
 .lists h3 {
@@ -195,7 +200,7 @@ li {
 .completeHeader {
   font-size: 25px;
   line-height: 25px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .completeHeader h4 {
@@ -232,6 +237,62 @@ li {
   margin-bottom: 15px;
 }
 
+.inviteWindow {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.inviteWindow h4 {
+  margin-bottom: 10px;
+}
+
+.google, .addEmail {
+  float: left;
+  background: #E8EAEB;
+  padding: 10px 10px 20px 10px;
+}
+
+.google {
+  width: 40%;
+}
+
+.addEmail {
+  width: 58%;
+  margin-left: 2%;
+  padding-bottom: 7px;
+}
+
+.importGoogle {
+  text-align: center;
+}
+
+.importGoogle h5 {
+  margin-bottom: 20px;
+}
+
+.googleContacts {
+  display: inline;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.googleContacts:hover {
+  cursor: pointer;
+}
+
+#email {
+  margin: 10px 0 7px 0;
+  width: 100%;
+  padding: 3px;
+}
+
+.postErrors, .error {
+  color: red;
+}
+
 .friendsWindow {
   width: 100%;
   max-height: 310px;
@@ -247,23 +308,36 @@ li {
   width: 33.33333333333%;
   float: left;
   padding: 10px;
+  text-align: center
 }
 
 .friendsEntry {
   box-shadow: 1px 1px 3px black;
-  display: block;
+  width: 100%;
+  padding: 5px 5px 10px 5px;
+}
+
+.contacts {
+  max-height: 180px;
+  overflow: scroll;
+  margin-bottom: 20px;
   padding: 5px;
 }
 
-.friendsEntry img {
-  float: left;
-  width: 33%;
+.contactName {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
-.friendsEntry h5 {
-  float: left;
-  width: 67%;
-  margin-bottom: 10px;
+.invite {
+  display: inline-block;
+  padding: 8px;
+  margin-top: 0;
+}
+
+.invite:hover {
+  cursor: pointer;
 }
 
 

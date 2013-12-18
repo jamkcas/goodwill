@@ -23,6 +23,13 @@ var addContacts = function(data) {
   $('.contactsList').append(template);
 };
 
+var setEmailSize = function() {
+  $('.addEmail').css('width', '100%');
+  $('.addEmail').css('margin-left', '0');
+  $('#email').css('width', '50%');
+  $('#email').css('margin-right', '10px');
+};
+
 // Function to fetch contacts after a google token request
 var getContacts = function() {
   $.ajax('/contacts/get_contacts').done(function(data) {
@@ -49,7 +56,8 @@ var importGoogle = function() {
   // Makes a call to get the contacts and append them to contacts list page
   getContacts();
   // Removing the add contacts function
-  $('.importGoogle').remove();
+  $('.google').remove();
+  setEmailSize();
 };
 
 // Call to get contacts if they exist on page load or add a button to get from google
@@ -58,7 +66,7 @@ var fetchContacts = function() {
     // If no contacts exist in the db then add a prompt and a button to import them
     if(data.length === 0) {
       var template = JST['templates/import'];
-      $('.contacts').append(template);
+      $('.google').append(template);
       // Importing google contacts
       $('#overlayWindow').on('click', '.googleContacts', function(e) {
         e.preventDefault();
@@ -67,6 +75,8 @@ var fetchContacts = function() {
     } else {
       // Appending the contacts to the contacts list
       addContacts(data);
+      $('.google').remove();
+      setEmailSize();
     }
   });
 }
@@ -320,7 +330,7 @@ var assignFinish = function() {
     $('.postErrors').empty();
     // Making sure at least one invite is sent
     if(inviteCounter === 0) {
-      $('.postErrors').append('<p>Sorry! You must invite at least one person</p>')
+      $('.postErrors').append('<p>Sorry! You must invite someone to complete your post. Thanks!</p>')
     } else {
       // Getting the current post and passing in a function to update the finished post
       fetchCurrent(finishPost);
@@ -336,14 +346,37 @@ var assignInvite = function() {
     // Getting the id of the contact, as well as the id of the thread the user is currently on
     var friend_id = current.data('id');
     var thread_id = $('#currentDeed').data('id');
-    // Hiding the invite button and giving inital send message
-    current.parent().append('<h4 class="sent">Invite being sent!</h4>');
-    current.hide();
+    var email = 'null';
+
+    if(current.hasClass('addedEmail')) {
+      email = $('#email').val();
+    }
+
+    // Clearing error messages
+    $('.postErrors').empty();
+
+    // Hiding the invite options and giving the initial invite message
+    $('.inviteMessage').append('<h4 class="sent">Invite being sent!</h4>');
+    $('.inviteWindow').hide();
+
+    /**************************************************************/
+    /*** This is for the multi-person invite flow in the future ***/
+    /**************************************************************/
+
+    // // Hiding the invite button and giving inital send message
+    // current.parent().append('<h4 class="sent">Invite being sent!</h4>');
+    // current.hide();
+
+    /**************************************************************/
+    /*** This is for the multi-person invite flow in the future ***/
+    /**************************************************************/
+
     // Making the ajax call to send the email for this person
     $.ajax('/posts/invite', {
       data: {
               thread: thread_id,
-              friend: friend_id
+              friend: friend_id,
+              email: email
             }
     }).done(function(data) {
       // If the invite is successfully sent
@@ -369,11 +402,9 @@ var assignInvite = function() {
         });
         // Removing the invite button and adding a sent message once the invitation was sent (need to check for success still)
         $('.sent').text('Invite sent!');
-        current.remove();
+        // current.remove(); /*** Also for multi person invites in the future ***/
         // Updating the counter so the post can be submitted as complete to facebook
         inviteCounter += 1;
-        // Clearing error messages
-        $('.postErrors').empty();
       }
     });
   });
@@ -439,7 +470,7 @@ var assignSavePost = function() {
           // Removes any previous error messages
           $('.error').remove();
           // Adds a new error message
-          $('#thread').prepend("<p class='error'>Post was unable to be saved. Please try again</p>")
+          $('#thread').prepend("<p class='error'>Post was unable to be saved. Please try again.</p>")
         } else {
           // Sets the queue to false if a post was created
           gon.queue = false;

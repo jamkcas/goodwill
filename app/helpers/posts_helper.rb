@@ -120,8 +120,14 @@ module PostsHelper
   end
 
   def send_invite
-    friend = Contact.find(params[:friend])
     thread = Post.find(params[:thread]).thread_id
+
+    if params[:email] == 'null'
+      friend = Contact.find(params[:friend]).email
+    else
+      friend = params[:email]
+    end
+
     # Send email passing in the user's current thread and the contact's email
     invite = InviteMailer.invite(friend, thread).deliver
   end
