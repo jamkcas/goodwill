@@ -397,6 +397,7 @@ var assignShowDetails = function() {
     $.get('/deeds/' + id).done(function(data) {
       // Hiding the lists of deeds div
       $('.lists').hide();
+      $('.modalHeader').hide();
       // Creating and appending the deed details to the entry details div
       var template = JST['templates/deed_details']({ details: data });
       $('.entryDetails').append(template);
@@ -411,6 +412,7 @@ var assignBack = function() {
     e.preventDefault();
     // Reshows the lists div and clears out the entry details div
     $('.lists').show();
+    $('.modalHeader').hide();
     $('.entryDetails').empty();
   });
 };

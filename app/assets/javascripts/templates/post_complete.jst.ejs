@@ -1,21 +1,39 @@
 <div class='currentPostModal'>
   <button class='closeModal'>X</button>
   <header class='modalHeader'>
-    <hgroup>
+    <hgroup class='completeHeader'>
       <h1>Great Job! Thanks For Helping!!</h1>
-      <h3>Now keep this thread of good deeds going across the globe.</h3>
+      <h4>Now in order to post your good deed and keep this thread of good deeds going, <span class='dark'>you must invite a friend.</span></h4>
     </hgroup>
   </header> <!-- end modalHeader -->
   <div class='modalMain' data-id='<%= current.id %>'>
-    <input type='text' id='postTitle' value='<%= current.details.title %>' />
-    <textarea id='deedDetails'><%= current.details.description %></textarea>
-    <h4>Invite your friends to take part...</h4>
-    <div class='contacts'>
-      <ul class='contactsList'>
+    <div class='inviteWindow'>
+      <h4>Invite your friends to take part...</h4>
+      <div class='contacts'>
+        <ul class='contactsList'>
 
-      </ul>
+        </ul>
+      </div>
+      <div class='postErrors'></div>
+      <button class='updatePost'>Done</button>
     </div>
-    <div class='postErrors'></div>
-    <button class='updatePost'>Done</button>
+
+    <div class='postTitleModal clearfix'>
+      <div class='leftCol'>
+        <h5>Post Title:</h5>
+      </div>
+      <div class='right'>
+        <input type='text' id='postTitle' value='<%= current.details.title %>' />
+      </div>
+    </div>
+    <div class='postDescriptionModal clearfix'>
+      <div class='leftCol'>
+        <h5>Post Description:</h5>
+      </div>
+      <div class='right'>
+        <textarea id='deedDetails'><%= current.details.description %></textarea>
+      </div>
+    </div>
+
   </div> <!-- end modalMain -->
 </div> <!-- end currentPostModal -->

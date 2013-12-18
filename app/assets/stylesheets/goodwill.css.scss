@@ -7,7 +7,7 @@
 // ****** Variables ******
 
 $containerWidth: 1170px;
-$modalWidth: $containerWidth * 0.7;
+$modalWidth: $containerWidth * 0.5;
 
 
 
@@ -79,14 +79,14 @@ li {
 
 #overlayWindow {
   background-color: #fff;
-  border:1px solid #000;
+  border: 1px solid #000;
   position: absolute;
   width: $modalWidth;
   left: center($containerWidth, $modalWidth);
   top: -1000px;
   max-height: 1000px;
   overflow: auto;
-  padding: 40px;
+  padding: 20px;
   text-align: center;
   z-index: 2000;
 }
@@ -96,12 +96,140 @@ li {
   display: inline-block;
 }
 
+.modalHeader h3 {
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+
+.modalHeader {
+  text-align: center;
+}
+
+.modalMain {
+  text-align: left;
+  padding: 0 30px;
+}
+
+.lists h3 {
+  font-size: 25px;
+  line-height: 35px;
+  padding: 0 20px;
+}
+
+.suggestedServices {
+  margin-top: 30px;
+}
+
+.suggestedDeedsModal h3, .localList {
+  margin-top: 20px;
+}
+
+.lists h4 {
+  padding: 0 30px 0 10px;
+}
+
+.back {
+  float: left;
+}
+
+.back:hover {
+  cursor: pointer;
+}
+
+.submitPost {
+  display: inline-block;
+}
+
+.deedInformation {
+  float: left;
+  clear: both;
+  text-align: center;
+}
+
+.deedInformation h4 {
+  font-size: 25px;
+  line-height: 25px;
+  margin: 15px 0;
+}
+
+.deedDets {
+  width: 100%;
+  text-align: center;
+}
+
+.deedDets li {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.leftCol {
+  float: left;
+  text-align: right;
+  width: 30%;
+  // margin-right: 20px;
+}
+
+.deedDets h5 {
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.deedDets p {
+  float: left;
+}
+
+.deedInformation img {
+  float: right;
+}
+
+
 
 
 // ****** Post Modal ******
 
 .currentPostModal {
   width: 100%;
+}
+
+.completeHeader {
+  font-size: 25px;
+  line-height: 25px;
+  margin-bottom: 20px;
+}
+
+.completeHeader h4 {
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.dark {
+  color: #5188C1;
+  font-size: 20px;
+}
+
+.right {
+  width: 70%;
+  padding: 0 20px;
+  float: left;
+}
+
+#deedDetails {
+  width: 100%;
+  resize: none;
+  height: 50px;
+  overflow: auto;
+  padding: 3px;
+}
+
+#postTitle {
+  width: 100%;
+  padding: 3px;
+}
+
+.postTitleModal, .postDescriptionModal {
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .friendsWindow {

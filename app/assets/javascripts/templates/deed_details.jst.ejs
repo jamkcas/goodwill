@@ -1,10 +1,70 @@
-<h3>Deed Details</h3>
-<button class='back'>Back</button>
-<% if(details.location != 'null') { %><img src='<%= details.picture %>'</><% } %>
-<h4><%= details.title %></h4>
-<h5>Category: <%= capitalize(details.category) %> <%= capitalize(details.deed_type) %></h5>
-<p>Description: <%= details.description %></p>
-<% if(details.location != 'null') { %><p>Location: <%= details.location %></p><% } %>
-<% if(details.deadline != 'null') { %><p>Deadline: <%= details.deadline %></p><% } %>
-<% if(details.contact != 'null') { %><p>Contact: <%= details.contact %></p><% } %>
-<button class='submitPost' data-id='<%= details.id %>'>Start a Post</button>
+<p class='back'>Back</p>
+<div class='deedInformation clearfix'>
+  <ul class='deedDets clearfix'>
+    <% if(details.picture != 'null') { %>
+      <li class='clearfix'>
+        <div class='leftCol'>
+            <img src='<%= details.picture %>'/>
+        </div>
+        <div class='right'>
+          <h4><%= details.title %></h4>
+        </div>
+      </li>
+    <% } else { %>
+      <h4><%= details.title %></h4>
+    <% } %>
+    <li class='clearfix'>
+      <div class='leftCol'>
+        <h5>Category:</h5>
+      </div>
+      <div class='right'>
+        <p><%= capitalize(details.deed_type) %></p>
+      </div>
+    </li>
+
+    <li class='clearfix'>
+      <div class='leftCol'>
+        <h5>Description:</h5>
+      </div>
+      <div class='right'>
+        <p><%= details.description %></p>
+      </div>
+    </li>
+
+    <% if(details.location != 'null') { %>
+      <li class='clearfix'>
+        <div class='leftCol'>
+          <h5>Location:</h5>
+        </div>
+        <div class='right'>
+          <p><%= details.location %></p>
+        </div>
+      </li>
+    <% } %>
+
+    <% if(details.deadline != 'null') { %>
+      <li class='clearfix'>
+        <div class='leftCol'>
+          <h5>Deadline:</h5>
+        </div>
+        <div class='right'>
+          <p><%= details.deadline %></p>
+        </div>
+      </li>
+    <% } %>
+
+    <% if(details.contact != 'null') { %>
+      <li class='clearfix'>
+        <div class='leftCol'>
+          <h5>Contact: </h5>
+        </div>
+        <div class='right'>
+          <p><%= details.contact %></p>
+        </div>
+      </li>
+    <% } %>
+  </ul>
+
+  <p class='button submitPost' data-id='<%= details.id %>'>Start a Post</p>
+
+</div>
