@@ -30,6 +30,7 @@ var capitalize = function(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+
 // Start of Javascript when page loads
 $(function() {
   // Add the map to the map canvas
@@ -37,6 +38,7 @@ $(function() {
 
   // Hiding the modal on page load
   $('#overlayWindow').fadeOut();
+
 
   // Populating all the lists with deeds from the db
   populatePage(pageLists); // In deeds.js
@@ -70,61 +72,71 @@ $(function() {
   // Setting the voting event delegates
   $('.container').on('click', '.upVote', function(e) {
     e.preventDefault();
-    var vote_id = $(this).parent().data('id');
+    var vote_id = $(this).data('id');
     // Setting the vote instance varaible for use in the ajax callback
     var current_vote = $(this);
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
-              vote_type: true,
+              vote_type: 'up',
               id: vote_id,
               votable_type: 'Deed'
             }
     }).done(function(data) {
       // Changing the vote on the index page if clicking on the modal page
-      if(current_vote.parent().parent().parent().parent().hasClass('lists')) {
+      if(current_vote.parent().parent().parent().parent().parent().hasClass('lists') || current_vote.parent().parent().parent().hasClass('completeLists')) {
         emptyPage();
         populatePage(pageLists);
       }
       // Getting the old vote count
-      oldTotal = current_vote.next().next().text();
+      oldTotal = current_vote.next().text();
       // Adding the new vote to the vote count
       new_total = parseInt(oldTotal) + parseInt(data)
       // Setting the new vote count to display
-      current_vote.next().next().text(new_total);
+      current_vote.next().text(new_total);
       // Removing both voting buttons so the current user cant vote again
-      current_vote.next().next().next().remove();
-      current_vote.remove();
+      current_vote.removeClass('upVote');
+      current_vote.next().next().removeClass('downVote');
     });
   });
 
   $('.container').on('click', '.downVote', function(e) {
     e.preventDefault();
-    var vote_id = $(this).parent().data('id');
+    var vote_id = $(this).data('id');
     // Setting the vote instance varaible for use in the ajax callback
     var current_vote = $(this);
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
-              vote_type: false,
+              vote_type: 'down',
               id: vote_id,
               votable_type: 'Deed'
             }
     }).done(function(data) {
       // Changing the vote on the index page if clicking on the modal page
-      if(current_vote.parent().parent().parent().parent().hasClass('lists')) {
+      if(current_vote.parent().parent().parent().parent().parent().hasClass('lists') || current_vote.parent().parent().parent().hasClass('completeLists')) {
         emptyPage();
         populatePage(pageLists);
       }
       // Getting the old vote count
-      oldTotal = current_vote.next().next().text();
+      oldTotal = current_vote.next().text();
       // Adding the new vote to the vote count
       new_total = parseInt(oldTotal) + parseInt(data)
       // Setting the new vote count to display
-      current_vote.next().next().text(new_total);
+      current_vote.next().text(new_total);
       // Removing both voting buttons so the current user cant vote again
-      current_vote.prev().prev().prev().remove();
-      current_vote.remove();
+      current_vote.prev().prev().removeClass('upVote');
+      current_vote.removeClass('downVote');
     });
   });
+  $('#suggestedServices').on('click', '.moreDonations', function(){
+    populatePage(fullList, 'donation');
+  });
+  $('#suggestedServices').on('click', '.moreServices', function(){
+    populatePage(fullList, 'service');
+  });
+  $('#suggestedServices').on('click', '.moreLocal', function(){
+    populatePage(fullList, 'local');
+  });
+
 });

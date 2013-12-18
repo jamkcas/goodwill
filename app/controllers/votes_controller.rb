@@ -6,7 +6,9 @@ class VotesController < ApplicationController
     input_vote
 
     # Returning the vote to use for updating the screen
-    response = (params[:vote_type] == 'true' ? 1 : -1)
+    response = (params[:vote_type] == 'up' ? 1 : -1)
+    p ('*') * 50
+    p response
     render text: response
   end
 

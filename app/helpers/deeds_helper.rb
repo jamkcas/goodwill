@@ -10,6 +10,8 @@ module DeedsHelper
       new_deed = {}
       # Adding the deed details
       new_deed[:deed] = d
+      new_deed[:category] = d.category
+      new_deed[:type] = d.deed_type
       # Initializing the user's vote status to true as well as the vote counts to 0 for this deed
       new_deed[:voted] = false
       up = 0
@@ -19,8 +21,8 @@ module DeedsHelper
         if current_user
           new_deed[:voted] = v.user_id == current_user.id ? true : false
         end
-        up += 1 if v.vote_type == true
-        down += 1 if v.vote_type == false
+        up += 1 if v.vote_type == 'up'
+        down += 1 if v.vote_type == 'down'
       end
       # Setting the up and down vote totals for this deed
       new_deed[:up] = up

@@ -160,7 +160,7 @@ var showChoices = function() {
 var setCurrent = function(data) {
   // If not currently on a thread, a new button is appended
   if(data.id === 'null') {
-    $('#thread').append("<button id='startThread'>Start a Thread</button>")
+    $('#thread').append("<p id='startThread' class='button'>START A THREAD</p>")
   } else { // If on a current thread the post details are displayed
     var template = JST['templates/current_deed']({current: data});
     $('#thread').append(template);
@@ -172,7 +172,8 @@ var setCurrent = function(data) {
       // Creating a function to make sure map is loaded then add markers
       var checkMap = function() {
         var mapIcon;
-        var locations = [];
+        // array for locations for polylines
+        // var locations = [];
         // Setting the map icon based on whether deed is current or already completed
         _.each(data, function(d) {
           if(d.complete === true) {
@@ -184,9 +185,19 @@ var setCurrent = function(data) {
           var location = new google.maps.LatLng(d.lat, d.lon)
           // Calling the placeMarker function to add a marker at the location
           placeMarker(location, d, mapIcon);
-          locations.push(location);
+          // Adding locations to array for polylines
+          // locations.push(location);
         });
-        console.log(locations)
+        // Setting the path for the polyline
+        // var paths = new google.maps.Polyline({
+        //   path: locations,
+        //   strokeColor: "#FF0000",
+        //   geodesic: true,
+        //   strokeOpacity: 1.0,
+        //   strokeWeight: 2
+        // });
+        // Adding the polyline to the map
+        // paths.setMap(map);
         // Checking to see if map is loaded, and recalling itself if the page isnt loaded
         if(map === undefined) {
           setTimeout(checkMap, 200);

@@ -5,27 +5,61 @@ var addDeedToList = function(data, list) {
   $(list).append(template);
 };
 
-// Populating the lists for te index page
+var fullList = function(data, type) {
+  var suggested = _.where(data, {category: 'suggested'});
+  var suggestedDonations = _.where(suggested, {type: 'donation'});
+  var suggestedServices = _.where(suggested, {type: 'service'});
+  var local = _.where(data, {category: 'local'});
+  if(type === 'donation') {
+    var list = suggestedDonations;
+  } else if(type = 'service') {
+    var list = suggestedServices;
+  } else {
+    var list = local;
+  }
+  var template = JST['templates/deeds_list']({list: list, type: type});
+  $('#overlayWindow').append(template);
+  showModal();
+};
+
+// Populating the lists for the index page
 var pageLists = function(data) {
+  var suggested = _.where(data, {category: 'suggested'});
+  var suggestedDonations = _.where(suggested, {type: 'donation'});
+  var suggestedServices = _.where(suggested, {type: 'service'});
+
+  var local = _.where(data, {category: 'local'});
   // Populating each list with the deed list returned from the db
-  _.each(data, function(d) {
-    // if the deed category is a deed then it populates the suggested lists
-    if(d.deed.category === 'suggested') {
-      // if the deed type is a donation then it populates the donations list
-      if(d.deed_type === 'donation') {
-        addDeedToList(d, '#suggestedDonations');
-      } else { // if the deed type is a service then it populates the services list
-        addDeedToList(d, '#suggestedServices');
-      }
-    } else { // if the deed category is help it populates the local lists
-      if(d.deed_type === 'local') {
-        // if the deed type is a donation then it populates the donations list
-        addDeedToList(d, '#localDonations');
-      } else { // if the deed type is a service then it populates the services list
-        addDeedToList(d, '#localServices');
-      }
-    }
+  // if the deed category is suggested then it populates the suggested lists
+
+  // if the deed type is a donation then it populates the donations list
+  _.each(suggestedDonations.slice(0, 4), function(d) {
+    addDeedToList(d, '#suggestedDonations');
   });
+  // assignMore(suggestedDonations, 'donation');
+
+  // if there are more suggested donations a more button is added
+  if(suggestedDonations.length > 4) {
+    $('#suggestedDonations').append('<p class="more moreDonations">More...</p>');
+  }
+
+  // if the deed type is a service then it populates the services list
+  _.each(suggestedServices.slice(0, 4), function(d) {
+      addDeedToList(d, '#suggestedServices');
+  });
+  // if there are more suggested services a more button is added
+  if(suggestedServices.length > 4) {
+    $('#suggestedServices').append('<p class="more moreServices">More...</p>');
+  }
+
+  // if the deed category is local it populates the local lists
+  _.each(local.slice(0, 4), function(d) {
+    addDeedToList(d, '#localCauses');
+  });
+  // if there are more local causes a more button is added
+  if(local.length > 4) {
+    $('#localCauses').append('<p class="more moreLocal">More...</p>');
+  }
 };
 
 // Populating the lists for new post modal
@@ -33,20 +67,15 @@ var modalLists = function(data) {
   // Populating each list with the deed list returned from the db
   _.each(data, function(d) {
     // if the deed category is a deed then it populates the suggested lists
-    if(d.deed.category === 'suggested') {
+    if(d.category === 'suggested') {
       // if the deed type is a donation then it populates the donations list
-      if(d.deed_type === 'donation') {
+      if(d.type === 'donation') {
         addDeedToList(d, '.suggestedDonationsModal');
       } else { // if the deed type is a service then it populates the services list
         addDeedToList(d, '.suggestedServicesModal');
       }
     } else { // if the deed category is help it populates the local lists
-      if(d.deed_type === 'local') {
-        // if the deed type is a donation then it populates the donations list
-        addDeedToList(d, '.localDonationsModal');
-      } else { // if the deed type is a service then it populates the services list
-        addDeedToList(d, '.localServicesModal');
-      }
+      addDeedToList(d, '.localCausesModal');
     }
   });
 };
@@ -79,7 +108,7 @@ var featuredLists = function(data) {
   // Sort the featured array by score
   var sorted = sortVotes(featured);
   // Displaying the top 6 scored deeds
-  _.each(sorted.slice(0, 5), function(d) {
+  _.each(sorted.slice(0, 6), function(d) {
     var template = JST['templates/featured_entry']({data: d});
     $('#featuredDeeds').append(template);
   });
@@ -94,15 +123,15 @@ var featuredLocal = function(data) {
     return entry.score;
   });
   // Displaying the highest rated deed
-  var template = JST['templates/featured_entry']({data: max});
+  var template = JST['templates/featured_cause']({data: max});
   $('#featuredLocal').append(template);
 };
 
 // Fetching all the deeds and using the passed in the proper list populating function
-var populatePage = function(list) {
+var populatePage = function(list, type) {
   // Getting all the deeds from the db
   $.get('/deeds').done(function(data) {
-    list(data);
+    list(data, type);
   });
 };
 
@@ -110,7 +139,6 @@ var populatePage = function(list) {
 var emptyPage = function() {
   $('#suggestedDonations').empty();
   $('#suggestedServices').empty();
-  $('#localDonations').empty();
-  $('#localServices').empty();
+  $('#localCauses').empty();
 }
 

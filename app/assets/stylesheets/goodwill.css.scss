@@ -51,6 +51,15 @@ li {
   list-style: none;
 }
 
+.button {
+  background: -webkit-linear-gradient(top, #72a6dd 50%,#3877B8  100%);
+  padding: 10px;
+  border-radius: 5px;
+  color: #fefefe;
+  font-family: 'gandhi_sansregular';
+  margin-top: 15px;
+}
+
 
 
 // ****** Modal ******
@@ -182,8 +191,6 @@ li {
 
 
 
-
-
 // ****** Current Thread ******
 
 #currentThread {
@@ -221,6 +228,7 @@ li {
   background: #e8eaeb;
   padding: 10px;
   margin-top: 10px;
+  height: 85px;
 }
 
 #currentDeed {
@@ -254,12 +262,21 @@ li {
 
 #postComplete {
   float: right;
-  background: -webkit-linear-gradient(top, #72a6dd 50%,#3877B8  100%);
-  padding: 10px;
-  border-radius: 3px;
-  color: #fefefe;
-  font-family: 'gandhi_sansregular';
-  margin-top: 15px;
+}
+
+#startThread {
+  display: block;
+  width: 30%;
+  margin: auto;
+  text-align: center;
+  font-size: 25px;
+  line-height: 25px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+#postComplete:hover, #startThread:hover {
+  cursor: pointer;
 }
 
 
@@ -320,31 +337,188 @@ li {
 // ****** Deeds ******
 
 .column {
-  width: 33.3333333333333%;
   float: left;
   display: block;
-  padding: 10px;
+  padding: 10px 20px 10px 10px;
 }
 
 .bottom {
-  padding: 30px 20px;
+  padding: 40px 20px;
+}
+
+.bottom h3 {
+  font-size: 25px;
+  line-height: 25px;
+  margin-bottom: 20px;
+}
+
+.downVote, .upVote {
+  color: #52C1E0;
+  background: #E8EAEB;
+  border-radius: 3px;
+  padding: 3px;
+  display: inline;
+  box-shadow: 0.8px 0.8px 1px #838488;
+}
+
+.upVote:hover, .downVote:hover {
+  cursor: pointer;
+  background: #A7CDED;
+  color: #E8EAEB;
+}
+
+.thumbs {
+  font-family: 'heydings_iconsregular';
+}
+
+.more {
+  padding-top: 10px;
+  padding-left: 20px;
+  color: #63C3E1;
+}
+
+.more:hover {
+  cursor: pointer;
 }
 
 
 
 // ****** Featured Deeds ******
 
+#featured {
+  width: 35%;
+}
+
 .featuredEntry {
   float: left;
-  width: 33.3333333333333%;
-  height: 50%;
+  width: 50%;
   display: inline-block;
-  padding: 10px;
+  padding: 10px 20px 10px 0;
 }
 
 .featuredContainer {
   box-shadow: 1px 1px 1.5px #B7B7B7;
+  width: 100%;
 }
 
+.featuredContainer:hover {
+  cursor: pointer;
+  background: #E8EAEB;
+}
+
+.featuredImage {
+  width: 100%;
+}
+
+.featuredInfo {
+  padding: 10px;
+  width: 100%;
+}
+
+.featuredTitle {
+  width: 100%;
+  height: 32px;
+}
+
+.featuredInfo h4 {
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.featuredVotes {
+  float: right;
+  margin-top: 10px;
+}
+
+.featuredVotes p {
+  float: left;
+  padding-left: 20px;
+}
+
+
+
 // ****** Suggested Deeds ******
+
+#suggestedDeeds {
+  width: 35%;
+}
+
+#suggestedDeeds h3 {
+  margin-left: 20px;
+}
+
+.donations {
+  padding-top: 10px;
+}
+
+.donations h5, .services h5 {
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.services  {
+  padding-top: 30px;
+}
+
+.deed {
+  width: 100%;
+}
+
+.deedEntry {
+  float: left;
+  margin-left: 20px;
+}
+
+.deedEntry h4 {
+  font-size: 16px;
+  line-height: 25px;
+  color: #63C3E1;
+}
+
+.deed:hover {
+  cursor: pointer;
+  background: #E8EAEB;
+}
+
+.voteTotals {
+  float: right;
+  margin-right: 20px;
+  margin-top: 3px;
+}
+
+.voteTotals p {
+  float: left;
+  margin-left: 5px;
+}
+
+.voteTotals p:nth-child(even) {
+  font-size: 15px;
+  margin-top: 2px;
+  margin-right: 20px;
+}
+
+.voteTotals p:last-child {
+  margin-right: 10px;
+}
+
+#align {
+  margin-left: -2px;
+}
+
+
+
 // ****** Local Causes ******
+
+#locals {
+  width: 30%;
+}
+
+#locals h3 {
+  margin-left: 10px;
+}
+
+#featuredLocal {
+  margin-left: 10px;
+}

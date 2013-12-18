@@ -1,4 +1,4 @@
-<div class='row clearfix'>
+<div class='row top clearfix'>
   <div id='currentThread'>
     <header class='currentHeader'>
       <h3>My Current Thread:</h3>
@@ -18,21 +18,31 @@
 
 <div class='row bottom clearfix'>
   <div id='featured' class='column'>
-    <h3><em>Featured:</em></h3>
+    <h3>Featured Deeds:</h3>
+
     <div id='featuredDeeds'></div>
   </div> <!-- end featured -->
 
   <div id='suggestedDeeds' class='column'>
-    <h3><em>Suggested:</em></h3>
-    <ul id='suggestedDonations'></ul>
-    <ul id='suggestedServices'></ul>
+    <h3>Suggested Deeds:</h3>
+
+    <div class='donations'>
+      <h5>Donation Type Deeds:</h5>
+      <ul id='suggestedDonations'></ul>
+    </div>
+
+    <div class='services'>
+      <h5>Service Type Deeds:</h5>
+      <ul id='suggestedServices'></ul>
+    </div>
   </div> <!-- end suggestedDeeds -->
 
-  <div id='localCauses' class='column'>
+  <div id='locals' class='column'>
+    <h3>Local Causes:</h3>
     <div id='featuredLocal'></div>
-    <h3><em>Local:</em></h3>
-    <ul id='localDonations'></ul>
-    <ul id='localServices'></ul>
+    <div class='local'>
+      <ul id='localCauses'></ul>
+    </div>
   </div> <!-- end localCauses -->
 </div> <!-- end row -->
 
