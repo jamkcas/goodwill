@@ -133,6 +133,8 @@ var finishPost = function(current) {
   var title = $('#postTitle').val();
   // Getting the id of the current post
   var id = $('#currentDeed').data('id');
+  // Hiding the popup modal
+  hideModal();
   // Getting the user's current location then making an update to the db to complete the post
   navigator.geolocation.getCurrentPosition(function(position) {
     initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
