@@ -12,11 +12,11 @@ class Deed < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
   validates :user_id, presence: true
-  validates :location, presence: true
-  validates :contact, presence: true
-  validates :contact_type, presence: true
-  validates :deadline, presence: true
-
+  # validates :location, presence: true
+  # validates :contact, presence: true
+  # validates :contact_type, presence: true
+  # validates :deadline, presence: true
+#
   # I want to try changing validations later since not every entry needs the same validations. The below validations break the rspec tests for the above validations tho
 
   # validates :user_id, presence: true, uniqueness: { scope: :event_status }, if: :event_status

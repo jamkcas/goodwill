@@ -133,14 +133,6 @@ $(function() {
       current_vote.removeClass('downVote');
     });
   });
-  $('#suggestedServices').on('click', '.moreDonations', function(){
-    populatePage(fullList, 'donation');
-  });
-  $('#suggestedServices').on('click', '.moreServices', function(){
-    populatePage(fullList, 'service');
-  });
-  $('#suggestedServices').on('click', '.moreLocal', function(){
-    populatePage(fullList, 'local');
-  });
+
 
 });

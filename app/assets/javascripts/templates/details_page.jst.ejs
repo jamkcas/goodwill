@@ -14,7 +14,7 @@
               </div>
             </li>
           <% } else { %>
-            <h3 id='detailsTitle'><%= details.title %></h3>
+            <h3 class='detailsTitle'><%= details.title %></h3>
           <% } %>
           <li class='clearfix'>
             <div class='leftCol'>
@@ -33,8 +33,8 @@
               <p><%= details.description %></p>
             </div>
           </li>
-
-          <% if(details.location != 'null') { %>
+          <% console.log(details) %>
+          <% if(details.location != null) { %>
             <li class='clearfix'>
               <div class='leftCol'>
                 <h5>Location:</h5>
@@ -45,7 +45,7 @@
             </li>
           <% } %>
 
-          <% if(details.deadline != 'null') { %>
+          <% if(details.deadline != null) { %>
             <li class='clearfix'>
               <div class='leftCol'>
                 <h5>Deadline:</h5>
@@ -56,7 +56,7 @@
             </li>
           <% } %>
 
-          <% if(details.contact != 'null') { %>
+          <% if(details.contact != null) { %>
             <li class='clearfix'>
               <div class='leftCol'>
                 <h5>Contact: </h5>

@@ -210,6 +210,15 @@ var assignDeedClicks = function() {
       showModal();
     });
   });
+  $('.container').on('click', '.moreDonations', function(){
+    populatePage(fullList, 'donation');
+  });
+  $('.container').on('click', '.moreServices', function(){
+    populatePage(fullList, 'service');
+  });
+  $('.container').on('click', '.moreLocal', function(){
+    populatePage(fullList, 'local');
+  });
 };
 
 
