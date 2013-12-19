@@ -82,7 +82,7 @@ module PostsHelper
       "name" => "Goodwill Tracking",
      "link"=> "http://goodwill-tracker.herokuapp.com",
      "caption"=> "Keep the kindness going!",
-     "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!", "me")
+     "description"=> "Join my thread on Goodwill Tracking and commit to doing a good deed today!"}, "me")
   end
 
   def new_posts(posts)
