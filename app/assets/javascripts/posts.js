@@ -183,31 +183,38 @@ var setCurrent = function(data) {
       var checkMap = function() {
         var mapIcon;
         // array for locations for polylines
-        // var locations = [];
+        var locations = [];
         // Setting the map icon based on whether deed is current or already completed
         _.each(data, function(d) {
           if(d.complete === true) {
             mapIcon = 'marker_heart.png';
           } else {
-            mapIcon = 'current_marker_heart.png';
+            mapIcon = 'current_marker_heart2.png';
           }
           // Setting the location where deed was or is being done
           var location = new google.maps.LatLng(d.lat, d.lon)
           // Calling the placeMarker function to add a marker at the location
           placeMarker(location, d, mapIcon);
           // Adding locations to array for polylines
-          // locations.push(location);
+          locations.push(location);
         });
-        // Setting the path for the polyline
-        // var paths = new google.maps.Polyline({
-        //   path: locations,
-        //   strokeColor: "#FF0000",
-        //   geodesic: true,
-        //   strokeOpacity: 1.0,
-        //   strokeWeight: 2
-        // });
-        // Adding the polyline to the map
-        // paths.setMap(map);
+        var i = 0
+        while(i < locations.length - 1) {
+          var loc = [locations[i], locations[i + 1]];
+          console.log(locations[i])
+          // Setting the path for the polyline
+          var paths = new google.maps.Polyline({
+            path: loc,
+            strokeColor: "#4681BD",
+            geodesic: true,
+            strokeOpacity: 1.0,
+            strokeWeight: 1
+          });
+          // Adding the polyline to the map
+          paths.setMap(map);
+          i += 1
+        }
+
         // Checking to see if map is loaded, and recalling itself if the page isnt loaded
         if(map === undefined) {
           setTimeout(checkMap, 200);
@@ -263,15 +270,38 @@ var assignConfirmDecline = function() {
 var assignConfirmAccept = function() {
   $('#overlayWindow').on('click', '.accept', function(e) {
     e.preventDefault();
-    // Clearing the modal contents
-    $('#overlayWindow').empty();
-    // Showing the deed list choices
-    var template = JST['templates/new_post']
-    $('#overlayWindow').append(template);
-    // Getting all the deeds from the db
-    populatePage(modalLists);
-    // Resetting the queue
-    queueReset();
+    var id = $(this).data('id');
+    if(id === null) {
+      // Clearing the modal contents
+      $('#overlayWindow').empty();
+      // Showing the deed list choices
+      var template = JST['templates/new_post']
+      $('#overlayWindow').append(template);
+      // Getting all the deeds from the db
+      populatePage(modalLists);
+    } else {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+        $.ajax('/posts/create', {
+          method: 'POST',
+          data: {
+                  data_id: id,
+                  lat: initialLocation.nb,
+                  lon: initialLocation.ob
+                }
+        }).done(function(data) {
+          // The modal is hidden
+          hideModal();
+          // Sets the queue to false if a post was created
+          gon.queue = false;
+          // The thread div is emptied (start thread button removed)
+          $('#thread').empty();
+          // The fetch current function is called to set the contents of the thread div to the current posts details
+          fetchCurrent(setCurrent);
+        });
+      });
+    }
+
   });
 };
 
@@ -432,7 +462,6 @@ var assignShowDetails = function() {
       // Creating and appending the deed details to the entry details div
       var template = JST['templates/deed_details']({ details: data });
       $('.entryDetails').append(template);
-      // debugger
     });
   });
 };
@@ -491,9 +520,6 @@ var getCurrent = function() {
   // When the user wants to post that they have finished the deed and hit Post as Complete
   assignPostComplete();
 
-  // Close modal
-  assignCloseModal();
-
   // Finish a Post
   assignFinish();
 
@@ -525,7 +551,7 @@ var getCurrent = function() {
         showChoices();
       } else {
         // Showing a confirmation modal so user can decide it they want to switch deed threads
-        var template = JST['templates/confirm'];
+        var template = JST['templates/confirm']({id: 'null'});
         $('#overlayWindow').append(template);
         showModal();
       }

@@ -131,6 +131,12 @@ var featuredLocal = function(data) {
 var populatePage = function(list, type) {
   // Getting all the deeds from the db
   $.get('/deeds').done(function(data) {
+    // This is for adding a new deed
+    // if(data[0].logged === 'in') {
+    //   $('.addDeed').empty();
+    //   var button = '<p class="newDeed button">+ DEED</p>'
+    //   $('.addDeed').append(button)
+    // }
     list(data, type);
   });
 };
@@ -141,4 +147,69 @@ var emptyPage = function() {
   $('#suggestedServices').empty();
   $('#localCauses').empty();
 }
+
+var assignDeedClicks = function() {
+  $('.bottom').on('click', '.featuredEntry', function(){
+    var current = $(this);
+    var post_id = null
+    var id = current.data('id');
+    if($('#currentDeed').data('id')) {
+      post_id = $('#currentDeed').data('id')
+    }
+    $.get('/deeds/' + id).done(function(data) {
+      var template = JST['templates/details_page']({details: data, post_id: post_id});
+      $('#overlayWindow').append(template);
+      showModal();
+    });
+  });
+
+  $('.bottom').on('click', '.deedEntry', function() {
+    var current = $(this);
+    var post_id = null
+    var id = current.parent().data('id');
+    if($('#currentDeed').data('id')) {
+      post_id = $('#currentDeed').data('id')
+    }
+    $.get('/deeds/' + id).done(function(data) {
+      var template = JST['templates/details_page']({details: data, post_id: post_id});
+      $('#overlayWindow').append(template);
+      showModal();
+    });
+  });
+
+  $('.bottom').on('mouseenter', '.deedEntry', function() {
+    $(this).parent().css('background', '#E8EAEB');
+    $(this).parent().css('cursor', 'pointer');
+  });
+
+  $('.bottom').on('mouseleave', '.deedEntry', function() {
+    $(this).parent().css('background', 'white');
+    $(this).parent().css('cursor', 'none');
+  });
+
+  $('.container').on('click', '.change', function() {
+    var id = $(this).data('id');
+    var template = JST['templates/confirm']({id: id});
+    $('#overlayWindow').empty();
+    $('#overlayWindow').append(template);
+  });
+
+  $('.container').on('click', '.changeDeed', function() {
+    var id = $(this).data('id');
+    var template = JST['templates/new_post'];
+    $('#overlayWindow').append(template);
+    populatePage(modalLists);
+    showModal();
+  });
+
+  $('#thread').on('click', '.showCurrent', function() {
+    var id = $(this).data('id');
+    $.get('/deeds/' + id).done(function(data) {
+      var template = JST['templates/details_page']({details: data, post_id: null});
+      $('#overlayWindow').append(template);
+      showModal();
+    });
+  });
+};
+
 

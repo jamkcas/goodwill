@@ -1,1 +1,6 @@
-<%=  data.title %>
+<div class='mapInfo'>
+  <h3><%= data.title %></h3>
+  <p><%= data.name %></p>
+  <% var date = new Date( data.updated_at) %>
+  <p><%= date %></p>
+</div>

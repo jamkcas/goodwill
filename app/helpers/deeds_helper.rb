@@ -31,9 +31,12 @@ module DeedsHelper
       new_deed[:score] = up - down
       # Preventing voting buttons from being displayed if no user
       new_deed[:voted] = true if !current_user
+      # Recording status of current user
+      new_deed[:logged] = current_user ? 'in' : 'out'
       # Shoving the new deed into the new deeds has
       new_deeds << new_deed
     end
+
     # Returning the new_deeds hash
     new_deeds
   end

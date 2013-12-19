@@ -1,0 +1,76 @@
+<div class='currentPostModal'>
+  <button class='closeModal'>X</button>
+  <div class='modalMain'>
+    <div class='entryDetails clearfix'>
+      <div class='deedInformation clearfix'>
+        <ul class='deedEntryDets clearfix'>
+          <% if(details.picture != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                  <img src='<%= details.picture %>'/>
+              </div>
+              <div class='right'>
+                <h3 class='detailsTitle'><%= details.title %></h3>
+              </div>
+            </li>
+          <% } else { %>
+            <h3 id='detailsTitle'><%= details.title %></h3>
+          <% } %>
+          <li class='clearfix'>
+            <div class='leftCol'>
+              <h5>Category:</h5>
+            </div>
+            <div class='right'>
+              <p><%= capitalize(details.deed_type) %></p>
+            </div>
+          </li>
+
+          <li class='clearfix'>
+            <div class='leftCol'>
+              <h5>Description:</h5>
+            </div>
+            <div class='right'>
+              <p><%= details.description %></p>
+            </div>
+          </li>
+
+          <% if(details.location != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <h5>Location:</h5>
+              </div>
+              <div class='right'>
+                <p><%= details.location %></p>
+              </div>
+            </li>
+          <% } %>
+
+          <% if(details.deadline != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <h5>Deadline:</h5>
+              </div>
+              <div class='right'>
+                <p><%= details.deadline %></p>
+              </div>
+            </li>
+          <% } %>
+
+          <% if(details.contact != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <h5>Contact: </h5>
+              </div>
+              <div class='right'>
+                <p><%= details.contact %></p>
+              </div>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+      <% if(post_id != null) { %>
+        <p class='change' data-id='<%= details.id %>'>Change To This Deed</p>
+      <% } %>
+    </div>
+  </div> <!-- end modalMain -->
+</div> <!-- end currentPostModal -->

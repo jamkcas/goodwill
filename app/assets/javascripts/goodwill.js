@@ -39,7 +39,6 @@ $(function() {
   // Hiding the modal on page load
   $('#overlayWindow').fadeOut();
 
-
   // Populating all the lists with deeds from the db
   populatePage(pageLists); // In deeds.js
 
@@ -56,6 +55,11 @@ $(function() {
   if(gon.logged_in === true) {
     getCurrent(); // In posts.js
   }
+
+  // Close modal
+  assignCloseModal();
+
+  assignDeedClicks();
 
   // Puts an event on the signin button so it can be auto-triggered
   $('#signin').click(function() {
