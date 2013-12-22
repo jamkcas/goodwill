@@ -1,4 +1,82 @@
-var map
+/************************************/
+/******* Google map functions *******/
+/************************************/
+
+var map;
+
+// Adds a pin on the map(passing in a title, icon and location)
+var placeMarker = function(loc, data, mapIcon) {
+  var marker = new google.maps.Marker({
+    position: loc,
+    map: map,
+    title: data.name,
+    icon: mapIcon
+  });
+  var msg = makeMessage(data);
+  attachMessage(marker, msg);
+};
+
+// Formats the info to be displayed in the info window on the map
+var makeMessage = function(data) {
+  var template = JST['templates/map_info']({data: data});
+  return template;
+};
+
+// Attaches the info window and event handler onto each marker
+function attachMessage(marker, msg) {
+  var infowindow = new google.maps.InfoWindow(
+      { content: msg,
+        size: new google.maps.Size(50,50)
+      });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+}
+
+// Creating locations and placing markers
+var setLocations = function(data) {
+  var mapIcon;
+  // array for locations for polylines
+  var locations = [];
+  // Setting the map icon based on whether deed is current or already completed
+  _.each(data, function(d) {
+    if(d.complete === true) {
+      mapIcon = 'marker_heart.png';
+    } else {
+      mapIcon = 'current_marker_heart2.png';
+    }
+    // Setting the location where deed was or is being done
+    var location = new google.maps.LatLng(d.lat, d.lon)
+    // Calling the placeMarker function to add a marker at the location
+    placeMarker(location, d, mapIcon);
+    // Adding locations to array for polylines
+    locations.push(location);
+  });
+  // Returning locations to be used to draw the polylines connecting corresponding locations
+  return(locations)
+};
+
+var drawLines = function(locations) {
+  // Index for cycling through locations
+  var i = 0
+  // While there is still an i + 1 location(has to be 2 locations to connect), this function is run to connect the locations
+  while(i < locations.length - 1) {
+    // Grabbing the 2 corresponding locs to connect
+    var locs = [locations[i], locations[i + 1]];
+    // Setting the path for the polyline
+    var paths = new google.maps.Polyline({
+      path: locs,
+      strokeColor: "#4681BD",
+      geodesic: true,
+      strokeOpacity: 1.0,
+      strokeWeight: 1
+    });
+    // Adding the polyline to the map
+    paths.setMap(map);
+    i += 1
+  }
+};
+
 // Creating an intial map
 var mapInit = function() {
   if(navigator.geolocation) {
@@ -9,10 +87,21 @@ var mapInit = function() {
         center: initialLocation,
         zoom: 8
       };
+      // Creating a new map with current location as center
       map = new google.maps.Map($('#map-canvas')[0], mapOptions);
+      // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
+      if(gon.logged_in === true) {
+        getCurrent(); // In posts.js
+      }
     });
   }
 }
+
+
+
+/************************************/
+/******* Modal functions *******/
+/************************************/
 
 var showModal = function() {
   $('#overlay').css('visibility', 'visible');
@@ -26,9 +115,21 @@ var hideModal = function() {
   $('#overlayWindow').empty();
 };
 
+
+
+/************************************/
+/******* Utility functions *******/
+/************************************/
+
 var capitalize = function(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
+
+
+/************************************/
+/******* On load function *******/
+/************************************/
 
 
 // Start of Javascript when page loads
@@ -51,15 +152,12 @@ $(function() {
   // Populating the recent posts list
   populatePosts();
 
-  // Setting the current project if one exists and User is logged in
-  if(gon.logged_in === true) {
-    getCurrent(); // In posts.js
-  }
+
 
   // Close modal
   assignCloseModal();
 
-  assignDeedClicks();
+  // assignDeedClicks();
 
   // Puts an event on the signin button so it can be auto-triggered
   $('#signin').click(function() {
@@ -74,65 +172,9 @@ $(function() {
   }
 
   // Setting the voting event delegates
-  $('.container').on('click', '.upVote', function(e) {
-    e.preventDefault();
-    var vote_id = $(this).data('id');
-    // Setting the vote instance varaible for use in the ajax callback
-    var current_vote = $(this);
-    $.ajax('/votes/save_vote', {
-      method: 'POST',
-      data: {
-              vote_type: 'up',
-              id: vote_id,
-              votable_type: 'Deed'
-            }
-    }).done(function(data) {
-      // Changing the vote on the index page if clicking on the modal page
-      if(current_vote.parent().parent().parent().parent().parent().hasClass('lists') || current_vote.parent().parent().parent().hasClass('completeLists')) {
-        emptyPage();
-        populatePage(pageLists);
-      }
-      // Getting the old vote count
-      oldTotal = current_vote.next().text();
-      // Adding the new vote to the vote count
-      new_total = parseInt(oldTotal) + parseInt(data)
-      // Setting the new vote count to display
-      current_vote.next().text(new_total);
-      // Removing both voting buttons so the current user cant vote again
-      current_vote.removeClass('upVote');
-      current_vote.next().next().removeClass('downVote');
-    });
-  });
+  assignEvents();
 
-  $('.container').on('click', '.downVote', function(e) {
-    e.preventDefault();
-    var vote_id = $(this).data('id');
-    // Setting the vote instance varaible for use in the ajax callback
-    var current_vote = $(this);
-    $.ajax('/votes/save_vote', {
-      method: 'POST',
-      data: {
-              vote_type: 'down',
-              id: vote_id,
-              votable_type: 'Deed'
-            }
-    }).done(function(data) {
-      // Changing the vote on the index page if clicking on the modal page
-      if(current_vote.parent().parent().parent().parent().parent().hasClass('lists') || current_vote.parent().parent().parent().hasClass('completeLists')) {
-        emptyPage();
-        populatePage(pageLists);
-      }
-      // Getting the old vote count
-      oldTotal = current_vote.next().text();
-      // Adding the new vote to the vote count
-      new_total = parseInt(oldTotal) + parseInt(data)
-      // Setting the new vote count to display
-      current_vote.next().text(new_total);
-      // Removing both voting buttons so the current user cant vote again
-      current_vote.prev().prev().removeClass('upVote');
-      current_vote.removeClass('downVote');
-    });
-  });
+
 
 
 });

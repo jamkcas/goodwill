@@ -148,77 +148,14 @@ var emptyPage = function() {
   $('#localCauses').empty();
 }
 
-var assignDeedClicks = function() {
-  $('.bottom').on('click', '.featuredEntry', function(){
-    var current = $(this);
-    var post_id = null
-    var id = current.data('id');
-    if($('#currentDeed').data('id')) {
-      post_id = $('#currentDeed').data('id')
-    }
-    $.get('/deeds/' + id).done(function(data) {
-      var template = JST['templates/details_page']({details: data, post_id: post_id});
-      $('#overlayWindow').append(template);
-      showModal();
-    });
-  });
-
-  $('.bottom').on('click', '.deedEntry', function() {
-    var current = $(this);
-    var post_id = null
-    var id = current.parent().data('id');
-    if($('#currentDeed').data('id')) {
-      post_id = $('#currentDeed').data('id')
-    }
-    $.get('/deeds/' + id).done(function(data) {
-      var template = JST['templates/details_page']({details: data, post_id: post_id});
-      $('#overlayWindow').append(template);
-      showModal();
-    });
-  });
-
-  $('.bottom').on('mouseenter', '.deedEntry', function() {
-    $(this).parent().css('background', '#E8EAEB');
-    $(this).parent().css('cursor', 'pointer');
-  });
-
-  $('.bottom').on('mouseleave', '.deedEntry', function() {
-    $(this).parent().css('background', 'white');
-    $(this).parent().css('cursor', 'none');
-  });
-
-  $('.container').on('click', '.change', function() {
-    var id = $(this).data('id');
-    var template = JST['templates/confirm']({id: id});
-    $('#overlayWindow').empty();
-    $('#overlayWindow').append(template);
-  });
-
-  $('.container').on('click', '.changeDeed', function() {
-    var id = $(this).data('id');
-    var template = JST['templates/new_post'];
-    $('#overlayWindow').append(template);
-    populatePage(modalLists);
-    showModal();
-  });
-
-  $('#thread').on('click', '.showCurrent', function() {
-    var id = $(this).data('id');
-    $.get('/deeds/' + id).done(function(data) {
-      var template = JST['templates/details_page']({details: data, post_id: null});
-      $('#overlayWindow').append(template);
-      showModal();
-    });
-  });
-  $('.container').on('click', '.moreDonations', function(){
-    populatePage(fullList, 'donation');
-  });
-  $('.container').on('click', '.moreServices', function(){
-    populatePage(fullList, 'service');
-  });
-  $('.container').on('click', '.moreLocal', function(){
-    populatePage(fullList, 'local');
-  });
+var refreshLists = function() {
+  populatePage(pageLists);
+  populatePage(featuredLists);
+  populatePage(featuredLocal);
 };
+
+// var assignDeedClicks = function() {
+
+// };
 
 

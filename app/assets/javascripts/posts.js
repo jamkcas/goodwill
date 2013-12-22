@@ -82,39 +82,6 @@ var fetchContacts = function() {
 }
 
 
-/************************************/
-/******* Google map functions *******/
-/************************************/
-
-// Adds a pin on the map(passing in a title, icon and location)
-var placeMarker = function(loc, data, mapIcon) {
-  var marker = new google.maps.Marker({
-    position: loc,
-    map: map,
-    title: data.name,
-    icon: mapIcon
-  });
-  var msg = makeMessage(data);
-  attachMessage(marker, msg);
-};
-
-// Formats the info to be displayed in the info window on the map
-var makeMessage = function(data) {
-  var template = JST['templates/map_info']({data: data});
-  return template;
-};
-
-// Attaches the info window and event handler onto each marker
-function attachMessage(marker, msg) {
-  var infowindow = new google.maps.InfoWindow(
-      { content: msg,
-        size: new google.maps.Size(50,50)
-      });
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.open(map,marker);
-  });
-}
-
 
 /**************************************/
 /******* Current post functions *******/
@@ -181,49 +148,8 @@ var setCurrent = function(data) {
       data: { post_id: data.id },
       method: 'GET'
     }).done(function(data) {
-      // Creating a function to make sure map is loaded then add markers
-      var checkMap = function() {
-        var mapIcon;
-        // array for locations for polylines
-        var locations = [];
-        // Setting the map icon based on whether deed is current or already completed
-        _.each(data, function(d) {
-          if(d.complete === true) {
-            mapIcon = 'marker_heart.png';
-          } else {
-            mapIcon = 'current_marker_heart2.png';
-          }
-          // Setting the location where deed was or is being done
-          var location = new google.maps.LatLng(d.lat, d.lon)
-          // Calling the placeMarker function to add a marker at the location
-          placeMarker(location, d, mapIcon);
-          // Adding locations to array for polylines
-          locations.push(location);
-        });
-        var i = 0
-        while(i < locations.length - 1) {
-          var loc = [locations[i], locations[i + 1]];
-          console.log(locations[i])
-          // Setting the path for the polyline
-          var paths = new google.maps.Polyline({
-            path: loc,
-            strokeColor: "#4681BD",
-            geodesic: true,
-            strokeOpacity: 1.0,
-            strokeWeight: 1
-          });
-          // Adding the polyline to the map
-          paths.setMap(map);
-          i += 1
-        }
-
-        // Checking to see if map is loaded, and recalling itself if the page isnt loaded
-        if(map === undefined) {
-          setTimeout(checkMap, 200);
-        }
-      }
-      // Calling the checkMap function to place all the locations for the thread
-      checkMap();
+      // Placing locations and drawinf lines connecting them
+      drawLines(setLocations(data));
     });
   }
 };
