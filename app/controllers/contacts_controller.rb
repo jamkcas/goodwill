@@ -1,11 +1,10 @@
 class ContactsController < ApplicationController
-  include ContactsHelper
   def google
     if current_user
       # Do the initial authorization if it hasnt been done before
       if current_user.google_token == nil
         # Getting the Url for permissions page
-        url = get_auth
+        url = Contact.get_auth
 
         # Creating a new hash to send back with the url to redirect users to for giving permission. Return the url given by the response (directs to page asking user for permissions. When they accept they are redirected to the auth_approve method)
         response = { url: url }
@@ -22,7 +21,7 @@ class ContactsController < ApplicationController
     code = params[:code]
 
     # Passing the code into the approve_auth method to get access token
-    response = approve_auth(code)
+    response = Contact.approve_auth(code)
 
     # Capturing the access token provided in the response
     google = response['access_token']
@@ -30,7 +29,6 @@ class ContactsController < ApplicationController
     current_user.update_attributes(google_token: google)
 
     # Rendering the auth_approve page instead of the normal application page, so it will self close
-    # render 'auth_approve', :layout => false
     redirect_to contacts_save_contacts_path
   end
 
@@ -39,16 +37,16 @@ class ContactsController < ApplicationController
     access = current_user.google_token
 
     # Getting contacts from google using the current user's google access token
-    contacts = fetch_contacts(access)
+    contacts = Contact.fetch_contacts(access)
 
     # Parsing the response from google with Nokogiri
-    noko = to_noko(contacts)
+    noko = Contact.to_noko(contacts)
 
     # Taking the Nokogiri object and turning into a json response
-    response = noko_parse(noko)
+    response = Contact.noko_parse(noko)
 
     # Saving the contacts to the db
-    save_contact_list(response)
+    Contact.save_contact_list(response, current_user)
 
     # render text: 'Contacts saved.'
     render 'save_contacts', :layout => false

@@ -9,8 +9,8 @@ class GoodwillController < ApplicationController
     # Checking to see if user exists and setting status as a Gon variable for javascript
     checkUser
 
-    # Populating the page if not signed in
-    fetch_deeds
+    # # Populating the page if not signed in
+    # fetch_deeds
 
     respond_to do |format|
       format.html

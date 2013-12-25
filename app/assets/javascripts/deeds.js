@@ -80,79 +80,67 @@ var modalLists = function(data) {
   });
 };
 
-// Sort votes function
-var sortVotes = function(data) {
-  var sort = _.sortBy(data, function(d) {
-    return -d.score;
-  });
-  return sort;
-};
+// // Sort votes function
+// var sortVotes = function(data) {
+//   var sort = _.sortBy(data, function(d) {
+//     return -d.score;
+//   });
+//   return sort;
+// };
 
-// Categorizing function
-var categorize = function(data, category) {
-  // Creating a new array to store only the categry type deeds
-  var sorted = [];
-  // Cycle through each deed and add the category type ones to the featured array
-  _.each(data, function(d) {
-    if(d.deed.category === category) {
-      sorted.push(d);
-    }
-  });
-  return sorted;
-  };
+// // Categorizing function
+// var categorize = function(data, category) {
+//   // Creating a new array to store only the categry type deeds
+//   var sorted = [];
+//   // Cycle through each deed and add the category type ones to the featured array
+//   _.each(data, function(d) {
+//     if(d.deed.category === category) {
+//       sorted.push(d);
+//     }
+//   });
+//   return sorted;
+// };
 
-// Populating the featured deeds list
-var featuredLists = function(data) {
-  // Filtering out the suggested deeds
-  var featured = categorize(data, 'suggested');
-  // Sort the featured array by score
-  var sorted = sortVotes(featured);
-  // Displaying the top 6 scored deeds
-  _.each(sorted.slice(0, 6), function(d) {
-    var template = JST['templates/featured_entry']({data: d});
-    $('#featuredDeeds').append(template);
-  });
-};
+// // Populating the featured deeds list
+// var featuredLists = function(data) {
+//   // Filtering out the suggested deeds
+//   var featured = categorize(data, 'suggested');
+//   // Sort the featured array by score
+//   var sorted = sortVotes(featured);
+//   // Displaying the top 6 scored deeds
+//   _.each(sorted.slice(0, 6), function(d) {
+//     var template = JST['templates/featured_entry']({data: d});
+//     $('#featuredDeeds').append(template);
+//   });
+// };
 
-// Populating the featured local cause
-var featuredLocal = function(data) {
-  // Filtering out the local deeds
-  var featured = categorize(data, 'local');
-  // Getting the highest rated deed
-  var max = _.max(featured, function(entry) {
-    return entry.score;
-  });
-  // Displaying the highest rated deed
-  var template = JST['templates/featured_cause']({data: max});
-  $('#featuredLocal').append(template);
-};
+// // Populating the featured local cause
+// var featuredLocal = function(data) {
+//   // Filtering out the local deeds
+//   var featured = categorize(data, 'local');
+//   // Getting the highest rated deed
+//   var max = _.max(featured, function(entry) {
+//     return entry.score;
+//   });
+//   // Displaying the highest rated deed
+//   var template = JST['templates/featured_cause']({data: max});
+//   $('#featuredLocal').append(template);
+// };
 
-// Fetching all the deeds and using the passed in the proper list populating function
-var populatePage = function(list, type) {
-  // Getting all the deeds from the db
-  $.get('/deeds').done(function(data) {
-    // This is for adding a new deed
-    // if(data[0].logged === 'in') {
-    //   $('.addDeed').empty();
-    //   var button = '<p class="newDeed button">+ DEED</p>'
-    //   $('.addDeed').append(button)
-    // }
-    list(data, type);
-  });
-};
+
 
 // Clearing the lists (this is for when the votes are made in the modal view, to refresh the index page vote counts)
-var emptyPage = function() {
-  $('#suggestedDonations').empty();
-  $('#suggestedServices').empty();
-  $('#localCauses').empty();
-}
+// var emptyPage = function() {
+//   $('#suggestedDonations').empty();
+//   $('#suggestedServices').empty();
+//   $('#localCauses').empty();
+// }
 
-var refreshLists = function() {
-  populatePage(pageLists);
-  populatePage(featuredLists);
-  populatePage(featuredLocal);
-};
+// var refreshLists = function() {
+//   populatePage(pageLists);
+//   populatePage(featuredLists);
+//   populatePage(featuredLocal);
+// };
 
 // var assignDeedClicks = function() {
 

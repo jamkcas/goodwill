@@ -1,8 +1,12 @@
+/********************************/
+/******* Google variables *******/
+/********************************/
+
+var map, inviteCounter = 0;
+
 /************************************/
 /******* Google map functions *******/
 /************************************/
-
-var map;
 
 // Adds a pin on the map(passing in a title, icon and location)
 var placeMarker = function(loc, data, mapIcon) {
@@ -39,7 +43,7 @@ var setLocations = function(data) {
   // array for locations for polylines
   var locations = [];
   // Setting the map icon based on whether deed is current or already completed
-  _.each(data, function(d) {
+  _.each(data.posts, function(d) {
     if(d.complete === true) {
       mapIcon = 'marker_heart.png';
     } else {
@@ -77,6 +81,11 @@ var drawLines = function(locations) {
   }
 };
 
+var mapPoints = function(data) {
+  // Placing locations and drawing lines connecting them
+  drawLines(setLocations(data));
+};
+
 // Creating an intial map
 var mapInit = function() {
   if(navigator.geolocation) {
@@ -91,7 +100,7 @@ var mapInit = function() {
       map = new google.maps.Map($('#map-canvas')[0], mapOptions);
       // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
       if(gon.logged_in === true) {
-        getCurrent(); // In posts.js
+        fetchCurrent('map', mapPoints);
       }
     });
   }
@@ -99,27 +108,27 @@ var mapInit = function() {
 
 
 
-/************************************/
+/*******************************/
 /******* Modal functions *******/
-/************************************/
+/*******************************/
 
 var showModal = function() {
-  $('#overlay').css('visibility', 'visible');
-  $('#overlayWindow').fadeIn(500).animate({'top': '50px'}, {duration: 300, queue: false});
+  $('.overlay').css('visibility', 'visible');
+  $('.overlayWindow').fadeIn(500).animate({'top': '50px'}, {duration: 300, queue: false});
 };
 
 var hideModal = function() {
-  $('#overlay').css('visibility', 'hidden');
-  $('#overlayWindow').fadeOut(500).animate({'top': '-1000px'}, {duration: 300, queue: false});
+  $('.overlay').css('visibility', 'hidden');
+  $('.overlayWindow').fadeOut(500).animate({'top': '-1000px'}, {duration: 300, queue: false});
   // Resetting the modal
-  $('#overlayWindow').empty();
+  $('.window').empty();
 };
 
 
 
-/************************************/
+/*********************************/
 /******* Utility functions *******/
-/************************************/
+/*********************************/
 
 var capitalize = function(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -127,52 +136,60 @@ var capitalize = function(word) {
 
 
 
-/************************************/
+/********************************/
 /******* On load function *******/
-/************************************/
+/********************************/
 
 
 // Start of Javascript when page loads
 $(function() {
+  assignEvents();
+
   // Add the map to the map canvas
   google.maps.event.addDomListener(window, 'load', mapInit);
 
-  // Hiding the modal on page load
-  $('#overlayWindow').fadeOut();
-
-  // Populating all the lists with deeds from the db
-  populatePage(pageLists); // In deeds.js
-
-  // Populating the featured list with most popular suggested deeds
-  populatePage(featuredLists); // In deeds.js
-
-  // Populating the featured local with most popular local cause
-  populatePage(featuredLocal); // In deeds.js
-
-  // Populating the recent posts list
-  populatePosts();
-
-
-
-  // Close modal
-  assignCloseModal();
-
-  // assignDeedClicks();
-
-  // Puts an event on the signin button so it can be auto-triggered
-  $('#signin').click(function() {
-    window.location.href = $('#signin').attr('href');
-  });
+  if(gon.logged_in === true) {
+    fetchCurrent('thread', setCurrent);
+  }
 
   // If user follows a redirect link this will trigger sign-in/sign-up process
   if(gon.logged_in != true && gon.queue === true) {
-
     // Auto-triggering the sign-in from the invite link redirect
     $('#signin').click();
   }
+  checkCurrent();
+  // // Hiding the modal on page load
+  // $('#overlayWindow').fadeOut();
 
-  // Setting the voting event delegates
-  assignEvents();
+
+
+
+
+  // // Populating all the lists with deeds from the db
+  // populatePage(pageLists); // In deeds.js
+
+  // // Populating the featured list with most popular suggested deeds
+  // populatePage(featuredLists); // In deeds.js
+
+  // // Populating the featured local with most popular local cause
+  // populatePage(featuredLocal); // In deeds.js
+
+  // // Populating the recent posts list
+  // populatePosts();
+
+
+
+  // // Close modal
+  // assignCloseModal();
+
+  // // assignDeedClicks();
+
+
+
+
+
+  // // Setting the voting event delegates
+  // assignEvents();
 
 
 

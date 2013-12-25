@@ -1,13 +1,15 @@
 <!-- Looping through each entry on the contacts list and creating an invite entry -->
 <% _.each(contacts, function(c) { %>
-  <li class='friends'>
-    <div class='friendsEntry'>
-      <div class='contactName'>
+  <li class='friends clearfix'>
+    <div class='contactName'>
+      <% if(c.name) { %>
         <h5><%= c.name %></h5>
-      </div>
+      <% } else { %>
+        <h5><%= c.email %></h5>
+      <% } %>
+    </div> <!-- end contactName -->
 
-      <!-- On submit it will send an invite to this google contact -->
-      <p class='invite button' data-id='<%= c.id %>'>Invite</p>
-    </div> <!-- end friendsEntry -->
-  </li>
+    <!-- On submit it will send an invite to this google contact -->
+    <p class='invite button' data-id='<%= c.id %>'>Invite</p>
+  </li> <!-- end friends -->
 <% }); %>

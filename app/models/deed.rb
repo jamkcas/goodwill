@@ -12,16 +12,48 @@ class Deed < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
   validates :user_id, presence: true
-  # validates :location, presence: true
-  # validates :contact, presence: true
-  # validates :contact_type, presence: true
-  # validates :deadline, presence: true
-#
-  # I want to try changing validations later since not every entry needs the same validations. The below validations break the rspec tests for the above validations tho
 
-  # validates :user_id, presence: true, uniqueness: { scope: :event_status }, if: :event_status
-  # validates :location, presence: true, if: :category == 'help'
-  # validates :contact, presence: true, if: :category == 'help'
-  # validates :contact_type, presence: true, if: :category == 'help'
-  # validates :deadline, presence: true, if: :category == 'help'
+  ##################################
+  ##### Method to fectch deeds #####
+  ##################################
+
+  def self.fetch_deeds(current_user)
+    # Getting all the deeds
+    deeds = Deed.all()
+    # Creating a new array to store new deeds hashes
+    new_deeds = []
+    # Cycling through each deed entry to create a new hash to store the deed itself, along with the number of up and down votes, and the current user's vote status for each deed
+    deeds.each do |d|
+      # Starting new hash to store deed and vote details together
+      new_deed = {}
+      # Adding the deed details
+      new_deed[:deed] = d
+      new_deed[:category] = d.category
+      new_deed[:type] = d.deed_type
+      # Initializing the user's vote status to true if there is no current user to prevent voting options from being shown, otherwise setting vote status to false
+      new_deed[:voted] = current_user ? false : true
+      # Initializing vote counts
+      up = 0
+      down = 0
+      # Cycling through each vote for this deed and updating the count totals, as well as updating the user's vote status if they have voted for this deed already
+      d.votes.each do |v|
+        if current_user
+          new_deed[:voted] = v.user_id == current_user.id ? true : false
+        end
+        up += 1 if v.vote_type == 'up'
+        down += 1 if v.vote_type == 'down'
+      end
+      # Setting the up and down vote totals for this deed
+      new_deed[:up] = up
+      new_deed[:down] = down
+      # Setting the total score
+      new_deed[:score] = up - down
+      # new_deed[:logged] = current_user ? 'in' : 'out'
+      # Shoving the new deed into the new deeds has
+      new_deeds << new_deed
+    end
+
+    # Returning the new_deeds hash
+    new_deeds
+  end
 end

@@ -6,5 +6,7 @@ module VotesHelper
     votable_type = params[:votable_type]
     # Saving the vote
     vote = Vote.create(user_id: current_user.id, votable_id: id, votable_type: votable_type, vote_type: vote_type)
+    p ('*') * 50
+    p vote
   end
 end

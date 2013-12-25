@@ -1,4 +1,4 @@
-<li class='deed clearfix' data-id='<%= data.deed.id %>'>
+<li class='deed' data-id='<%= data.deed.id %>'>
   <div class='deedEntry'>
     <h4><%= data.deed.title %></h4>
   </div>
@@ -6,18 +6,17 @@
   <div class='voteTotals'>
     <!-- Only shows up vote button if the current user hasnt voted on it yet -->
     <% if(data.voted === false) { %>
-      <p class='thumbs vote upVote' data-id='<%= data.deed.id %>'>8</p>
+      <p class='vote upVote' data-id='<%= data.deed.id %>'>Like: <span><%= data.up %></span></p>
     <% } else { %>
-      <p class='thumbs vote'>8</p>
+      <p class='vote'>Like: <span><%= data.up %></span></p>
     <% }; %>
-    <p><%= data.up %></p>
 
     <!-- Only shows down vote button if the current user hasnt voted on it yet -->
     <% if(data.voted === false) { %>
-      <p class='thumbs vote downVote' data-id='<%= data.deed.id %>' id='align'>2</p>
+      <p class='vote downVote' data-id='<%= data.deed.id %>'>Dislike: <span><%= data.down %></span></p>
     <% } else { %>
-      <p class='thumbs vote'>2</p>
+      <p class='vote'>Dislike: <span><%= data.down %></span></p>
     <% }; %>
-    <p><%= data.down %></p>
+
   </div>
 </li>

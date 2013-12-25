@@ -10,10 +10,15 @@ class PostsController < ApplicationController
   def get_current
     # If there is a current user, then fetch the post the current user is on
     if current_user
-      current = query_current
+      current = Post.query_current(current_user, params[:type])
+    end
+    if params[:ajax]
+      render json: current
+    else
+      render text: 'Access Forbidden'
     end
     # Pass back the current_post hash
-    render json: current
+
   end
 
   def create
@@ -28,7 +33,7 @@ class PostsController < ApplicationController
 
   def invite_friend
     # Call method to send out the invitation
-    send_invite
+    Post.send_invite(params)
     # Need to figure out error message handling for action mailer
     render text: 'ok'
   end
@@ -36,9 +41,9 @@ class PostsController < ApplicationController
   def finish_post
     if current_user
       # Updating the post if there is a current user
-      post = update_post
+      post = Post.update_post(params)
       # Post to facebook unless updateType is 'invite'
-      post_to_fb(post) if post.complete == true && params[:updateType] == 'complete' || params[:updateType] == 'post'
+      Post.post_to_fb(post, current_user) if post.complete == true && params[:updateType] == 'complete' || params[:updateType] == 'post'
     end
 
     render text: 'ok'
@@ -51,13 +56,13 @@ class PostsController < ApplicationController
     redirect_to root_path
   end
 
-  def populate_map
-    # Getting all the locations with the current thread id
-    locations = get_locations if current_user
+  # def populate_map
+  #   # Getting all the locations with the current thread id
+  #   locations = get_locations if current_user
 
-    # Returning the locations
-    render json: locations
-  end
+  #   # Returning the locations
+  #   render json: locations
+  # end
 
   def reset_queue
     clear_queue

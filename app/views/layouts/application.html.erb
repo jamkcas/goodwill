@@ -33,7 +33,7 @@
 </script>
 
 <!-- Background for modal -->
-<div id='overlay'></div>
+<div class='overlay'></div>
 
 <!-- Main Header -->
 <header class='mainHeader clearfix'>
@@ -58,7 +58,12 @@
 
 <div class='container'>
   <!-- Modal window -->
-  <div id='overlayWindow'></div>
+  <div class='overlayWindow'>
+    <div class='modal'>
+      <button class='closeModal'>X</button>
+      <div class='window'></div>
+    </div> <!-- end modal -->
+  </div> <!-- end overlayWindow -->
 
   <%= yield %>
 

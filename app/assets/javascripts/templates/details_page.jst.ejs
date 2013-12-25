@@ -1,4 +1,4 @@
-<div class='currentPostModal'>
+<div class='modal'>
   <button class='closeModal'>X</button>
   <div class='modalMain'>
     <div class='entryDetails clearfix'>
@@ -9,7 +9,7 @@
               <div class='leftCol'>
                   <img src='<%= details.picture %>'/>
               </div>
-              <div class='right'>
+              <div class='rightCol'>
                 <h3 class='detailsTitle'><%= details.title %></h3>
               </div>
             </li>
@@ -20,7 +20,7 @@
             <div class='leftCol'>
               <h5>Category:</h5>
             </div>
-            <div class='right'>
+            <div class='rightCol'>
               <p><%= capitalize(details.deed_type) %></p>
             </div>
           </li>
@@ -29,7 +29,7 @@
             <div class='leftCol'>
               <h5>Description:</h5>
             </div>
-            <div class='right'>
+            <div class='rightCol'>
               <p><%= details.description %></p>
             </div>
           </li>
@@ -39,7 +39,7 @@
               <div class='leftCol'>
                 <h5>Location:</h5>
               </div>
-              <div class='right'>
+              <div class='rightCol'>
                 <p><%= details.location %></p>
               </div>
             </li>
@@ -50,7 +50,7 @@
               <div class='leftCol'>
                 <h5>Deadline:</h5>
               </div>
-              <div class='right'>
+              <div class='rightCol'>
                 <p><%= details.deadline %></p>
               </div>
             </li>
@@ -61,7 +61,7 @@
               <div class='leftCol'>
                 <h5>Contact: </h5>
               </div>
-              <div class='right'>
+              <div class='rightCol'>
                 <p><%= details.contact %></p>
               </div>
             </li>
@@ -73,4 +73,4 @@
       <% } %>
     </div>
   </div> <!-- end modalMain -->
-</div> <!-- end currentPostModal -->
+</div> <!-- end modal -->
