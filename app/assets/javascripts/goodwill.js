@@ -2,7 +2,7 @@
 /******* Google variables *******/
 /********************************/
 
-var map, inviteCounter = 0;
+var map, inviteCounter = 0, deedCounter = 0, deeds = [];
 
 /************************************/
 /******* Google map functions *******/
@@ -114,7 +114,10 @@ var mapInit = function() {
 
 var showModal = function() {
   $('.overlay').css('visibility', 'visible');
-  $('.overlayWindow').fadeIn(500).animate({'top': '50px'}, {duration: 300, queue: false});
+  // Getting the position for the modal to move too based on window position
+  var top = $(window).scrollTop() - 50;
+  $('.overlayWindow').css('max-height', ($(window).height() * 0.9))
+  $('.overlayWindow').fadeIn(500).animate({'top': top}, {duration: 300, queue: false});
 };
 
 var hideModal = function() {
@@ -124,6 +127,20 @@ var hideModal = function() {
   $('.window').empty();
 };
 
+// Function to set the modal width and postion based on the container width
+var modalSize = function(size) {
+  // Getting the width and taking off the 'px'
+  var width = $('.container').css('width');
+  var pattern = /[0-9]+/
+  // Calculating the modal size based on the input percentage
+  var new_width = parseInt(width.match(pattern)[0]) * size;
+  // Getting the left positioning
+  var windowWidth = $(window).width();
+  var left = (parseInt(width.match(pattern)[0])/2) - (new_width/2);
+  // Setting the modal width and left positioning
+  $('.overlayWindow').css('width', new_width);
+  $('.overlayWindow').css('left', left);
+};
 
 
 /*********************************/

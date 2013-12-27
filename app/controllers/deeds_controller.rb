@@ -8,7 +8,11 @@ class DeedsController < ApplicationController
   end
 
   def show
-    deed = Deed.find(params[:id])
-    render json: deed
+    deed = Deed.fetch_deed(params)
+    if params[:ajax]
+      render json: deed
+    else
+      render text: 'Access Forbidden'
+    end
   end
 end

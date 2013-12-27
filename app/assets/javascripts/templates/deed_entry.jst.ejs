@@ -1,22 +1,34 @@
-<li class='deed' data-id='<%= data.deed.id %>'>
-  <div class='deedEntry'>
-    <h4><%= data.deed.title %></h4>
-  </div>
+<li class='deed'>
+  <div class='entry' data-id='<%= data.deed.id %>'>
+    <div class='deedClickable'>
+      <div class='deedImg'>
+        <img src='<%= data.deed.picture %>'>
+      </div> <!-- end deedImg -->
 
-  <div class='voteTotals'>
-    <!-- Only shows up vote button if the current user hasnt voted on it yet -->
-    <% if(data.voted === false) { %>
-      <p class='vote upVote' data-id='<%= data.deed.id %>'>Like: <span><%= data.up %></span></p>
-    <% } else { %>
-      <p class='vote'>Like: <span><%= data.up %></span></p>
-    <% }; %>
+      <div class='deedEntry'>
+        <% if(data.deed.title.length > 15) { %>
+          <h4><%= data.deed.title.slice(0, 15) + '...' %></h4>
+        <% } else { %>
+          <h4><%= data.deed.title %></h4>
+        <% }; %>
+      </div> <!-- end deedEntry -->
+    </div> <!-- end deedClickable -->
 
-    <!-- Only shows down vote button if the current user hasnt voted on it yet -->
-    <% if(data.voted === false) { %>
-      <p class='vote downVote' data-id='<%= data.deed.id %>'>Dislike: <span><%= data.down %></span></p>
-    <% } else { %>
-      <p class='vote'>Dislike: <span><%= data.down %></span></p>
-    <% }; %>
+    <div class='voteTotals'>
+      <!-- Only shows up vote button if the current user hasnt voted on it yet -->
+      <% if(data.voted === false) { %>
+        <p class='vote upVote' data-id='<%= data.deed.id %>' data-type='<%= data.deed.category %>'>Like: <span><%= data.up %></span></p>
+      <% } else { %>
+        <p class='vote'>Like: <span><%= data.up %></span></p>
+      <% }; %>
 
-  </div>
-</li>
+      <!-- Only shows down vote button if the current user hasnt voted on it yet -->
+      <% if(data.voted === false) { %>
+        <p class='vote downVote' data-id='<%= data.deed.id %>' data-type='<%= data.deed.category %>'>Dislike: <span><%= data.down %></span></p>
+      <% } else { %>
+        <p class='vote'>Dislike: <span><%= data.down %></span></p>
+      <% }; %>
+
+    </div> <!-- end voteTotals -->
+  </div> <!-- end entry -->
+</li> <!-- end deed -->

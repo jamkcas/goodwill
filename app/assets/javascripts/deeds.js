@@ -1,9 +1,4 @@
-var addDeedToList = function(data, list) {
-  // Creating a new list item by creating a data object and passing it into the deed_entry jst template
-  var template = JST['templates/deed_entry']({data: data});
-  // Appending the template to the appropriate item
-  $(list).append(template);
-};
+
 
 var fullList = function(data, type) {
   var suggested = _.where(data, {category: 'suggested'});
@@ -62,23 +57,6 @@ var pageLists = function(data) {
   }
 };
 
-// Populating the lists for new post modal
-var modalLists = function(data) {
-  // Populating each list with the deed list returned from the db
-  _.each(data, function(d) {
-    // if the deed category is a deed then it populates the suggested lists
-    if(d.category === 'suggested') {
-      // if the deed type is a donation then it populates the donations list
-      if(d.type === 'donation') {
-        addDeedToList(d, '.suggestedDonationsModal');
-      } else { // if the deed type is a service then it populates the services list
-        addDeedToList(d, '.suggestedServicesModal');
-      }
-    } else { // if the deed category is help it populates the local lists
-      addDeedToList(d, '.localCausesModal');
-    }
-  });
-};
 
 // // Sort votes function
 // var sortVotes = function(data) {

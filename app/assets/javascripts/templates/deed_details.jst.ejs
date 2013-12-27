@@ -1,70 +1,72 @@
-<p class='back'>Back</p>
+<h6 class='back'>< Back</h6>
 <div class='deedInformation clearfix'>
-  <ul class='deedDets clearfix'>
-    <% if(details.picture != 'null') { %>
-      <li class='clearfix'>
-        <div class='leftCol'>
-            <img src='<%= details.picture %>'/>
-        </div>
-        <div class='rightCol'>
-          <h4><%= details.title %></h4>
-        </div>
-      </li>
-    <% } else { %>
+  <div class='row clearfix'>
+    <div class='deedPhoto'>
+      <img src='<%= details.picture %>'/>
+    </div> <!-- end deedPhoto -->
+
+    <div class='headerDetails'>
       <h4><%= details.title %></h4>
-    <% } %>
-    <li class='clearfix'>
-      <div class='leftCol'>
-        <h5>Category:</h5>
-      </div>
-      <div class='rightCol'>
-        <p><%= capitalize(details.deed_type) %></p>
-      </div>
-    </li>
+      <p>Submitted by: <%= details.submitted_by %></p>
 
-    <li class='clearfix'>
-      <div class='leftCol'>
-        <h5>Description:</h5>
-      </div>
-      <div class='rightCol'>
-        <p><%= details.description %></p>
-      </div>
-    </li>
+      <div class='otherDetails'>
+        <ul class='detailList'>
+          <li class='clearfix'>
+            <div class='leftCol'>
+              <p>Category:</p>
+            </div> <!-- end leftCol -->
+            <div class='rightCol'>
+              <p><%= capitalize(details.deed_type) %></p>
+            </div>
+          </li> <!-- end rightCol -->
 
-    <% if(details.location != 'null') { %>
-      <li class='clearfix'>
-        <div class='leftCol'>
-          <h5>Location:</h5>
-        </div>
-        <div class='rightCol'>
-          <p><%= details.location %></p>
-        </div>
-      </li>
-    <% } %>
+          <li class='clearfix'>
+            <div class='leftCol'>
+              <p>Description:</p>
+            </div> <!-- end leftCol -->
+            <div class='rightCol'>
+              <p><%= details.description %></p>
+            </div> <!-- end rightCol -->
+          </li>
 
-    <% if(details.deadline != 'null') { %>
-      <li class='clearfix'>
-        <div class='leftCol'>
-          <h5>Deadline:</h5>
-        </div>
-        <div class='rightCol'>
-          <p><%= details.deadline %></p>
-        </div>
-      </li>
-    <% } %>
+          <% if(details.location != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <p>Location:</p>
+              </div> <!-- end leftCol -->
+              <div class='rightCol'>
+                <p><%= details.location %></p>
+              </div> <!-- end rightCol -->
+            </li>
+          <% } %>
 
-    <% if(details.contact != 'null') { %>
-      <li class='clearfix'>
-        <div class='leftCol'>
-          <h5>Contact: </h5>
-        </div>
-        <div class='rightCol'>
-          <p><%= details.contact %></p>
-        </div>
-      </li>
-    <% } %>
-  </ul>
+          <% if(details.deadline != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <p>Deadline:</p>
+              </div> <!-- end leftCol -->
+              <div class='rightCol'>
+                <p><%= details.deadline %></p>
+              </div> <!-- end rightCol -->
+            </li>
+          <% } %>
 
-  <p class='button submitPost' data-id='<%= details.id %>'>Start a Post</p>
+          <% if(details.contact != 'null') { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <p>Contact: </p>
+              </div> <!-- end leftCol -->
+              <div class='rightCol'>
+                <p><%= details.contact %></p>
+              </div> <!-- end rightCol -->
+            </li>
+          <% } %>
+        </ul> <!-- end detailList -->
+      </div>  <!-- end otherDetails -->
+    </div> <!-- end headerDetails -->
+  </div> <!-- end row -->
 
-</div>
+  <div class='postButton'>
+    <p class='button submitPost' data-id='<%= details.id %>'>Choose This Deed</p>
+  </div> <!-- end postButton -->
+</div> <!-- end deedInformation -->

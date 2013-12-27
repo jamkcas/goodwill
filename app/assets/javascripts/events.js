@@ -12,7 +12,7 @@ var assignEvents = function() {
   $('.overlayWindow').on('click', '.closeModal', function(e) {
     e.preventDefault();
 
-    // // If invite has been sent, then the deed is marked as completed so the thread modal needs to be reset
+    // If invite has been sent, then the deed is marked as completed so the thread modal needs to be reset
     if(inviteCounter > 0) {
       // If invite is sent then the post needs to be posted on facebook
       var post_id = $('.modalMain').data('id');
@@ -35,7 +35,22 @@ var assignEvents = function() {
 
     // Resetting the queue
     queueReset();
+
+    // Resetting the counter for the modal deed list pagination
+    deedCounter = 0;
+
+    // Resetting the deeds list
+    deeds = [];
   });
+
+  // Changing the position of the modal on scroll
+  $(window).on('scroll', function() {
+    // Only changes modal position when its visible
+    if($('.overlay').css('visibility') === 'visible') {
+      $('.overlayWindow').css('top', $(window).scrollTop() - 50);
+    }
+  });
+
 
 
   /***************************************/
@@ -196,18 +211,106 @@ var assignEvents = function() {
     showChoices();
   });
 
-  $('.overlayWindow').on('mouseenter', '.deedEntry', function() {
-    $(this).parent().css('background', '#E8EAEB');
+  // Hover events for when the user hovers on an entry
+  $('.overlayWindow').on('mouseenter', '.deedClickable', function() {
+    $(this).parent().parent().css('background', '#E8EAEB');
   });
 
-  $('.overlayWindow').on('mouseleave', '.deedEntry', function() {
-    $(this).parent().css('background', 'white');
+  // Resettingthe hover events when the user hovers away from an entry
+  $('.overlayWindow').on('mouseleave', '.deedClickable', function() {
+    $(this).parent().parent().css('background', 'white');
   });
+
+  // Event for paginating deeds
+  $('.overlayWindow').on('click', '.paginate', function() {
+    // Grabbing the current button
+    var button = $(this);
+    // Fading out the current list
+    $('.list').fadeOut(500, function() {
+      if(button.hasClass('next')) {
+        // Populating the list with the next up to 8 messages and fading them in
+        if(button.hasClass('d')) {
+          populate(deeds[0], deedCounter, deedCounter + 8, 'd');
+        } else if(button.hasClass('s')) {
+          populate(deeds[1], deedCounter, deedCounter + 8, 's');
+        } else {
+          populate(deeds[2], deedCounter, deedCounter + 8, 'l');
+        }
+      } else {
+        // Populating the list with the previous 8 messages and fading them in
+        if(button.hasClass('d')) {
+          populate(deeds[0], deedCounter - 16, deedCounter - 8, 'd');
+        } else if(button.hasClass('s')) {
+          populate(deeds[1], deedCounter - 16, deedCounter - 8, 's');
+        } else {
+          populate(deeds[2], deedCounter - 16, deedCounter - 8, 'l');
+        }
+      }
+    });
+  });
+
+  // Event for setting the current active tab, and populating the list with the currently selected category
+  $('.overlayWindow').on('click', '.listNav', function() {
+    // Resetting the deed counter because a new category was selected
+    deedCounter = 0;
+    // Removing the active class from whatever was active
+    $('.listNav').removeClass('active');
+    // Grabbing the current tab that was selected
+    var nav = $(this);
+    // Setting the currently selected tab to active state
+    nav.addClass('active');
+    // Fading out the current deed list, removing them, then populating the list with the new deeds
+    $('.list').fadeOut(500, function() {
+      $('.list').empty();
+      if(nav.hasClass('donations')) {
+        populate(deeds[0], deedCounter, deedCounter + 8, 'd');
+      } else if(nav.hasClass('services')) {
+        populate(deeds[1], deedCounter, deedCounter + 8, 's');
+      } else {
+        populate(deeds[2], deedCounter, deedCounter + 8, 'l');
+      }
+    });
+  })
+
 
   /*************************************/
   /******* Show Details Handlers *******/
   /*************************************/
 
+  // Display deed details when click on a deed in the start thread modal
+  $('.overlayWindow').on('click', '.deedClickable', function() {
+    // Getting the deed id
+    var id = $(this).parent().data('id');
+    // Call to get the deed details
+    $.ajax('/deeds/' + id, {
+      data: {
+        ajax: 'This is an ajax call'
+      }
+    }).done(function(data) {
+      // Hiding the rest of the modal contents
+      $('.modalHeader').hide();
+      $('.deedNav').hide();
+      $('.lists').hide();
+      // Shrinking the modal size for the details display
+      modalSize(0.5);
+      // Showing deed details
+      var template = JST['templates/deed_details']({details: data});
+      $('.entryDetails').append(template);
+
+    });
+
+  });
+
+  $('.overlayWindow').on('click', '.back', function() {
+    // Removing the current deed details
+    $('.entryDetails').empty();
+    // Increasing the modal size to accomocate the deeds list
+    modalSize(0.7);
+    // Showing the deeds list, the nav bar, and the title
+    $('.modalHeader').show();
+    $('.deedNav').show();
+    $('.lists').show();
+  })
   // $('.bottom').on('click', '.featuredEntry', function(){
   //   var current = $(this);
   //   var post_id = null
@@ -334,6 +437,8 @@ var assignEvents = function() {
     var vote_id = $(this).data('id');
     // Setting the vote instance varaible for use in the ajax callback
     var current_vote = $(this);
+    var category = $('.active').data('type');
+    console.log(category)
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
@@ -342,11 +447,6 @@ var assignEvents = function() {
               votable_type: 'Deed'
             }
     }).done(function(data) {
-      // Changing the vote on the index page if clicking on the modal page
-      // if(current_vote.parent().parent().parent().parent().parent().hasClass('lists') || current_vote.parent().parent().parent().hasClass('completeLists')) {
-      //   emptyPage();
-      //   refreshLists();
-      // }
       // Getting the old vote count
       oldTotal = current_vote.children(1).text();
       // Adding the new vote to the vote count
@@ -356,6 +456,8 @@ var assignEvents = function() {
       // Removing both voting buttons so the current user cant vote again
       current_vote.prev().removeClass('upVote');
       current_vote.removeClass('downVote');
+
+      refreshVoteTotals(category);
     });
   });
 

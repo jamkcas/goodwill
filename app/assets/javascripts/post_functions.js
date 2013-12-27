@@ -110,8 +110,11 @@ var queueReset = function() {
 var showChoices = function() {
   var template = JST['templates/new_post'];
   $('.window').append(template);
+
+  modalSize(0.7);
+
   // Getting all the deeds from the db
-  populatePage(modalLists);
+  populatePage(modalLists, 'donation');
   showModal();
 };
 

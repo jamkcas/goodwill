@@ -5,17 +5,15 @@
 <div class='modalMain'>
   <div class='entryDetails'></div>
 
-  <div class='lists'>
-    <div class='suggestedDeedsModal'>
-      <h3>Suggested Donations:</h3>
-      <ul class='suggestedDonationsModal'></ul>
-      <h3>Suggested Services:</h3>
-      <ul class='suggestedServicesModal'></ul>
-    </div> <!-- end lists -->
+  <nav class='deedNav clearfix'>
+    <ul class='listTypes'>
+      <li class='listNav donations active' data-type='donation'>Donations</li>
+      <li class='listNav services' data-type='service'>Services</li>
+      <li class='listNav localCause' data-type='local'>Local Causes</li>
+    </ul>
+  </nav> <!-- end deedNav -->
 
-    <div class='localModal'>
-      <h3 class='localList'>Local Causes:</h3>
-      <ul class='localCausesModal'></ul>
-    </div> <!-- end localModal -->
+  <div class='lists'>
+    <ul class='list clearfix'></ul>
   </div> <!-- end localList -->
 </div> <!-- end modalMain -->

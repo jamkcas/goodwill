@@ -10,6 +10,7 @@
 
 $containerWidth: 1170px;
 $modalWidth: $containerWidth * 0.5;
+$link: #52C1E0;
 
 
 
@@ -48,8 +49,7 @@ a {
   color: inherit;
 }
 
-a, button, .postComplete, .startThread, .currentDeed, .changeDeed,
-.googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry {
+a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back {
   cursor: pointer;
 }
 
@@ -144,6 +144,9 @@ li {
 
 .voteTotals {
   float: right;
+  padding: 0 10px;
+  margin-bottom: 5px;
+  font-size: 12px;
 }
 
 .vote {
@@ -155,7 +158,7 @@ li {
 }
 
 .downVote, .upVote {
-  color: #52C1E0;
+  color: $link;
 }
 
 
@@ -273,6 +276,7 @@ li {
   padding: 20px;
   text-align: center;
   z-index: 2000;
+  border-radius: 8px;
 }
 
 .closeModal, .closeConfirmModal {
@@ -300,18 +304,16 @@ li {
 
 .modalMain {
   text-align: left;
-  padding: 0 30px;
+  padding-bottom: 20px;
 }
 
 .rightCol {
   width: 70%;
-  padding: 0 20px;
   float: left;
 }
 
 .leftCol {
   float: left;
-  text-align: right;
   width: 30%;
 }
 
@@ -335,6 +337,7 @@ li {
 
 .detailsWindow {
   width: 100%;
+  padding: 0 10px;
 }
 
 #postTitle {
@@ -358,6 +361,10 @@ li {
   display: inline-block;
   text-align: center;
   width: 100%;
+}
+
+.postDone {
+  padding: 0 10px;
 }
 
 /**** Invites Modal ****/
@@ -425,6 +432,7 @@ li {
   width: 100%;
   margin-top: 10px;
   text-align: center;
+  padding: 0 10px;
 }
 
 .friends {
@@ -436,14 +444,23 @@ li {
   float: right;
 }
 
+.friends:nth-child(odd) {
+  background: #E8EAEB;
+}
+
 .contacts {
   max-height: 200px;
   overflow: scroll;
   margin-bottom: 20px;
-  padding: 5px;
+  border: 1px solid #E8EAEB;
 }
 
-.contactName, .contactName h5 {
+.contactName {
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.contactName h5 {
   display: inline;
 }
 
@@ -451,6 +468,7 @@ li {
   display: inline-block;
   padding: 8px;
   margin-top: 0;
+  margin-right: 15px;
 }
 
 .inviteMessage {
@@ -475,19 +493,116 @@ li {
 
 /**** New Post Modal ****/
 
-.deed {
-  padding: 5px;
-  margin: 5px 0;
+.active {
+  color: #78CCE7;
+  cursor: default;
 }
 
-.deedEntry {
+.deedNav {
+  margin: 10px 0 20px 2%;
+}
+
+.listTypes li {
+  float: left;
+  display: inline-block;
+  margin-right: 10px;
+  padding-left: 10px;
+  font-size: 16px;
+  border-left: 1px solid #87888C;
+}
+
+.listTypes li:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.deed {
+  margin: 2%;
+  margin-bottom: 20px;
+  width: 21%;
+  float: left;
+}
+
+.entry {
+  // width: 100%;
+  border: 1px solid #E4E6E5;
   display: inline-block;
 }
 
-.suggestedServicesModal, .suggestedDonationsModal, .localCausesModal {
-  max-height: 170px;
-  overflow: scroll;
+.deedImg img {
+  width: 100%;
 }
+
+.deedEntry {
+  width: 100%;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.next {
+  float: right;
+  margin-right: 20px;
+  color: $link;
+}
+
+.prev {
+  float: left;
+  margin-left: 20px;
+  color: $link;
+}
+
+/**** Deed Details Modal ****/
+
+.back {
+  margin-bottom: 25px;
+  padding-top: 5px;
+  color: $link;
+}
+
+.deedPhoto {
+  width: 20%;
+  display: inline-block;
+  float: left;
+}
+
+.deedPhoto img {
+  width: 100%;
+}
+
+.headerDetails {
+  width: 80%;
+  padding: 0 10px 10px 10px;
+  float: left;
+}
+
+.headerDetails h4 {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.headerDetails p {
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.detailList li {
+  width: 100%;
+  margin: 4px 0;
+}
+
+.otherDetails {
+  margin-top: 25px;
+}
+
+.postButton {
+  text-align: center;
+}
+
+.submitPost {
+  display: inline-block;
+}
+
 
 // .modalPostMain {
 //   text-align: center;
