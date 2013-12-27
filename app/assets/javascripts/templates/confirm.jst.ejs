@@ -1,9 +1,15 @@
 <div class='choices'>
+  <header class='confirmHeader'>
+    <h3>Uh Oh!</h3>
+  </header> <!-- end confirmHeader -->
+
   <div class='confirm'>
-    <p>You are already working on a deed thread. Do you still want to join this new thread? (By hitting accept, you will be removed from the current one)</p>
+    <p>You are currently part of an active Good Deed Thread. You can only join one Good Deed Thread at a time. </p>
+    <p class='confirmMessage'>Do you still want to join this new thread?</p>
   </div> <!-- end confirm -->
+
   <div class='choiceButtons'>
-    <p class='accept button' data-id='<%= id %>'>Accept</p>
-    <p class='decline button'>Decline</p>
+    <p class='accept button' data-id='<%= id %>'>Change Deed Thread</p>
+    <p class='decline button'>Never Mind, Cancel</p>
   </div> <!-- end choiceButtons -->
 </div> <!-- end choices -->

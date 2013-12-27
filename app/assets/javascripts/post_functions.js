@@ -34,6 +34,16 @@ var fetchCurrent = function(type, callback) {
   });
 };
 
+// Updates the current thread window and the map to reflect what the user is working on
+var updateCurrent = function() {
+  // Add the map to the map canvas
+  mapInit();
+  // Getting current deed info
+  if(gon.logged_in === true) {
+    fetchCurrent('thread', setCurrent);
+  }
+};
+
 // Update post as complete in db function
 var postAsComplete = function(current_id, title, details, type) {
   navigator.geolocation.getCurrentPosition(function(position) {
@@ -52,7 +62,7 @@ var postAsComplete = function(current_id, title, details, type) {
         // Resetting the thread window on the index page
         $('.thread').empty();
         // Adding the start a new thread on the window
-        fetchCurrent('thread', setCurrent);
+        updateCurrent();
       }
     });
   });
@@ -111,11 +121,27 @@ var showChoices = function() {
   var template = JST['templates/new_post'];
   $('.window').append(template);
 
+  // Setting the modal size and positioning
   modalSize(0.7);
 
   // Getting all the deeds from the db
   populatePage(modalLists, 'donation');
   showModal();
+};
+
+
+/************************************/
+/******* Recent post functons *******/
+/************************************/
+
+// Function to populate the recent posts
+var populatePosts = function() {
+  $.get('/posts/recent').done(function(data) {
+    _.each(data.slice(0, 7), function(post) {
+      var template = JST['templates/recent_post']({ data: post });
+      $('.recentList').append(template);
+    });
+  });
 };
 
 

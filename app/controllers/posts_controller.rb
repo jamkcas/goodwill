@@ -2,7 +2,8 @@ class PostsController < ApplicationController
   include PostsHelper
 
   def get_recent
-    posts = fetch_recent
+    # Getting the most recent posts that were completed
+    posts = Post.fetch_recent
 
     render json: posts
   end
@@ -17,14 +18,12 @@ class PostsController < ApplicationController
     else
       render text: 'Access Forbidden'
     end
-    # Pass back the current_post hash
-
   end
 
   def create
     # If there is a current_user, a new post is created using the params given
     if current_user
-      post = start_post
+      post = Post.start_post(params, session, current_user)
     end
 
     # Pass back the newly created post hash

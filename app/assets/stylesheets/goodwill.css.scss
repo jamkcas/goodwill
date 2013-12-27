@@ -49,7 +49,7 @@ a {
   color: inherit;
 }
 
-a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back {
+a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back, .submitPost {
   cursor: pointer;
 }
 
@@ -180,6 +180,10 @@ li {
   padding-top: 30px;
 }
 
+.currentHeader {
+  width: 100%;
+}
+
 .currentHeader h3 {
   float: left;
   font-size: 20px;
@@ -190,9 +194,10 @@ li {
 
 .currentHeader h5 {
   float: right;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 14px;
   margin-right: 10px;
+  margin-top: 4px;
 }
 
 .currentHeader h5 span {
@@ -246,6 +251,61 @@ li {
   clear: both;
 }
 
+
+/**********************/
+/**** Recent Posts ****/
+/**********************/
+
+.recentPosts {
+  width: 30%;
+  float: left;
+}
+
+.recentHeader {
+  padding-top: 30px;
+  padding-left: 20px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.recentList {
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.recentEntry {
+  padding: 10px;
+  border-bottom: 1px dotted #c9d5e2;
+  width: 100%;
+}
+
+.recentEntry:last-child {
+  border-bottom: none;
+}
+
+.profile, .recentDetails {
+  float: left;
+}
+
+.recentDetails {
+  padding-left: 10px;
+}
+
+.recentDetails h4 {
+  font-size: 16px;
+  line-height: 16px;
+  margin-bottom: 2px;
+}
+
+.recentDetails p {
+  font-size: 12px;
+  line-height: 12px;
+  padding: 2px 0;
+}
+
+.profile img {
+  width: 100%;
+}
 
 /***************/
 /**** Modal ****/
@@ -478,9 +538,22 @@ li {
 
 /**** Accept Modal ****/
 
+.confirmHeader {
+  font-size: 30px;
+  line-height: 30px;
+  margin-bottom: 30px;
+}
+
+.confirmMessage {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: bold;
+  margin: 30px 0;
+}
+
 .confirm {
-  clear: both;
   padding: 10px;
+  text-align: left;
 }
 
 .accept, .decline {
@@ -738,23 +811,7 @@ li {
 //   width: 100%
 // }
 
-// .recentEntry {
-//   padding: 10px;
-//   border-bottom: 1px dotted #c9d5e2;
-//   width: 100%;
-// }
 
-// .recentEntry:last-child {
-//   border-bottom: none;
-// }
-
-// .profile, .recentDetails {
-//   float: left;
-// }
-
-// .recentDetails {
-//   padding-left: 10px;
-// }
 
 // .recentDetails h4 {
 //   font-size: 17px;

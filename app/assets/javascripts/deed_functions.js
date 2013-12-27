@@ -1,3 +1,7 @@
+/**************************************/
+/******* Deed utility functions *******/
+/**************************************/
+
 // Categorizing function
 var categorize = function(data, category) {
   // Creating a new array to store only the categry type deeds
@@ -23,6 +27,14 @@ var typify = function(data, type) {
   return sorted;
 };
 
+// Sort votes function
+var sortVotes = function(data) {
+  var sort = _.sortBy(data, function(d) {
+    return -d.score;
+  });
+  return sort;
+};
+
 
 /******************************/
 /******* List functions *******/
@@ -46,9 +58,8 @@ var addDeedToList = function(data, list) {
 
 // Function to populate the list with active tab category deeds, and adding next/prev buttons as needed
 var populate = function(data, start, end, type) {
-
-      // Emptying out the current list after it is done fading out
-      $('.list').empty();
+  // Emptying out the current list after it is done fading out
+  $('.list').empty();
   _.each(data.slice(start, end), function(d) {
     if(d) {
       addDeedToList(d, '.list');
@@ -74,6 +85,7 @@ var populate = function(data, start, end, type) {
 var modalLists = function(data, type) {
   // Assigning the global variables with the deeds for use while modal is open
   deeds = data;
+
   // Populating the list with the deeds based on the current active tab
   if(type === 'donation') {
     populate(deeds[0], deedCounter, deedCounter + 8, 'd');
@@ -95,3 +107,4 @@ var refreshVoteTotals = function(category) {
     populatePage(modalLists, category);
   }
 };
+

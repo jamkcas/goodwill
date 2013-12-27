@@ -58,26 +58,9 @@ var pageLists = function(data) {
 };
 
 
-// // Sort votes function
-// var sortVotes = function(data) {
-//   var sort = _.sortBy(data, function(d) {
-//     return -d.score;
-//   });
-//   return sort;
-// };
 
-// // Categorizing function
-// var categorize = function(data, category) {
-//   // Creating a new array to store only the categry type deeds
-//   var sorted = [];
-//   // Cycle through each deed and add the category type ones to the featured array
-//   _.each(data, function(d) {
-//     if(d.deed.category === category) {
-//       sorted.push(d);
-//     }
-//   });
-//   return sorted;
-// };
+
+
 
 // // Populating the featured deeds list
 // var featuredLists = function(data) {
@@ -120,8 +103,6 @@ var pageLists = function(data) {
 //   populatePage(featuredLocal);
 // };
 
-// var assignDeedClicks = function() {
 
-// };
 
 

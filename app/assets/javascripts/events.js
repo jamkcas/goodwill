@@ -36,11 +36,6 @@ var assignEvents = function() {
     // Resetting the queue
     queueReset();
 
-    // Resetting the counter for the modal deed list pagination
-    deedCounter = 0;
-
-    // Resetting the deeds list
-    deeds = [];
   });
 
   // Changing the position of the modal on scroll
@@ -50,7 +45,6 @@ var assignEvents = function() {
       $('.overlayWindow').css('top', $(window).scrollTop() - 50);
     }
   });
-
 
 
   /***************************************/
@@ -82,6 +76,10 @@ var assignEvents = function() {
   // Puts an event on the signin button so it can be auto-triggered (for when joining a thread via email link)
   $('#user_nav').on('click', '#signin', function() {
     window.location.href = $('#signin').attr('href');
+  });
+
+  $('.thread').on('click', '.changeDeed', function() {
+    showChoices(true);
   });
 
 
@@ -172,11 +170,8 @@ var assignEvents = function() {
     if(id === null) {
       // Clearing the modal contents
       $('.window').empty();
-      // Showing the deed list choices
-      var template = JST['templates/new_post']
-      $('.window').append(template);
-      // Getting all the deeds from the db
-      populatePage(modalLists);
+      // Showing the deed choices
+      showChoices();
     } else {
       navigator.geolocation.getCurrentPosition(function(position) {
         initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -193,9 +188,9 @@ var assignEvents = function() {
           // Sets the queue to false if a post was created
           gon.queue = false;
           // The thread div is emptied (start thread button removed)
-          $('#thread').empty();
+          $('.thread').empty();
           // The fetch current function is called to set the contents of the thread div to the current posts details
-          fetchCurrent(setCurrent);
+          fetchCurrent('thread', setCurrent);
         });
       });
     }
@@ -296,11 +291,10 @@ var assignEvents = function() {
       // Showing deed details
       var template = JST['templates/deed_details']({details: data});
       $('.entryDetails').append(template);
-
     });
-
   });
 
+  // Event to go back to the deed list modal
   $('.overlayWindow').on('click', '.back', function() {
     // Removing the current deed details
     $('.entryDetails').empty();
@@ -311,6 +305,40 @@ var assignEvents = function() {
     $('.deedNav').show();
     $('.lists').show();
   })
+
+  // Event for when a person first starts a post or changes to a new one
+  $('.overlayWindow').on('click', '.submitPost', function() {
+    var id = $(this).data('id');
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      $.ajax('/posts/create', {
+        method: 'POST',
+        data: {
+                data_id: id,
+                lat: initialLocation.nb,
+                lon: initialLocation.ob
+              }
+      }).done(function(data) {
+        // The modal is hidden
+        hideModal();
+        // If a false status is returned then an error message is returned
+        if(data === false) {
+          // Removes any previous error messages
+          $('.error').remove();
+          // Adds a new error message
+          $('.thread').prepend("<p class='error'>Post was unable to be saved. Please try again.</p>")
+        } else {
+          // Sets the queue to false if a post was created
+          gon.queue = false;
+          // The thread div is emptied (start thread button removed)
+          $('.thread').empty();
+          // The fetch current function is called to set the contents of the thread div to the current posts details
+          updateCurrent();
+        }
+      });
+    });
+  });
+
   // $('.bottom').on('click', '.featuredEntry', function(){
   //   var current = $(this);
   //   var post_id = null
@@ -347,15 +375,6 @@ var assignEvents = function() {
   /******* Mouse Hover Handlers *******/
   /************************************/
 
-  // $('.bottom').on('mouseenter', '.deedEntry', function() {
-  //   $(this).parent().css('background', '#E8EAEB');
-  //   $(this).parent().css('cursor', 'pointer');
-  // });
-
-  // $('.bottom').on('mouseleave', '.deedEntry', function() {
-  //   $(this).parent().css('background', 'white');
-  //   $(this).parent().css('cursor', 'none');
-  // });
 
   // $('.container').on('click', '.change', function() {
   //   var id = $(this).data('id');
@@ -397,12 +416,12 @@ var assignEvents = function() {
   /*****************************/
 
   // Up vote handler
-  $('.container').on('click', '.upVote', function(e) {
-    e.preventDefault();
+  $('.container').on('click', '.upVote', function() {
     // Grabbing the data id of the deed being voted on
     var vote_id = $(this).data('id');
     // Setting the vote instance variable for use in the ajax callback
     var current_vote = $(this);
+    var category = $('.active').data('type');
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
@@ -411,14 +430,6 @@ var assignEvents = function() {
               votable_type: 'Deed'
             }
     }).done(function(data) {
-    //   // Changing the vote on the index page if clicking on the modal page
-    //   if(current_vote.parent().parent().parent().parent().parent().hasClass('lists') || current_vote.parent().parent().parent().hasClass('completeLists')) {
-    //     emptyPage();
-    //     // Refreshing the lists on the index page
-    //     ***** Move this to Sidekiq and sideTiq later *****
-    //     /****** Actually populating each list twice atm ******/
-    //     refreshLists();
-    //   }
       // Getting the old vote count
       oldTotal = current_vote.children(1).text();
       // Adding the new vote to the vote count
@@ -428,17 +439,17 @@ var assignEvents = function() {
       // Removing both voting buttons so the current user cant vote again
       current_vote.removeClass('upVote');
       current_vote.next().removeClass('downVote');
+      // Refreshing the votes on the page
+      refreshVoteTotals(category);
     });
   });
 
   // Down vote handler
-  $('.container').on('click', '.downVote', function(e) {
-    e.preventDefault();
+  $('.container').on('click', '.downVote', function() {
     var vote_id = $(this).data('id');
     // Setting the vote instance varaible for use in the ajax callback
     var current_vote = $(this);
     var category = $('.active').data('type');
-    console.log(category)
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
@@ -456,7 +467,7 @@ var assignEvents = function() {
       // Removing both voting buttons so the current user cant vote again
       current_vote.prev().removeClass('upVote');
       current_vote.removeClass('downVote');
-
+      // Refreshing the votes on the page
       refreshVoteTotals(category);
     });
   });

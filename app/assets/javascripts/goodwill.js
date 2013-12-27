@@ -125,6 +125,9 @@ var hideModal = function() {
   $('.overlayWindow').fadeOut(500).animate({'top': '-1000px'}, {duration: 300, queue: false});
   // Resetting the modal
   $('.window').empty();
+  // Resetting the deed counter
+  deedCounter = 0;
+  deeds = [];
 };
 
 // Function to set the modal width and postion based on the container width
@@ -174,7 +177,10 @@ $(function() {
     // Auto-triggering the sign-in from the invite link redirect
     $('#signin').click();
   }
+
   checkCurrent();
+
+  populatePosts();
   // // Hiding the modal on page load
   // $('#overlayWindow').fadeOut();
 

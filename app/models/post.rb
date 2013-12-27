@@ -136,4 +136,46 @@ class Post < ActiveRecord::Base
     # Send email passing in the user's current thread and the contact's email
     invite = InviteMailer.invite(friend, thread).deliver
   end
+
+  ###################################
+  ##### Method to create a post #####
+  ###################################
+
+  def self.start_post(params, session, current_user)
+    # In the case where a person decides to change threads, their old post is deleted
+    current = current_user.posts.where(complete: false)[0]
+    current.delete if current
+    # Searches for the deed the user selected
+    deed = Deed.find(params[:data_id])
+    if(session[:queue] == nil)
+      # Creates a random id
+      id = SecureRandom.urlsafe_base64(nil, false)
+      # If, by chance that id already exists as a thread id, then a new id is selected
+      until Post.find_all_by_thread_id(id).empty?
+        id = SecureRandom.urlsafe_base64(nil, false)
+      end
+    else
+      id = session[:queue]
+    end
+    # Creates a hash passing in the new thread id, lat and lon, and deed details
+    post_params = {title: deed.title, content: deed.description, deed_id: deed.id, user_id: current_user.id, thread_id: id, lat: params[:lat], lon: params[:lon]}
+    # Creates a new post with the created hash
+    post = Post.create(post_params)
+    # Clearing the queue
+    session[:queue] = nil if post.save
+    # If post isnt save a post status of false is returned
+    post = 'false' if !post.save
+    # Returns the post
+    post
+  end
+
+
+  def self.fetch_recent
+    # Finding all the completed posts
+    posts = Post.where(complete: true)
+    # Adding the poster's name to each post
+    all_posts = new_posts(posts)
+    # Returning the posts sorted by time completed
+    sorted = (all_posts.sort_by { |post| post[:updated_at] }).reverse
+  end
 end

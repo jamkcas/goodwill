@@ -1,9 +1,12 @@
 <li class='recentEntry clearfix' data-id='<%= data.id %>'>
   <div class='profile'>
     <img src='<%= data.pic %>'>
-  </div>
+  </div> <!-- end recentEntry -->
+
   <div class='recentDetails'>
     <h4><%= data.title %></h4>
-    <p><%= data.name %></p>
-  </div>
-</li>
+    <p>Completed By: <%= data.name %></p>
+    <% var date = new Date(data.updated_at).toDateString(); %>
+    <p>Completed on: <%= date %></p>
+  </div> <!-- end recentDetails -->
+</li> <!-- end recentEntry -->
