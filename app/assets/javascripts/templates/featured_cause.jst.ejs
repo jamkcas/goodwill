@@ -1,18 +1,19 @@
-<li class='featuredEntry' data-id='<%= data.deed.id %>'>
-  <div class='featuredContainer'>
-    <div class='featuredImage'>
-      <img src='<%= data.deed.picture %>'>
-    </div> <!-- end featuredImage -->
+<li class='featuredCause' data-id='<%= data.deed.id %>'>
+  <div class='featuredCauseImage'>
+    <img src='<%= data.deed.picture %>'>
+  </div> <!-- end featuredCauseImage -->
 
-    <div class='featuredInfo clearfix'>
-      <div class='featuredTitle'>
-        <h4><%= data.deed.title %></h4>
-      </div>
+  <header class='featuredCauseTitle'>
+    <h4><%= data.deed.title %></h4>
+  </header> <!-- end featuredCauseTitle -->
 
-      <div class='featuredVotes clearfix'>
-        <p><span class='thumbs'>8</span> <%= data.up %> </p>
-        <p><span class='thumbs'>2</span> <%= data.down %> </p>
-      </div> <!-- end featuredVotes -->
-    </div> <!-- end featuredInfo -->
-  </div> <!-- end featuredContainer -->
-</li> <!-- end featuredEntry -->
+  <div class='featuredContact'>
+    <h5>Contact Info</h5>
+    <p><%= data.deed.contact %></p>
+  </div> <!-- end featuredContact -->
+
+  <div class='featuredPage'>
+    <h5>Homepage</h5>
+    <p><%= data.deed.contact %></p>
+  </div> <!-- end featuredVotes -->
+</li> <!-- end featuredCause -->

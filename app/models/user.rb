@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :contacts
 
+  #################################
+  ##### Method to save a user #####
+  #################################
+
   def self.from_omniauth(auth)
     # slice method extracts one hash out of another, looking for the first entry that matches that provider and uid in the db, or creating a new entry in the db
     where(auth.slice(:provider, :uid)).first || create_from_omniauth(auth)

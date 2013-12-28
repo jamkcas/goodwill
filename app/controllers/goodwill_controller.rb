@@ -1,6 +1,5 @@
 class GoodwillController < ApplicationController
   include GoodwillHelper
-  include DeedsHelper
 
   def index
     # Checking to see if a Session queue exists and setting the status as a javascript variable

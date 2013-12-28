@@ -35,6 +35,13 @@ var sortVotes = function(data) {
   return sort;
 };
 
+// Clearing the lists (this is for when the votes are made in the modal view, to refresh the index page vote counts)
+var emptyPage = function() {
+  $('.featuredDonation').empty();
+  $('.featuredService').empty();
+  $('.featuredLocal').empty();
+  $('.suggestedDeeds').empty();
+}
 
 /******************************/
 /******* List functions *******/
@@ -77,8 +84,10 @@ var populate = function(data, start, end, type) {
   if(start > 0) {
     $('.lists').append('<p class="paginate prev ' + type + '">Previous</p>');
   }
-  // Setting the deedCounter to the last index position
-  deedCounter = end;
+  // Setting the deedCounter to the last index position, only if the modal is open
+  if($('.overlay').css('visibility') === 'visible') {
+    deedCounter = end;
+  }
 };
 
 // Populating the lists for new post modal
@@ -94,6 +103,53 @@ var modalLists = function(data, type) {
   } else {
     populate(deeds[2], deedCounter, deedCounter + 8, 's');
   }
+  // Emptying all the lists
+  emptyPage();
+  // Refreshing all the index page lists
+  featuredLists(deeds);
+  suggestedList(deeds);
+
+  var height = $('.rightBottom').height();
+  $('.leftBottom').css('height', height);
+};
+
+// Function to add an individual entry into the featured list
+var addFeaturedToList = function(data, list, template) {
+  // Creating a new list item by creating a data object and passing it into the featured_entry jst template
+  var template = JST['templates/' + template]({data: data});
+  // Appending the template to the appropriate featured list
+  $(list).append(template);
+};
+
+var featuredLists = function(data) {
+  // Sorting all the deed based on popularity
+  sortedDonation = sortVotes(data[0]);
+  sortedService = sortVotes(data[1]);
+  sortedLocal = sortVotes(data[2])[0];
+
+  // Setting the featured donations
+  _.each(sortedDonation.slice(0,2), function(d) {
+    addFeaturedToList(d, '.featuredDonation', 'featured_entry');
+  });
+
+  // Setting the featured services
+  _.each(sortedService.slice(0,2), function(s) {
+    addFeaturedToList(s, '.featuredService', 'featured_entry');
+  });
+
+  // Setting the featured local cause
+  addFeaturedToList(sortedLocal, '.featuredLocal', 'featured_cause');
+};
+
+var suggestedList = function(data) {
+  // Combining the deeds to one list
+  var deeds = data[0].concat(data[1]).concat(data[2]);
+
+  // Randomly setting the 5 displayed suggested deeds
+  deedIndex = Math.floor(Math.random() * (deeds.length - 6));
+  _.each(deeds.slice(deedIndex, deedIndex + 5), function(d) {
+    addDeedToList(d, '.suggestedDeeds');
+  });
 };
 
 // Vote refresh function

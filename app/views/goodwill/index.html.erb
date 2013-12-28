@@ -1,58 +1,63 @@
 <div class='row top clearfix'>
   <div class='currentThread'>
     <header class='currentHeader clearfix'>
-      <h3>My Current Thread:</h3>
+      <h3>My Current Thread</h3>
       <h5>View Thread History <span>{</span></h5>
-    </header>
+    </header> <!-- end currentHeader -->
+
     <div id='map-canvas'></div>
     <div class='thread'></div>
   </div> <!-- end currentThread -->
 
   <div class='recentPosts'>
     <header class='recentHeader'>
-      <h3>Recent Posts:</h3>
-    </header>
+      <h3>Recent Posts</h3>
+    </header> <!-- end recentHeader -->
 
     <div class='recentContainer'>
       <ul class='recentList'></ul>
-    </div>
+    </div> <!-- end recentContainer -->
   </div> <!-- end recentPosts -->
-</div> <!-- end row -->
+</div> <!-- end row top -->
 
+<div class='row bottom clearfix'>
+  <div class='leftBottom'>
+    <div class='localFeatured'>
+      <header class='localHeader'>
+        <h4>Featured Local Cause</h4>
+      </header> <!-- end localHeader -->
 
+      <div class='featuredLocal'></div>
+    </div> <!-- end localFeatured -->
+  </div> <!-- end leftBottom -->
 
+  <div class='rightBottom'>
+    <div class='featured clearfix'>
+      <div class='donationFeatured'>
+        <header class='donationHeader'>
+          <h4>Featured Donations</h4>
+        </header> <!-- end donationHeader -->
 
+        <ul class='featuredDonation clearfix'></ul>
+      </div> <!-- end donationFeatured -->
 
+      <div class='serviceFeatured'>
+        <header class='serviceHeader'>
+          <h4>Featured Services</h4>
+        </header> <!-- end serviceHeader -->
 
+        <ul class='featuredService clearfix'></ul>
+      </div> <!-- end serviceFeatured -->
+    </div> <!-- end featured -->
 
-<!-- <div class='row bottom clearfix'> -->
-  <!-- <div id='featured' class='column'> -->
-    <!-- <h3>Featured Deeds:</h3> -->
+    <div class='suggested'>
+      <header class='suggestedHeader'>
+        <h4>Suggested Deeds</h4>
+      </header> <!-- end suggestedHeader -->
 
-    <!-- <div id='featuredDeeds'></div> -->
-  <!-- </div> end featured -->
-
-  <!-- <div id='suggestedDeeds' class='column'> -->
-   <!--  <h3>Suggested Deeds:</h3>
-    <div class='addDeed'></div>
-    <div class='donations'>
-      <h5>Donation Type Deeds:</h5>
-      <ul id='suggestedDonations'></ul>
-    </div>
-
-    <div class='services'>
-      <h5>Service Type Deeds:</h5>
-      <ul id='suggestedServices'></ul>
-    </div> -->
-  <!-- </div> end suggestedDeeds -->
-<!--
-  <div id='locals' class='column'>
-    <h3>Local Causes:</h3>
-    <div id='featuredLocal'></div>
-    <div class='local'>
-      <ul id='localCauses'></ul>
-    </div> -->
-  <!-- </div> end localCauses -->
-<!-- </div> end row -->
+      <ul class='suggestedDeeds clearfix'></ul>
+    </div> <!-- end suggested -->
+  </div> <!-- end rightBottom -->
+</div> <!-- end row bottom -->
 
 

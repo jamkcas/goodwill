@@ -11,63 +11,63 @@
 </head>
 
 <body>
-<div id="fb-root"></div>
-<script>
-  window.fbAsyncInit = function() {
-    // init the FB JS SDK
-    FB.init({
-      appId      : "<%= ENV['FACEBOOK_APP_ID'] %>",
-      status     : true,
-      xfbml      : true
-    });
-  };
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      // init the FB JS SDK
+      FB.init({
+        appId      : "<%= ENV['FACEBOOK_APP_ID'] %>",
+        status     : true,
+        xfbml      : true
+      });
+    };
 
-  // Load the SDK asynchronously
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+    // Load the SDK asynchronously
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 
-<!-- Background for modal -->
-<div class='overlay'></div>
+  <!-- Background for modal -->
+  <div class='overlay'></div>
 
-<!-- Main Header -->
-<header class='mainHeader clearfix'>
-  <hgroup class='title'>
-    <h1>Goodwill Tracker</h1>
-    <h4>Perform an act of kindness. Watch what it inspires others to do.</h4>
-  </hgroup>
-  <!-- Login Controls -->
-  <div id="user_nav" class='clearfix'>
-    <% if current_user %>
-      <img src='<%= current_user.profile_pic %>'>
+  <!-- Main Header -->
+  <header class='mainHeader clearfix'>
+    <hgroup class='title'>
+      <h1>Goodwill Tracker</h1>
+      <h4>Perform an act of kindness. Watch what it inspires others to do.</h4>
+    </hgroup>
+    <!-- Login Controls -->
+    <div id="user_nav" class='clearfix'>
+      <% if current_user %>
+        <img src='<%= current_user.profile_pic %>'>
 
-      <p>Welcome, <%= current_user.name %></p>
+        <p>Welcome, <%= current_user.name %></p>
 
-      <%= link_to "Sign out", signout_path, id: "signout" %>
-    <% else %>
-      <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
-      <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>
-    <% end %>
-  </div> <!-- end user_nav -->
-</header> <!-- end mainHeader -->
+        <%= link_to "Sign out", signout_path, id: "signout" %>
+      <% else %>
+        <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
+        <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>
+      <% end %>
+    </div> <!-- end user_nav -->
+  </header> <!-- end mainHeader -->
 
-<div class='container'>
-  <!-- Modal window -->
-  <div class='overlayWindow'>
-    <div class='modal'>
-      <button class='closeModal'>X</button>
-      <div class='window'></div>
-    </div> <!-- end modal -->
-  </div> <!-- end overlayWindow -->
+  <div class='container'>
+    <!-- Modal window -->
+    <div class='overlayWindow'>
+      <div class='modal'>
+        <button class='closeModal'>X</button>
+        <div class='window'></div>
+      </div> <!-- end modal -->
+    </div> <!-- end overlayWindow -->
 
-  <%= yield %>
+    <%= yield %>
 
-</div> <!-- end container -->
+  </div> <!-- end container -->
 </body>
 
 </html>

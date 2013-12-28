@@ -1,5 +1,4 @@
 class DeedsController < ApplicationController
-
   def index
     # Fetches all the deeds from the db
     deeds = Deed.fetch_deeds(current_user)

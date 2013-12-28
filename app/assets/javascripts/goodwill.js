@@ -2,7 +2,7 @@
 /******* Google variables *******/
 /********************************/
 
-var map, inviteCounter = 0, deedCounter = 0, deeds = [];
+var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex;
 
 /************************************/
 /******* Google map functions *******/
@@ -134,7 +134,7 @@ var hideModal = function() {
 var modalSize = function(size) {
   // Getting the width and taking off the 'px'
   var width = $('.container').css('width');
-  var pattern = /[0-9]+/
+  var pattern = /[0-9]+/;
   // Calculating the modal size based on the input percentage
   var new_width = parseInt(width.match(pattern)[0]) * size;
   // Getting the left positioning
@@ -181,6 +181,8 @@ $(function() {
   checkCurrent();
 
   populatePosts();
+
+  populatePage(modalLists);
   // // Hiding the modal on page load
   // $('#overlayWindow').fadeOut();
 
