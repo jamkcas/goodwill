@@ -1,4 +1,6 @@
-<h6 class='back'>< Back</h6>
+<% if(!status) { %>
+  <h6 class='back'>< Back</h6>
+<% } %>
 <div class='deedInformation clearfix'>
   <div class='row clearfix'>
     <div class='deedPhoto'>
@@ -7,7 +9,7 @@
 
     <div class='headerDetails'>
       <h4><%= details.title %></h4>
-      <p>Submitted by: <%= details.submitted_by %></p>
+      <p>Suggested By:  <%= capitalize(details.submitted_by) %></p>
 
       <div class='otherDetails'>
         <ul class='detailList'>
@@ -29,7 +31,7 @@
             </div> <!-- end rightCol -->
           </li>
 
-          <% if(details.location != 'null') { %>
+          <% if(details.location) { %>
             <li class='clearfix'>
               <div class='leftCol'>
                 <p>Location:</p>
@@ -40,7 +42,7 @@
             </li>
           <% } %>
 
-          <% if(details.deadline != 'null') { %>
+          <% if(details.deadline) { %>
             <li class='clearfix'>
               <div class='leftCol'>
                 <p>Deadline:</p>
@@ -51,7 +53,7 @@
             </li>
           <% } %>
 
-          <% if(details.contact != 'null') { %>
+          <% if(details.contact) { %>
             <li class='clearfix'>
               <div class='leftCol'>
                 <p>Contact: </p>
@@ -61,12 +63,33 @@
               </div> <!-- end rightCol -->
             </li>
           <% } %>
+
+          <% if(details.url) { %>
+            <li class='clearfix'>
+              <div class='leftCol'>
+                <p>Website: </p>
+              </div> <!-- end leftCol -->
+              <div class='rightCol'>
+                <p><%= details.url %></p>
+              </div> <!-- end rightCol -->
+            </li>
+          <% } %>
         </ul> <!-- end detailList -->
       </div>  <!-- end otherDetails -->
     </div> <!-- end headerDetails -->
   </div> <!-- end row -->
 
-  <div class='postButton'>
-    <p class='button submitPost' data-id='<%= details.id %>'>Choose This Deed</p>
-  </div> <!-- end postButton -->
+  <% if(gon.logged_in && status != 'current') { %>
+    <div class='postButton'>
+      <p class='button submitPost' data-id='<%= details.id %>'>
+        <% if($('.currentDeed').data('id') != null) { %>
+          Change To This Deed
+        <% } else if(status === 'suggested' && $('.currentDeed').data('id') === null) { %>
+          Start A New Thread
+        <% } else { %>
+          Choose This Deed
+        <% } %>
+      </p>
+    </div> <!-- end postButton -->
+  <% } %>
 </div> <!-- end deedInformation -->

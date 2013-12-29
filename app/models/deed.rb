@@ -1,5 +1,5 @@
 class Deed < ActiveRecord::Base
-  attr_accessible :category, :contact, :contact_type, :deadline, :description, :location, :picture, :title, :deed_type, :user_id
+  attr_accessible :category, :contact, :url, :deadline, :description, :location, :picture, :title, :deed_type, :user_id
 
   belongs_to :user
   has_many :posts

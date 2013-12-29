@@ -47,11 +47,27 @@ var assignEvents = function() {
   });
 
 
+  /******************************/
+  /******* Hover Handlers *******/
+  /******************************/
+
+  // Hover events for when the user hovers on an entry
+  $('.container').on('mouseenter', '.deedClickable', function() {
+    $(this).parent().parent().css('background', '#E8EAEB');
+  });
+
+  // Resettingthe hover events when the user hovers away from an entry
+  $('.container').on('mouseleave', '.deedClickable', function() {
+    $(this).parent().parent().css('background', 'white');
+  });
+
+
   /***************************************/
   /******* Current Thread Handlers *******/
   /***************************************/
 
   $('.thread').on('click', '.postComplete', function() {
+    modalSize(0.5);
     // Adding the complete post modal
     fetchCurrent('modal', makePostModal);
     // Adding the person's contacts if they exist or the import google button
@@ -80,6 +96,11 @@ var assignEvents = function() {
 
   $('.thread').on('click', '.changeDeed', function() {
     showChoices(true);
+  });
+
+  $('.thread').on('click', '.showCurrent', function() {
+    var id = $(this).data('id');
+    getDeed(id, 'current');
   });
 
 
@@ -204,16 +225,6 @@ var assignEvents = function() {
   // Event for when a user wants to start a thread
   $('.thread').on('click', '.startThread', function() {
     showChoices();
-  });
-
-  // Hover events for when the user hovers on an entry
-  $('.overlayWindow').on('mouseenter', '.deedClickable', function() {
-    $(this).parent().parent().css('background', '#E8EAEB');
-  });
-
-  // Resettingthe hover events when the user hovers away from an entry
-  $('.overlayWindow').on('mouseleave', '.deedClickable', function() {
-    $(this).parent().parent().css('background', 'white');
   });
 
   // Event for paginating deeds
@@ -370,47 +381,6 @@ var assignEvents = function() {
   // });
 
 
-
-  /************************************/
-  /******* Mouse Hover Handlers *******/
-  /************************************/
-
-
-  // $('.container').on('click', '.change', function() {
-  //   var id = $(this).data('id');
-  //   var template = JST['templates/confirm']({id: id});
-  //   $('#overlayWindow').empty();
-  //   $('#overlayWindow').append(template);
-  // });
-
-  // $('.container').on('click', '.changeDeed', function() {
-  //   var id = $(this).data('id');
-  //   var template = JST['templates/new_post'];
-  //   $('#overlayWindow').append(template);
-  //   populatePage(modalLists);
-  //   showModal();
-  // });
-
-  // $('#thread').on('click', '.showCurrent', function() {
-  //   var id = $(this).data('id');
-  //   $.get('/deeds/' + id).done(function(data) {
-  //     var template = JST['templates/details_page']({details: data, post_id: null});
-  //     $('#overlayWindow').append(template);
-  //     showModal();
-  //   });
-  // });
-  // $('.container').on('click', '.moreDonations', function(){
-  //   populatePage(fullList, 'donation');
-  // });
-  // $('.container').on('click', '.moreServices', function(){
-  //   populatePage(fullList, 'service');
-  // });
-  // $('.container').on('click', '.moreLocal', function(){
-  //   populatePage(fullList, 'local');
-  // });
-
-
-
   /*****************************/
   /******* Vote Handlers *******/
   /*****************************/
@@ -470,6 +440,80 @@ var assignEvents = function() {
       // Refreshing the votes on the page
       refreshVoteTotals(category);
     });
+  });
+
+
+  /**********************************/
+  /******* Suggested Handlers *******/
+  /**********************************/
+
+  $('.suggestedDeedsContainer').on('click', '.leftArrow', function() {
+    // Combining the deed list arrays to one list
+    var totalDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
+    // Setting the next deed
+    if(deedIndex + 5 > totalDeeds.length - 1) {
+      var deed = totalDeeds[0 + (deedIndex + 5) - (totalDeeds.length - 1)];
+    } else {
+      var deed = totalDeeds[deedIndex + 5];
+    }
+    // Cloning the deed, bringing it to the front, and positioning it so it can be animated
+    var deedList = $('.suggestedDeeds').clone();
+    deedList.css('position', 'absolute');
+    deedList.css('z-index', '100');
+    deedList.css('background', 'white');
+    // Adding it to the frame
+    $('.suggestedDeedsFrame').append(deedList);
+    // Moving the clone. When it is done moving the first deed is removed and a new deed is added on the end. Then the deedIndex is updated and the clone is deleted
+    deedList.animate({'left': '-20%'}, {'complete': function() {
+        $('.suggestedDeeds').children()[0].remove();
+        addDeedToList(deed, '.suggestedDeeds');
+        if(deedIndex === totalDeeds.length - 1) {
+          deedIndex = 0;
+        } else {
+          deedIndex += 1;
+        }
+        deedList.remove();
+      }
+    });
+  });
+
+  $('.suggestedDeedsContainer').on('click', '.rightArrow', function() {
+    // Combining the deed list arrays to one list
+    var totalDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
+    // Setting the next deed
+    if(deedIndex - 1 < 0) {
+      var deed = totalDeeds[totalDeeds.length - 1];
+    } else {
+      var deed = totalDeeds[deedIndex];
+    }
+    // Cloning the deed, bringing it to the front, and positioning it so it can be animated
+    var deedList = $('.suggestedDeeds').clone();
+    deedList.css('position', 'absolute');
+    deedList.css('z-index', '100');
+    deedList.css('background', 'white');
+    // Adding it to the frame
+    $('.suggestedDeedsFrame').append(deedList);
+    // Moving the clone. When it is done moving the last deed is removed and a new deed is added on the beginning. Then the deedIndex is updated and the clone is deleted
+    deedList.animate({'left': '20%'}, {'complete': function() {
+        $('.suggestedDeeds').children()[4].remove();
+        var template = JST['templates/deed_entry']({data: deed});
+        $('.suggestedDeeds').prepend(template);
+        if(deedIndex === 0) {
+          deedIndex = totalDeeds.length - 1;
+        } else {
+          deedIndex -= 1;
+        }
+        deedList.remove();
+      }
+    });
+  });
+
+  // Display the deed details in a modal
+  $('.suggestedDeeds').on('click', '.deedClickable', function() {
+    // Getting the deed id
+    var id = $(this).parent().data('id');
+    // Call to get the deed details
+    getDeed(id);
   });
 
 };

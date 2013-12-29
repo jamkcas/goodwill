@@ -38,11 +38,11 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
     t.string   "deadline"
     t.string   "location"
     t.string   "contact"
-    t.string   "contact_type"
+    t.string   "url"
     t.string   "picture"
     t.integer  "user_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "favorites", :force => true do |t|

@@ -2,7 +2,7 @@
 /******* Google variables *******/
 /********************************/
 
-var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex;
+var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex, featuredIndex = 1;
 
 /************************************/
 /******* Google map functions *******/
@@ -127,7 +127,6 @@ var hideModal = function() {
   $('.window').empty();
   // Resetting the deed counter
   deedCounter = 0;
-  deeds = [];
 };
 
 // Function to set the modal width and postion based on the container width

@@ -43,6 +43,7 @@ var emptyPage = function() {
   $('.suggestedDeeds').empty();
 }
 
+
 /******************************/
 /******* List functions *******/
 /******************************/
@@ -58,7 +59,11 @@ var populatePage = function(list, type) {
 // Function to add an individual entry into the current list
 var addDeedToList = function(data, list) {
   // Creating a new list item by creating a data object and passing it into the deed_entry jst template
-  var template = JST['templates/deed_entry']({data: data});
+  if(list === '.list') {
+    var template = JST['templates/deed_entry']({data: data, status: 'modal'});
+  } else {
+    var template = JST['templates/deed_entry']({data: data});
+  }
   // Appending the template to the appropriate item
   $(list).append(template);
 };
@@ -108,39 +113,60 @@ var modalLists = function(data, type) {
   // Refreshing all the index page lists
   featuredLists(deeds);
   suggestedList(deeds);
-
-  var height = $('.rightBottom').height();
-  $('.leftBottom').css('height', height);
 };
 
 // Function to add an individual entry into the featured list
-var addFeaturedToList = function(data, list, template) {
+var addFeaturedToList = function(data, list) {
   // Creating a new list item by creating a data object and passing it into the featured_entry jst template
-  var template = JST['templates/' + template]({data: data});
+  var template = JST['templates/featured_cause']({data: data});
   // Appending the template to the appropriate featured list
   $(list).append(template);
 };
 
+// Function to set up the featured deeds
 var featuredLists = function(data) {
   // Sorting all the deed based on popularity
-  sortedDonation = sortVotes(data[0]);
-  sortedService = sortVotes(data[1]);
-  sortedLocal = sortVotes(data[2])[0];
-
-  // Setting the featured donations
-  _.each(sortedDonation.slice(0,2), function(d) {
-    addFeaturedToList(d, '.featuredDonation', 'featured_entry');
-  });
-
-  // Setting the featured services
-  _.each(sortedService.slice(0,2), function(s) {
-    addFeaturedToList(s, '.featuredService', 'featured_entry');
-  });
-
-  // Setting the featured local cause
-  addFeaturedToList(sortedLocal, '.featuredLocal', 'featured_cause');
+  var sortedDonation = sortVotes(data[0])[0];
+  var sortedService = sortVotes(data[1])[0];
+  var sortedLocal = sortVotes(data[2])[0];
+  // Adding the featured deeds to the list
+  addFeaturedToList(sortedLocal, '.featuredLocal');
+  addFeaturedToList(sortedDonation, '.featuredLocal');
+  addFeaturedToList(sortedService, '.featuredLocal');
+  // Hiding the deeds initially
+  $('.featuredLocal').children().fadeOut(0);
+  // Displaying the first featured deed
+  var showFeatured = $('.featuredLocal li:nth-child(1)');
+  showFeatured.fadeIn(0);
+  showFeatured.addClass('activeFeatured');
+  // Setting the featured cycle interval
+  cycledFeatured;
 };
 
+// Function to update the current featured
+var showActiveFeature = function() {
+  // Getting the current featured
+  var current = $('.activeFeatured');
+  // Fading out the current featured, then fading in the new featured item
+  current.fadeOut(500, function() {
+    var showFeatured = $('.featuredLocal li:nth-child(' + featuredIndex + ')');
+    showFeatured.fadeIn(700);
+    // Setting the new featured to active, and removing active on the old featured
+    showFeatured.addClass('activeFeatured');
+    current.removeClass('activeFeatured');
+  });
+  // Adjustig the featuredIndex
+  if(featuredIndex === 3) {
+    featuredIndex = 1
+  } else {
+    featuredIndex += 1;
+  }
+};
+
+// Setting the interval for displaying the next current featured
+var cycledFeatured = setInterval(showActiveFeature, 20000);
+
+// Function to populate the suggested list
 var suggestedList = function(data) {
   // Combining the deeds to one list
   var deeds = data[0].concat(data[1]).concat(data[2]);
@@ -162,5 +188,25 @@ var refreshVoteTotals = function(category) {
     // Refreshing the deeds list with the new vote calculated as well as the current page the user is on
     populatePage(modalLists, category);
   }
+};
+
+// Get a deed's info function
+var getDeed = function(id, status) {
+  $.ajax('/deeds/' + id, {
+    data: {
+      ajax: 'This is an ajax call'
+    }
+  }).done(function(data) {
+    // Shrinking the modal size for the details display
+    modalSize(0.5);
+    // Showing deed details
+    if(status === 'current') {
+      var template = JST['templates/deed_details']({details: data, status: 'current'});
+    } else {
+      var template = JST['templates/deed_details']({details: data, status: 'suggested'});
+    }
+    $('.window').append(template);
+    showModal();
+  });
 };
 

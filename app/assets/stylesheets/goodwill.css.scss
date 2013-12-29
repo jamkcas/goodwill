@@ -49,7 +49,7 @@ a {
   color: inherit;
 }
 
-a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back, .submitPost {
+a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back, .submitPost, .deedClickable, .leftArrow, .rightArrow {
   cursor: pointer;
 }
 
@@ -169,14 +169,12 @@ li {
 .thread {
   background: #e8eaeb;
   padding: 10px;
-  margin-top: 10px;
   height: 85px;
 }
 
 .currentThread {
-  width: 70%;
+  width: 68%;
   float: left;
-  padding-left: 20px;
   padding-top: 30px;
 }
 
@@ -259,18 +257,17 @@ li {
 .recentPosts {
   width: 30%;
   float: left;
+  margin-left: 2%;
 }
 
 .recentHeader {
   padding-top: 30px;
-  padding-left: 20px;
   font-size: 20px;
   line-height: 20px;
 }
 
-.recentList {
-  padding-left: 20px;
-  padding-top: 10px;
+.recentContainer {
+  margin-bottom: 10px;
 }
 
 .recentEntry {
@@ -308,31 +305,20 @@ li {
 }
 
 
-/****************/
-/**** Bottom ****/
-/****************/
 
-.bottom {
-  margin: 40px 0;
-}
+/******************/
+/**** Featured ****/
+/******************/
 
-
-/*********************/
-/**** Left Bottom ****/
-/*********************/
-
-.leftBottom {
-  width: 28%;
-  float: left;
-  padding: 20px;
-  margin-right: 2%;
-  background: #d5f4ff;
+.localFeatured {
+  padding: 10px 20px;
+  background: #edfaff;
 }
 
 .localHeader {
   font-size: 20px;
   line-height: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .featuredCause {
@@ -341,83 +327,32 @@ li {
 
 .featuredCauseImage {
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 }
 
 .featuredCauseImage img {
   width: 100%;
 }
 
-.featuredCauseTitle {
+.featuredCauseTitle, .featuredDetails {
+  margin-bottom: 10px;
+}
+
+.featuredCauseTitle h4 {
   font-size: 20px;
   line-height: 20px;
-  margin-bottom: 15px;
 }
 
-.featuredContact, .featuredPage {
-  margin-bottom: 15px;
+.featuredCauseTitle p {
+  font-size: 12px;
 }
 
-.featuredContact h5, .featuredPage h5 {
+.localContact {
+  color: #45BEE0;
+}
+
+.featuredDetails h6 {
   margin-bottom: 3px;
-  font-size: 15px;
-  line-height: 15px;
-}
-
-
-/**********************/
-/**** Right Bottom ****/
-/**********************/
-
-.rightBottom {
-  width: 68%;
-  float: left;
-  margin-left: 2%;
-}
-
-
-/************************/
-/**** Featured Deeds ****/
-/************************/
-
-.featured {
-  margin-bottom: 40px;
-}
-
-.donationFeatured, .serviceFeatured {
-  width: 46%;
-  float: left;
-}
-
-.serviceFeatured {
-  margin-left: 8%;
-}
-
-.donationHeader, .serviceHeader {
-  font-size: 20px;
-  line-height: 20px;
-  padding-top: 20px;
-  margin-bottom: 20px;
-}
-
-.featuredDonation, .featuredService {
-  width: 100%;
-}
-
-.featuredEntry:first-child {
-  float: left;
-  width: 46%;
-  margin-right: 4%;
-}
-
-.featuredEntry:last-child {
-  float: left;
-  width: 46%;
-  margin-left: 4%;
-}
-
-.featuredEntry img {
-  width: 100%;
 }
 
 
@@ -425,10 +360,32 @@ li {
 /**** Suggested ****/
 /*******************/
 
+.suggested {
+  padding: 30px 0
+}
+
 .suggestedHeader {
   font-size: 20px;
   line-height: 20px;
-  margin-bottom: 20px;
+  text-align: right;
+}
+
+.border {
+  width: 100%;
+  height: 1px;
+  background: -webkit-linear-gradient(left, white 30%, #838488 100%);
+  margin: 5px 0 10px 0;
+}
+
+.suggestedDeedsContainer {
+  position: relative;
+}
+
+.suggestedDeedsFrame {
+  width: 85%;
+  overflow: hidden;
+  margin: auto;
+  position: relative;
 }
 
 .suggestedDeeds {
@@ -437,13 +394,29 @@ li {
 
 .suggestedDeeds li {
   float: left;
+  background: white;
   width: 18%;
   margin: 0 2.5% 0 0;
+}
+
+.leftArrow, .rightArrow {
+  font: normal 32px/32px 'web_symbolsregular';
+  position: absolute;
+  top: 50px;
+}
+
+.leftArrow {
+  left: 0px;
+}
+
+.rightArrow {
+  right: 0px;
 }
 
 .suggestedDeeds li:last-child {
   margin-right: 0;
 }
+
 
 /***************/
 /**** Modal ****/
@@ -771,6 +744,10 @@ li {
   color: $link;
 }
 
+.deedInformation {
+  text-align: left;
+}
+
 .deedPhoto {
   width: 20%;
   display: inline-block;
@@ -782,9 +759,11 @@ li {
 }
 
 .headerDetails {
-  width: 80%;
+  width: 78%;
   padding: 0 10px 10px 10px;
   float: left;
+  margin-left: 2%;
+  border-left: 1px solid #E4E4E3;
 }
 
 .headerDetails h4 {
@@ -793,8 +772,8 @@ li {
 }
 
 .headerDetails p {
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 16px;
 }
 
 .detailList li {
@@ -806,6 +785,11 @@ li {
   margin-top: 25px;
 }
 
+.otherDetails p {
+  font-size: 16px;
+  line-height: 18px;
+}
+
 .postButton {
   text-align: center;
 }
@@ -814,371 +798,4 @@ li {
   display: inline-block;
 }
 
-
-// .modalPostMain {
-//   text-align: center;
-//   padding: 0;
-// }
-
-
-
-
-// .choices {
-//   width: 100%;
-// }
-
-
-
-
-
-
-
-
-
-
-
-// .lists h3 {
-//   font-size: 25px;
-//   line-height: 35px;
-//   padding: 0 20px;
-// }
-
-// .suggestedServices {
-//   margin-top: 30px;
-// }
-
-
-
-// .suggestedDeedsModal h3, .localList {
-//   margin-top: 20px;
-// }
-
-// .lists h4 {
-//   padding: 0 30px 0 10px;
-// }
-
-// .back {
-//   float: left;
-// }
-
-// .back:hover {
-//   cursor: pointer;
-// }
-
-// .submitPost {
-//   cursor: pointer;
-//   display: inline-block;
-// }
-
-// .deedInformation {
-//   float: left;
-//   clear: both;
-//   text-align: center;
-// }
-
-// .deedInformation h4 {
-//   font-size: 25px;
-//   line-height: 25px;
-//   margin: 15px 0;
-// }
-
-// .deedDets {
-//   width: 100%;
-//   text-align: center;
-// }
-
-// .deedDets li {
-//   width: 100%;
-//   margin-bottom: 10px;
-// }
-
-// .deedDets h5 {
-//   font-size: 16px;
-//   line-height: 16px;
-// }
-
-// .deedDets p {
-//   float: left;
-// }
-
-// .deedInformation img {
-//   float: right;
-//   width: 100%
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // ****** Recent Posts ******
-
-// #recentPosts {
-//   float: left;
-//   width: 30%;
-//   height: 504px;
-//   padding: 30px 0;
-// }
-
-// #recentPosts h3 {
-//   font: normal 25px/25px 'judsonmedium', serif;
-//   padding: 0 20px 5px 20px;
-// }
-
-// .recentContainer {
-//   overflow: auto;
-//   height: 480px;
-//   margin-bottom: 10px;
-//   padding: 0 20px;
-//   width: 100%
-// }
-
-
-
-// .recentDetails h4 {
-//   font-size: 17px;
-//   line-height: 17px;
-//   padding-bottom: 5px;
-// }
-
-// .recentDetails p {
-//   font-size: 12px;
-//   line-height: 12px;
-// }
-
-
-
-// // ****** Deeds ******
-
-// .column {
-//   float: left;
-//   display: block;
-//   padding: 10px 20px 10px 10px;
-// }
-
-// .bottom {
-//   padding: 40px 20px;
-// }
-
-// .bottom h3 {
-//   font-size: 25px;
-//   line-height: 25px;
-//   margin-bottom: 20px;
-// }
-
-// .vote {
-//   margin-left: 28px;
-//   float: left;
-// }
-
-
-// .downVote {
-//   margin-left: 20px;
-// }
-
-// .voteTotals {
-//   float: right;
-// }
-
-
-// .more {
-//   padding-top: 10px;
-//   padding-left: 20px;
-//   color: #63C3E1;
-// }
-
-// .more:hover {
-//   cursor: pointer;
-// }
-
-// .detailsTitle {
-//   margin-bottom: 15px;
-//   font-size: 25px;
-//   line-height: 25px;
-//   text-align: left;
-// }
-
-// .deedEntryDets {
-//   width: 100%;
-//   text-align: center;
-// }
-
-// .deedEntryDets li {
-//   width: 100%;
-//   margin-bottom: 10px;
-// }
-
-// .deedEntryDets h5 {
-//   font-size: 16px;
-//   line-height: 16px;
-// }
-
-// .deedEntryDets p {
-//   float: left;
-// }
-
-// .change {
-//   cursor: pointer;
-//   text-align: center;
-//   color: #44BDE0;
-//   margin-top: 15px;
-// }
-
-
-
-// // ****** Featured Deeds ******
-
-// #featured {
-//   width: 35%;
-// }
-
-// .featuredEntry {
-//   float: left;
-//   width: 50%;
-//   display: inline-block;
-//   padding: 10px 20px 10px 0;
-// }
-
-// .featuredContainer {
-//   box-shadow: 0.5px 0.5px 1.5px #B7B7B7;
-//   width: 100%;
-// }
-
-// .featuredContainer:hover {
-//   cursor: pointer;
-//   background: #E8EAEB;
-// }
-
-// .featuredImage {
-//   width: 100%;
-// }
-
-// .featuredImage img {
-//   width: 100%;
-// }
-
-// .featuredInfo {
-//   padding: 10px;
-//   width: 100%;
-// }
-
-// .featuredTitle {
-//   width: 100%;
-// }
-
-// .featuredInfo h4 {
-//   font-size: 16px;
-//   line-height: 16px;
-// }
-
-// .featuredVotes {
-//   float: right;
-//   margin-top: 10px;
-// }
-
-// .featuredVotes p {
-//   float: left;
-//   padding-left: 20px;
-// }
-
-
-
-// // ****** Suggested Deeds ******
-
-// #suggestedDeeds {
-//   width: 35%;
-// }
-
-// #suggestedDeeds h3 {
-//   margin-left: 20px;
-//   display: inline-block;
-// }
-
-// .addDeed {
-//   float: right;
-//   margin-right: 30px;
-//   margin-top: -15px;
-// }
-
-// .newDeed {
-//   padding: 7px;
-//   font-size: 12px;
-//   line-height: 12px;
-//   cursor: pointer;
-// }
-
-// .donations {
-//   padding-top: 10px;
-// }
-
-// .donations h5, .services h5 {
-//   font-size: 20px;
-//   line-height: 20px;
-//   margin-bottom: 10px;
-//   padding-left: 20px;
-// }
-
-// .services  {
-//   padding-top: 30px;
-// }
-
-// .deed {
-//   width: 100%;
-// }
-
-// .deedEntry {
-//   float: left;
-//   margin-left: 20px;
-//   max-width: 50%;
-// }
-
-// .deedEntry h4 {
-//   font-size: 16px;
-//   line-height: 25px;
-//   color: #63C3E1;
-// }
-
-// // .deed:hover {
-// //   cursor: pointer;
-// //   background: #E8EAEB;
-// // }
-
-
-
-
-// // ****** Local Causes ******
-
-// #locals {
-//   width: 30%;
-// }
-
-// #locals h3 {
-//   margin-left: 10px;
-//   display: inline-block;
-// }
-
-// #featuredLocal {
-//   margin-left: 10px;
-// }
-
-// .completeLists {
-//   max-height: 400px;
-//   overflow: scroll;
-// }
 

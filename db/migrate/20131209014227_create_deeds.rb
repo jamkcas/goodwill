@@ -8,7 +8,7 @@ class CreateDeeds < ActiveRecord::Migration
       t.string :deadline
       t.string :location
       t.string :contact
-      t.string :contact_type
+      t.string :url
       t.string :picture
       t.integer :user_id
 

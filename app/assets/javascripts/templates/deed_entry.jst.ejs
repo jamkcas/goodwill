@@ -6,11 +6,19 @@
       </div> <!-- end deedImg -->
 
       <div class='deedEntry'>
-        <% if(data.deed.title.length > 15) { %>
-          <h4><%= data.deed.title.slice(0, 15) + '...' %></h4>
+        <% if(status === 'modal') { %>
+          <% if(data.deed.title.length > 15) { %>
+            <h4><%= data.deed.title.slice(0, 15) + '...' %></h4>
+          <% } else { %>
+            <h4><%= data.deed.title %></h4>
+          <% } %>
         <% } else { %>
-          <h4><%= data.deed.title %></h4>
-        <% }; %>
+          <% if(data.deed.title.length > 10) { %>
+            <h4><%= data.deed.title.slice(0, 10) + '...' %></h4>
+          <% } else { %>
+            <h4><%= data.deed.title %></h4>
+          <% } %>
+        <% } %>
       </div> <!-- end deedEntry -->
     </div> <!-- end deedClickable -->
 

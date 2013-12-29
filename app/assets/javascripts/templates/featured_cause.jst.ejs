@@ -1,19 +1,27 @@
 <li class='featuredCause' data-id='<%= data.deed.id %>'>
+  <header class='localHeader'>
+    <% if(data.deed.category === 'local') { %>
+      <h4>Featured Local Cause</h4>
+    <% } else if(data.deed.deed_type === 'donation') { %>
+      <h4>Featured Donation</h4>
+    <% } else { %>
+      <h4>Featured Service</h4>
+    <% } %>
+  </header> <!-- end localHeader -->
+
   <div class='featuredCauseImage'>
     <img src='<%= data.deed.picture %>'>
   </div> <!-- end featuredCauseImage -->
 
   <header class='featuredCauseTitle'>
     <h4><%= data.deed.title %></h4>
+    <p><%= data.deed.url %></p>
+    <p class='localContact'>Contact</p>
   </header> <!-- end featuredCauseTitle -->
 
-  <div class='featuredContact'>
-    <h5>Contact Info</h5>
-    <p><%= data.deed.contact %></p>
-  </div> <!-- end featuredContact -->
+  <div class='featuredDetails'>
+    <h6>Description:</h6>
+    <p><%= data.deed.description %></p>
+  </div>
 
-  <div class='featuredPage'>
-    <h5>Homepage</h5>
-    <p><%= data.deed.contact %></p>
-  </div> <!-- end featuredVotes -->
 </li> <!-- end featuredCause -->
