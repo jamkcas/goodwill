@@ -2,7 +2,7 @@
 /******* Google variables *******/
 /********************************/
 
-var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex, featuredIndex = 1;
+var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1;
 
 /************************************/
 /******* Google map functions *******/
@@ -70,10 +70,10 @@ var drawLines = function(locations) {
     // Setting the path for the polyline
     var paths = new google.maps.Polyline({
       path: locs,
-      strokeColor: "#4681BD",
+      strokeColor: "#de00ff",
       geodesic: true,
       strokeOpacity: 1.0,
-      strokeWeight: 1
+      strokeWeight: 3
     });
     // Adding the polyline to the map
     paths.setMap(map);
@@ -154,7 +154,6 @@ var capitalize = function(word) {
 }
 
 
-
 /********************************/
 /******* On load function *******/
 /********************************/
@@ -162,11 +161,13 @@ var capitalize = function(word) {
 
 // Start of Javascript when page loads
 $(function() {
+  // Assigning event handlers
   assignEvents();
 
   // Add the map to the map canvas
   google.maps.event.addDomListener(window, 'load', mapInit);
 
+  // Setting the current thread
   if(gon.logged_in === true) {
     fetchCurrent('thread', setCurrent);
   }
@@ -177,45 +178,12 @@ $(function() {
     $('#signin').click();
   }
 
+  // Checks to see if user is currently on a post when navigating from the join thread email link
   checkCurrent();
 
+  // Populating the recent posts list
   populatePosts();
 
+  // Fetching deeds to populate all the lists
   populatePage(modalLists);
-  // // Hiding the modal on page load
-  // $('#overlayWindow').fadeOut();
-
-
-
-
-
-  // // Populating all the lists with deeds from the db
-  // populatePage(pageLists); // In deeds.js
-
-  // // Populating the featured list with most popular suggested deeds
-  // populatePage(featuredLists); // In deeds.js
-
-  // // Populating the featured local with most popular local cause
-  // populatePage(featuredLocal); // In deeds.js
-
-  // // Populating the recent posts list
-  // populatePosts();
-
-
-
-  // // Close modal
-  // assignCloseModal();
-
-  // // assignDeedClicks();
-
-
-
-
-
-  // // Setting the voting event delegates
-  // assignEvents();
-
-
-
-
 });

@@ -113,7 +113,7 @@ class Post < ActiveRecord::Base
     # Posts to facebook the current users good deed
     # api = Koala::Facebook::API.new(current_user.oauth_token)
     # # Need to change the link for production
-    # api.put_wall_post("Just completed the deed: #{post.title}\n#{post.content}!", {
+    # api.put_wall_post("Just completed the good deed: #{post.title}\n#{post.content}!", {
     #   "name" => "Goodwill Tracking",
     #  "link"=> "http://goodwill-tracker.herokuapp.com",
     #  "caption"=> "Keep the kindness going!",

@@ -350,35 +350,12 @@ var assignEvents = function() {
     });
   });
 
-  // $('.bottom').on('click', '.featuredEntry', function(){
-  //   var current = $(this);
-  //   var post_id = null
-  //   var id = current.data('id');
-  //   if($('#currentDeed').data('id')) {
-  //     post_id = $('#currentDeed').data('id')
-  //   }
-  //   $.get('/deeds/' + id).done(function(data) {
-  //     var template = JST['templates/details_page']({details: data, post_id: post_id});
-  //     $('#overlayWindow').append(template);
-  //     showModal();
-  //   });
-  // });
-
-  // $('.container').on('click', '.deedEntry', function() {
-
-  //   var current = $(this);
-  //   var post_id = null
-  //   var id = current.parent().data('id');
-  //   if($('#currentDeed').data('id')) {
-  //     post_id = $('#currentDeed').data('id')
-  //   }
-  //   $.get('/deeds/' + id).done(function(data) {
-  //     $('#overlayWindow').empty();
-  //     var template = JST['templates/details_page']({details: data, post_id: post_id});
-  //     $('#overlayWindow').append(template);
-  //     showModal();
-  //   });
-  // });
+  $('.localFeatured').on('click', '.featuredStart', function() {
+    // Getting the deed id
+    var id = $(this).data('id');
+    // Call to get the deed details
+    getDeed(id);
+  });
 
 
   /*****************************/

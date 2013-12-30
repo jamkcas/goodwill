@@ -9,19 +9,41 @@
     <% } %>
   </header> <!-- end localHeader -->
 
-  <div class='featuredCauseImage'>
-    <img src='<%= data.deed.picture %>'>
-  </div> <!-- end featuredCauseImage -->
+  <div class='featuredContainer'>
+    <div class='featuredCauseImage'>
+      <img src='<%= data.deed.picture %>'>
+    </div> <!-- end featuredCauseImage -->
 
-  <header class='featuredCauseTitle'>
-    <h4><%= data.deed.title %></h4>
-    <p><%= data.deed.url %></p>
-    <p class='localContact'>Contact</p>
-  </header> <!-- end featuredCauseTitle -->
+    <header class='featuredCauseTitle'>
+      <h4><%= data.deed.title %></h4>
+    </header> <!-- end featuredCauseTitle -->
 
-  <div class='featuredDetails'>
-    <h6>Description:</h6>
-    <p><%= data.deed.description %></p>
-  </div>
+    <div class='featuredDetails'>
+      <% if(data.deed.url) { %>
+        <% if((data.deed.url).match(/^http:\/\//) || (data.deed.url).match(/^https:\/\//)) { %>
+          <p><a href='<%= data.deed.url %>' target='_blank'><%= data.deed.url %></a></p>
+        <% } else { %>
+          <p><a href='http://<%= data.deed.url %>' target='_blank'><%= data.deed.url %></a></p>
+        <% } %>
+      <% } %>
+      <% if(data.deed.contact) { %>
+        <% if((data.deed.contact).match(/@[a-zA-Z-]+.[a-z]{3}$/)) { %>
+          <p>Contact: <a href="mailto:<%= data.deed.contact %>" target='_blank' class='localContact'><%= data.deed.contact %></a></p>
+        <% } else { %>
+          <p class='nonEmail'>Contact:  <%= data.deed.contact %></p>
+        <% } %>
+      <% } %>
+      <h6>Description:</h6>
+      <p><%= data.deed.description %></p>
+    </div>
+
+    <% if(gon.logged_in && status != 'current') { %>
+      <div class='postButton'>
+        <p class='featuredStart button' data-id='<%= data.deed.id %>'>Do This Good Deed</p>
+      </div> <!-- end postButton -->
+    <% } %>
+  </div> <!-- end featuredContainer -->
+
+
 
 </li> <!-- end featuredCause -->

@@ -99,7 +99,10 @@ var populate = function(data, start, end, type) {
 var modalLists = function(data, type) {
   // Assigning the global variables with the deeds for use while modal is open
   deeds = data;
-
+  // Resetting the counter if navigating from email link
+  if(gon.queue === true) {
+    deedCounter = 0;
+  }
   // Populating the list with the deeds based on the current active tab
   if(type === 'donation') {
     populate(deeds[0], deedCounter, deedCounter + 8, 'd');
@@ -129,6 +132,8 @@ var featuredLists = function(data) {
   var sortedDonation = sortVotes(data[0])[0];
   var sortedService = sortVotes(data[1])[0];
   var sortedLocal = sortVotes(data[2])[0];
+  // Emptying old featured when refreshing
+  $('.featuredLocal').empty();
   // Adding the featured deeds to the list
   addFeaturedToList(sortedLocal, '.featuredLocal');
   addFeaturedToList(sortedDonation, '.featuredLocal');
@@ -164,7 +169,7 @@ var showActiveFeature = function() {
 };
 
 // Setting the interval for displaying the next current featured
-var cycledFeatured = setInterval(showActiveFeature, 20000);
+var cycledFeatured = setInterval(showActiveFeature, 8000);
 
 // Function to populate the suggested list
 var suggestedList = function(data) {
@@ -172,7 +177,9 @@ var suggestedList = function(data) {
   var deeds = data[0].concat(data[1]).concat(data[2]);
 
   // Randomly setting the 5 displayed suggested deeds
-  deedIndex = Math.floor(Math.random() * (deeds.length - 6));
+  if(deedIndex === 0) {
+    deedIndex = Math.floor(Math.random() * (deeds.length - 6));
+  }
   _.each(deeds.slice(deedIndex, deedIndex + 5), function(d) {
     addDeedToList(d, '.suggestedDeeds');
   });
