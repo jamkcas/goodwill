@@ -16,7 +16,11 @@ class DeedsController < ApplicationController
   end
 
   def create
-    deed = Deed.save_deed(params, current_user)
+    # Saving the deed if there is a current user
+    if current_user
+      deed = Deed.save_deed(params, current_user)
+    end
+
     render json: deed
   end
 end

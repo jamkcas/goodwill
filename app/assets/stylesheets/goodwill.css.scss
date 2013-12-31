@@ -363,8 +363,11 @@ li {
 }
 
 .localContact {
-  color: #45BEE0;
   padding-left: 5px;
+}
+
+.localEmail {
+  color: #45BEE0;
 }
 
 .featuredDetails h6 {
@@ -615,10 +618,6 @@ li {
   text-align: center;
   z-index: 2000;
   border-radius: 8px;
-}
-
-.window {
-  position: relative;
 }
 
 .closeModal, .closeConfirmModal {

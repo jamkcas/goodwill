@@ -42,24 +42,24 @@
             </li>
           <% } %>
 
-          <% if(details.deadline) { %>
+          <% if(details.phone) { %>
             <li class='clearfix'>
               <div class='leftCol'>
-                <p>Deadline:</p>
+                <p>Phone Number: </p>
               </div> <!-- end leftCol -->
               <div class='rightCol'>
-                <p><%= details.deadline %></p>
+                <p><%= details.phone %></p>
               </div> <!-- end rightCol -->
             </li>
           <% } %>
 
-          <% if(details.contact) { %>
+          <% if(details.email) { %>
             <li class='clearfix'>
               <div class='leftCol'>
-                <p>Contact: </p>
+                <p>Email: </p>
               </div> <!-- end leftCol -->
               <div class='rightCol'>
-                <p><%= details.contact %></p>
+                <p><%= details.email %></p>
               </div> <!-- end rightCol -->
             </li>
           <% } %>

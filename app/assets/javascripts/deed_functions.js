@@ -43,6 +43,112 @@ var emptyPage = function() {
   $('.suggestedDeeds').empty();
 }
 
+// Function to attach the input file to the picture canvas
+var readURL = function(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      // Setting the source of the picture canvas image
+      $('.inputImage').attr('src', e.target.result);
+
+      var width = $('.window').width();
+      var height = $('.window').height();
+      // Checking to see whether the window size should be determined by the image width or height
+      if(Math.abs($('.inputImage').height() - height) > Math.abs($('.inputImage').width() - width)) {
+        $('.inputImage').css('height', '100%');
+      } else {
+        $('.inputImage').css('width', '100%');
+      }
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+
+/*****************************************/
+/******* Deed validation functions *******/
+/*****************************************/
+
+// Function to check if valid email format
+var checkUrl = function(str) {
+  var pattern1 = /[\d\D]+\.[a-z]{2,3}$/;
+  var pattern2 = /[\d\D]+\.[a-z]{2,3}\/$/;
+  if(str.match(/\s/)) {
+    return false;
+  }
+  if(str.match(pattern1) || str.match(pattern2)) {
+    return true;
+  }
+};
+
+// Function to check if valid zipcode format
+var checkZip = function(zip) {
+  var pattern = /[\d]{5}/;
+  if(zip.match(pattern) && zip.length === 5) {
+    return true;
+  }
+};
+
+// Funtion for checking if a phone number is of a correct format
+var checkPhone = function(num) {
+  // Setting all the valid phone format patterns
+  var pattern1 = /[\d]{3}\-[\d]{3}\-[\d]{4}/;
+  var pattern2 = /\([\d]{3}\)[\d]{3}-[\d]{4}/;
+  var pattern3 = /\([\d]{3}\)[\d]{7}/;
+  var pattern4 = /[\d]{10}/;
+  var pattern5 = /1-[\d]{10}/;
+  var pattern6 = /1-[\d]{3}-[\d]{3}-[\d]{4}/;
+  var pattern7 = /1-\([\d]{3}\)[\d]{3}-[\d]{4}/;
+  var pattern8 = /1-\([\d]{3}\)[\d]{7}/;
+
+  if(num.match(/\s/)) {
+    return false;
+  }
+
+  if(num.match(pattern1) || num.match(pattern2) || num.match(pattern3) || num.match(pattern4) || num.match(pattern5) || num.match(pattern6) || num.match(pattern7) || num.match(pattern8)) {
+    return true;
+  }
+
+};
+
+// Function to check if email address is of a correct format
+var checkEmail = function(email) {
+  var pattern = /[\w\W]+\@\w+\.[a-zA-Z]{2,3}$/;
+  if(email.match(/\s/)) {
+    return false;
+  }
+  if(email.match(pattern)) {
+    return true;
+  }
+};
+
+// Function for adding an error message when mandatory field is blank
+var missingField = function(elem) {
+  elem.next().empty();
+  elem.css('box-shadow', '0.5px 0.5px 5px 1px red');
+  elem.next().append('<p>* Required Field</p>');
+};
+
+// Function for clearing error messages
+var clearMessage = function(elem) {
+  elem.css('box-shadow', 'none');
+  elem.next().empty();
+  // If there is an info message associated with the field it is reshown when errors are cleared
+  if(elem.next().next()) {
+    elem.next().next().show();
+  }
+};
+
+// Function for adding an error message when input value is an invalid format
+var invalid = function(elem, message) {
+  elem.css('box-shadow', '0.5px 0.5px 5px 1px red');
+  elem.next().append('<p>' + message + '</p>');
+  // Hiding the info message if there is an error
+  elem.next().next().hide();
+};
+
 
 /******************************/
 /******* List functions *******/

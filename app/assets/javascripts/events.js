@@ -503,68 +503,21 @@ var assignEvents = function() {
     var template = JST['templates/add_deed'];
     $('.window').append(template);
     modalSize(0.7);
+
     // Setting the size of the input to be that of the div containing it(so the entire div is clickable for file input)
     var width = $('.upload').width();
     var height = $('.upload').height();
     $('#deedPicture').css('width', width);
     $('#deedPicture').css('height', height);
 
+    // Setting the image height and margin of the the uload button to center it on the image
     var imageHeight = $('.deedImage').width() * 0.61;
     $('.deedImage').css('height', imageHeight);
     var margin = (imageHeight / 2) - (height / 2);
-    console.log(margin)
     $('.upload').css('margin-top', margin);
+
     showModal();
   });
-
-  // Function to check if valid email format
-  var checkUrl = function(str) {
-    var pattern = /[\d\D]+\.[a-z]{2,3}$/;
-    if(str.match(/\s/)) {
-      return false;
-    }
-    if(str.match(pattern)) {
-      return true;
-    }
-  };
-
-  // Function to check if valid zipcode format
-  var checkZip = function(zip) {
-    var pattern = /[\d]{5}/;
-    if(zip.match(pattern) && zip.length === 5) {
-      return true;
-    }
-  };
-
-  // Function for adding an error message when mandatory field is blank
-  var missingField = function(elem) {
-    elem.next().empty();
-    elem.css('box-shadow', '0.5px 0.5px 5px 1px red');
-    elem.next().append('<p>* Required Field</p>');
-  };
-
-  // Function for clearing error messages
-  var clearMessage = function(elem) {
-    elem.css('box-shadow', 'none');
-    elem.next().empty();
-    if(elem.next().next()) {
-      elem.next().next().show();
-    }
-  };
-
-  // Function for adding an error message when url is an invalid format
-  var invalidUrl = function(elem) {
-    elem.css('box-shadow', '0.5px 0.5px 5px 1px red')
-    elem.next().append('<p>* Invalid URL</p>');
-    elem.next().next().hide();
-  };
-
-  // Function for adding an error message when zip is an invalid format
-  var invalidZip = function(elem) {
-    elem.css('box-shadow', '0.5px 0.5px 5px 1px red');
-    elem.next().append('<p>* Invalid Zipcode</p>');
-    elem.next().next().hide();
-  };
 
   // Event for saving a new deed
   $('.overlayWindow').on('click', '#submitDeed', function() {
@@ -572,12 +525,14 @@ var assignEvents = function() {
     var deedStatus = true;
     var urlStatus = true;
     var zipStatus = true;
+    var phoneStatus = true;
+    var emailStatus = true;
 
     // If the url field has been filled in then a check is made to see if the url is of a correct format. If not the urlStatus is set to false to prevent deed from being saved
     if($('#deedUrl').val() != '') {
       clearMessage($('#deedUrl'));
       if(!(checkUrl($('#deedUrl').val()))) {
-        invalidUrl($('#deedUrl'));
+        invalid($('#deedUrl'), '* Invalid URL');
         urlStatus = false;
       }
     } else {
@@ -588,11 +543,33 @@ var assignEvents = function() {
     if($('#deedLocation').val() != '') {
       clearMessage($('#deedLocation'));
       if(!(checkZip($('#deedLocation').val()))) {
-        invalidZip($('#deedLocation'));
+        invalid($('#deedLocation'), '* Invalid Zipcode');
         zipStatus = false;
       }
     } else {
       clearMessage($('#deedLocation'));
+    }
+
+    // If the phone number field has been filled in then a check is made to see if the phone number is of a correct format. If not the phoneStatus is set to false to prevent deed from being saved
+    if($('#deedPhone').val() != '') {
+      clearMessage($('#deedPhone'));
+      if(!(checkPhone($('#deedPhone').val()))) {
+        invalid($('#deedPhone'), '* Invalid Phone Number');
+        phoneStatus = false;
+      }
+    } else {
+      clearMessage($('#deedPhone'));
+    }
+
+    // If the email field has been filled in then a check is made to see if the email address is of a correct format. If not the emailStatus is set to false to prevent deed from being saved
+    if($('#deedEmail').val() != '') {
+      clearMessage($('#deedEmail'));
+      if(!(checkEmail($('#deedEmail').val()))) {
+        invalid($('#deedEmail'), '* Invalid Email Address');
+        emailStatus = false;
+      }
+    } else {
+      clearMessage($('#deedEmail'));
     }
 
     // If any of the mandatory fields arent filled in then deedStatus is set to false to prevent the deed from being saved
@@ -605,22 +582,25 @@ var assignEvents = function() {
     });
 
     // If no errors then all the field values are sent to the db to be saved in a new deed
-    if(deedStatus && urlStatus && zipStatus) {
+    if(deedStatus && urlStatus && zipStatus && phoneStatus && emailStatus) {
       var title = $('#deedTitle').val();
       var description = $('#deedDescription').val();
-      var contact = $('#deedContact').val();
+      var phone = $('#deedPhone').val();
       var url = $('#deedUrl').val();
       var location = $('#deedLocation').val();
-      // var picture = $('#deedPicture').val();
-      var category = $('#deedCategory').val() || 'donation';
+      var picture = $('#deedPicture').val() || '/category_animals.png';
+      var email = $('#deedEmail').val()
+      var category = $('#deedCategory').val();
       $.ajax('/deeds', {
         method: 'POST',
         data: {
           title: title,
           description: description,
-          contact: contact,
+          phone: phone,
+          email: email,
           url: url,
           location: location,
+          picture: picture,
           category: category
         }
       }).done(function(data) {
@@ -654,7 +634,7 @@ var assignEvents = function() {
       clearMessage($(this));
       if($(this).val() != '') {
         if(!(checkUrl($('#deedUrl').val()))) {
-          invalidUrl($(this));
+          invalid($(this), '* Invalid URL');
         }
       }
     }
@@ -666,43 +646,48 @@ var assignEvents = function() {
       clearMessage($(this));
       if($(this).val() != '') {
         if(!(checkZip($('#deedLocation').val()))) {
-          invalidZip($(this));
+          invalid($(this), '* Invalid Zip Code');
         }
       }
     }
   });
-// onchange="readURL(this);
 
+  // Event to check if a phone number is not of the correct format. If so an error message is shown
+  $('.overlayWindow').on('keydown', '#deedPhone', function(e) {
+    if(e.which === 9) {
+      clearMessage($(this));
+      if($(this).val() != '') {
+        if(!(checkPhone($('#deedPhone').val()))) {
+          invalid($(this), '* Invalid Phone Number');
+        }
+      }
+    }
+  });
+
+  // Event to check if an email address is not of the correct format. If so an error message is shown
+  $('.overlayWindow').on('keydown', '#deedEmail', function(e) {
+    if(e.which === 9) {
+      clearMessage($(this));
+      if($(this).val() != '') {
+        if(!(checkEmail($('#deedEmail').val()))) {
+          invalid($(this), '* Invalid Email Address');
+        }
+      }
+    }
+  });
+
+  // Event to add input picture to the picture canvas window for cropping
   $('.overlayWindow').on('change', '#deedPicture', function() {
+    // Adding and displaying the picture canvas
     var template = JST['templates/picture_canvas'];
     $('.window').append(template);
+    // Setting the height of the pucture canvas
     var width = $('.window').width();
     var height = $('.window').height();
     $('.pictureCanvas').css('width', width);
     $('.pictureCanvas').css('height', height);
+    // Attaching the inputted file to the canvas
     readURL($(this)[0]);
   });
 
 };
-
-var readURL = function(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function(e) {
-      $('.inputImage').attr('src', e.target.result);
-      var width = $('.window').width();
-      var height = $('.window').height();
-
-      console.log(Math.abs($('.inputImage').width() - width))
-      console.log(Math.abs($('.inputImage').height() - height))
-      if(Math.abs($('.inputImage').height() - height) > Math.abs($('.inputImage').width() - width)) {
-        $('.inputImage').css('height', '100%');
-      } else {
-        $('.inputImage').css('width', '100%');
-      }
-    };
-
-    reader.readAsDataURL(input.files[0]);
-  }
-}

@@ -26,13 +26,15 @@
           <p><a href='http://<%= data.deed.url %>' target='_blank'><%= data.deed.url %></a></p>
         <% } %>
       <% } %>
-      <% if(data.deed.contact) { %>
-        <% if((data.deed.contact).match(/@[a-zA-Z-]+.[a-z]{3}$/)) { %>
-          <p>Contact: <a href="mailto:<%= data.deed.contact %>" target='_blank' class='localContact'><%= data.deed.contact %></a></p>
-        <% } else { %>
-          <p class='nonEmail'>Contact:  <%= data.deed.contact %></p>
-        <% } %>
+
+      <% if(data.deed.phone) { %>
+        <p>Phone Number: <span class='localContact'><%= data.deed.phone %></span></p>
       <% } %>
+
+      <% if(data.deed.email) { %>
+        <p>Email: <a href="mailto:<%= data.deed.contact %>" target='_blank' class='localContact localEmail'><%= data.deed.email %></a></p>
+      <% } %>
+
       <h6>Description:</h6>
       <p><%= data.deed.description %></p>
     </div>

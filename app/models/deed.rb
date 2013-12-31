@@ -1,5 +1,5 @@
 class Deed < ActiveRecord::Base
-  attr_accessible :category, :contact, :url, :deadline, :description, :location, :picture, :title, :deed_type, :user_id
+  attr_accessible :category, :email, :phone, :url, :deadline, :description, :location, :picture, :title, :deed_type, :user_id
 
   belongs_to :user
   has_many :posts
@@ -76,12 +76,39 @@ class Deed < ActiveRecord::Base
     deed = Deed.find(params[:id])
     deed[:submitted_by] = User.find(deed.user_id).name
 
-    # Returning the deed
+    # Returning the deeds
     deed
   end
 
   def self.save_deed(params, current_user)
-    deed = {title: params[:title], description: params[:description], contact: params[:contact], url: params[:url], user_id: current_user.id, location: params[:location], category: params[:category]}
-
+    deed = {}
+    # Formatting the phone number if given
+    phone = (params[:phone].scan(/\d+/)).join if params[:phone] != ''
+    # Setting the category and deed type
+    if params[:category] == 'local'
+      category = 'local'
+      deed_type = 'donation'
+    elsif params[:category] == 'donation'
+      category = 'suggested'
+      deed_type = 'donation'
+    else
+      category = 'suggested'
+      deed_type = 'service'
+    end
+    # Creating a deed hash tp be saved
+    deed[:title] = params[:title]
+    deed[:description] = params[:description]
+    deed[:phone] = phone if phone
+    deed[:email] = params[:email] if params[:email] != ''
+    deed[:picture] = params[:picture]
+    deed[:url] = params[:url] if params[:url] != ''
+    deed[:user_id] = current_user.id
+    deed[:location] = params[:location] if params[:location] != ''
+    deed[:category] = category
+    deed[:deed_type] = deed_type
+    # Creating the deed
+    Deed.create(deed)
+    # Returning the deed
+    deed
   end
 end
