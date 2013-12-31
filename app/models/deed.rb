@@ -79,4 +79,9 @@ class Deed < ActiveRecord::Base
     # Returning the deed
     deed
   end
+
+  def self.save_deed(params, current_user)
+    deed = {title: params[:title], description: params[:description], contact: params[:contact], url: params[:url], user_id: current_user.id, location: params[:location], category: params[:category]}
+
+  end
 end

@@ -493,4 +493,216 @@ var assignEvents = function() {
     getDeed(id);
   });
 
+
+  /*********************************/
+  /******* Add Deed Handlers *******/
+  /*********************************/
+
+  // When the add a deed button is clicked the new deed form is displayed in the modal
+  $('.addDeedLink').on('click', function() {
+    var template = JST['templates/add_deed'];
+    $('.window').append(template);
+    modalSize(0.7);
+    // Setting the size of the input to be that of the div containing it(so the entire div is clickable for file input)
+    var width = $('.upload').width();
+    var height = $('.upload').height();
+    $('#deedPicture').css('width', width);
+    $('#deedPicture').css('height', height);
+
+    var imageHeight = $('.deedImage').width() * 0.61;
+    $('.deedImage').css('height', imageHeight);
+    var margin = (imageHeight / 2) - (height / 2);
+    console.log(margin)
+    $('.upload').css('margin-top', margin);
+    showModal();
+  });
+
+  // Function to check if valid email format
+  var checkUrl = function(str) {
+    var pattern = /[\d\D]+\.[a-z]{2,3}$/;
+    if(str.match(/\s/)) {
+      return false;
+    }
+    if(str.match(pattern)) {
+      return true;
+    }
+  };
+
+  // Function to check if valid zipcode format
+  var checkZip = function(zip) {
+    var pattern = /[\d]{5}/;
+    if(zip.match(pattern) && zip.length === 5) {
+      return true;
+    }
+  };
+
+  // Function for adding an error message when mandatory field is blank
+  var missingField = function(elem) {
+    elem.next().empty();
+    elem.css('box-shadow', '0.5px 0.5px 5px 1px red');
+    elem.next().append('<p>* Required Field</p>');
+  };
+
+  // Function for clearing error messages
+  var clearMessage = function(elem) {
+    elem.css('box-shadow', 'none');
+    elem.next().empty();
+    if(elem.next().next()) {
+      elem.next().next().show();
+    }
+  };
+
+  // Function for adding an error message when url is an invalid format
+  var invalidUrl = function(elem) {
+    elem.css('box-shadow', '0.5px 0.5px 5px 1px red')
+    elem.next().append('<p>* Invalid URL</p>');
+    elem.next().next().hide();
+  };
+
+  // Function for adding an error message when zip is an invalid format
+  var invalidZip = function(elem) {
+    elem.css('box-shadow', '0.5px 0.5px 5px 1px red');
+    elem.next().append('<p>* Invalid Zipcode</p>');
+    elem.next().next().hide();
+  };
+
+  // Event for saving a new deed
+  $('.overlayWindow').on('click', '#submitDeed', function() {
+    // Initializing all statuses as true. If any get changed to false then an error has occurred and the deed wont be saved
+    var deedStatus = true;
+    var urlStatus = true;
+    var zipStatus = true;
+
+    // If the url field has been filled in then a check is made to see if the url is of a correct format. If not the urlStatus is set to false to prevent deed from being saved
+    if($('#deedUrl').val() != '') {
+      clearMessage($('#deedUrl'));
+      if(!(checkUrl($('#deedUrl').val()))) {
+        invalidUrl($('#deedUrl'));
+        urlStatus = false;
+      }
+    } else {
+      clearMessage($('#deedUrl'));
+    }
+
+    // If the location field has been filled in then a check is made to see if the zipcode is of a correct format. If not the zipStatus is set to false to prevent deed from being saved
+    if($('#deedLocation').val() != '') {
+      clearMessage($('#deedLocation'));
+      if(!(checkZip($('#deedLocation').val()))) {
+        invalidZip($('#deedLocation'));
+        zipStatus = false;
+      }
+    } else {
+      clearMessage($('#deedLocation'));
+    }
+
+    // If any of the mandatory fields arent filled in then deedStatus is set to false to prevent the deed from being saved
+    $('.mandatory').each(function() {
+      clearMessage($(this));
+      if($(this).val() === '') {
+        missingField($(this));
+        deedStatus = false;
+      }
+    });
+
+    // If no errors then all the field values are sent to the db to be saved in a new deed
+    if(deedStatus && urlStatus && zipStatus) {
+      var title = $('#deedTitle').val();
+      var description = $('#deedDescription').val();
+      var contact = $('#deedContact').val();
+      var url = $('#deedUrl').val();
+      var location = $('#deedLocation').val();
+      // var picture = $('#deedPicture').val();
+      var category = $('#deedCategory').val() || 'donation';
+      $.ajax('/deeds', {
+        method: 'POST',
+        data: {
+          title: title,
+          description: description,
+          contact: contact,
+          url: url,
+          location: location,
+          category: category
+        }
+      }).done(function(data) {
+        console.log(data);
+        hideModal();
+      });
+    } else {
+      // Event listener to reset the webkit animation name to nothing when the animation ends
+      $('#submitDeed')[0].addEventListener('webkitAnimationEnd', function(){
+        this.style.webkitAnimationName = '';
+      }, false);
+      // If any errors are made then the shake animation is attached to the button to notify the user that errors exist
+      $('#submitDeed').css('-webkit-animation-name', 'shakes');
+    }
+  });
+
+  // Event to check if a mandatory field is blank when user tabs out of it. If so an error message is shown
+  $('.overlayWindow').on('keydown', '.mandatory', function(e) {
+    if(e.which === 9) {
+      if($(this).val() === '') {
+        missingField($(this));
+      } else {
+        clearMessage($(this));
+      }
+    }
+  });
+
+  // Event to check if a url is not of the correct format. If so an error message is shown
+  $('.overlayWindow').on('keydown', '#deedUrl', function(e) {
+    if(e.which === 9) {
+      clearMessage($(this));
+      if($(this).val() != '') {
+        if(!(checkUrl($('#deedUrl').val()))) {
+          invalidUrl($(this));
+        }
+      }
+    }
+  });
+
+  // Event to check if a zip is not of the correct format. If so an error message is shown
+  $('.overlayWindow').on('keydown', '#deedLocation', function(e) {
+    if(e.which === 9) {
+      clearMessage($(this));
+      if($(this).val() != '') {
+        if(!(checkZip($('#deedLocation').val()))) {
+          invalidZip($(this));
+        }
+      }
+    }
+  });
+// onchange="readURL(this);
+
+  $('.overlayWindow').on('change', '#deedPicture', function() {
+    var template = JST['templates/picture_canvas'];
+    $('.window').append(template);
+    var width = $('.window').width();
+    var height = $('.window').height();
+    $('.pictureCanvas').css('width', width);
+    $('.pictureCanvas').css('height', height);
+    readURL($(this)[0]);
+  });
+
 };
+
+var readURL = function(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('.inputImage').attr('src', e.target.result);
+      var width = $('.window').width();
+      var height = $('.window').height();
+
+      console.log(Math.abs($('.inputImage').width() - width))
+      console.log(Math.abs($('.inputImage').height() - height))
+      if(Math.abs($('.inputImage').height() - height) > Math.abs($('.inputImage').width() - width)) {
+        $('.inputImage').css('height', '100%');
+      } else {
+        $('.inputImage').css('width', '100%');
+      }
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}

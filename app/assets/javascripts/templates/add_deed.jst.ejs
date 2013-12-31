@@ -1,0 +1,69 @@
+<header class='newDeedHeader'>
+  <h3>Submit a New Good Deed</h3>
+</header>
+
+<div class='deedImage'>
+  <img src='' class=''>
+  <div class='upload'>
+    <p class='uploadButton button'>Upload Image</p>
+    <input type='file' id='deedPicture' class='box' />
+  </div>
+  <div class='deedError'></div>
+</div>
+
+<div class='deedInputInfo'>
+  <div class='deedInput'>
+    <input type="radio" class='deedCategory' name='deedCategory' value='service' checked>Service
+    <input type="radio" class='deedCategory' name='deedCategory' value='donation'>Donation
+    <input type="radio" class='deedCategory' name='deedCategory' value='local'>Local Cause
+  </div>
+
+  <div class='deedInput clearfix'>
+    <input type='text' id='deedTitle' class='mandatory box' placeholder='Title' />
+    <div class='deedError'></div>
+  </div>
+
+  <div class='deedInput clearfix'>
+    <textarea id='deedDescription' class='mandatory' placeholder='Description'></textarea>
+    <div class='deedError'></div>
+  </div>
+
+  <div class='deedInput clearfix'>
+    <input type='text' id='deedContact' placeholder='Phone Number (optional)' class='box' />
+    <div class='deedError'></div>
+    <div class='formInfo'>
+      <p>If there is a phone number associated with this good deed, you can enter it here.</p>
+    </div>
+  </div>
+
+  <div class='deedInput clearfix'>
+    <input type='text' id='deedEmail' placeholder='Email (optional)' class='box' />
+    <div class='deedError'></div>
+    <div class='formInfo'>
+      <p>If there is an email associated with this good deed, you can enter it here.</p>
+    </div>
+  </div>
+
+  <div class='deedInput clearfix'>
+    <input type='text' id='deedUrl' placeholder='URL (optional)' class='box' />
+    <div class='deedError'></div>
+    <div class='formInfo'>
+      <p>If there is a website associated with this good deed, you can enter it here.</p>
+    </div>
+  </div>
+
+  <div class='deedInput clearfix'>
+    <input type='text' id='deedLocation' placeholder='Zip Code (optional)' class='box' maxlength='5' />
+    <div class='deedError'></div>
+    <div class='formInfo'>
+      <p>If this good deed is location-specific, you can enter the zip code here.</p>
+    </div>
+  </div>
+
+  <div class='newDeedButtons'>
+    <p class='button' id='submitDeed'>Submit Deed</p>
+    <p class='button' id='cancel'>Cancel</p>
+  </div>
+</div>
+
+

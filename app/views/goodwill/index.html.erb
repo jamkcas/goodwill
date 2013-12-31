@@ -12,6 +12,9 @@
     <div class='suggested'>
       <header class='suggestedHeader'>
         <h4>Suggested Deeds</h4>
+        <% if(current_user) %>
+        <p class='addDeed'>Don't like these deeds? <span class='addDeedLink'>Add your own!</span></p>
+        <% end %>
       </header> <!-- end suggestedHeader -->
 
       <div class='border'></div>

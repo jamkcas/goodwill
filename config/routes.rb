@@ -16,7 +16,7 @@ GoodwillTracker::Application.routes.draw do
 
   root to: 'goodwill#index'
   resources :goodwill, only: :index
-  resources :deeds, only: [:index, :show]
+  resources :deeds, only: [:index, :show, :create]
 
   # Posts controller routes
   get '/posts/current', to: 'posts#get_current'

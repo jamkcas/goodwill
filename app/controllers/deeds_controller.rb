@@ -14,4 +14,9 @@ class DeedsController < ApplicationController
       render text: 'Access Forbidden'
     end
   end
+
+  def create
+    deed = Deed.save_deed(params, current_user)
+    render json: deed
+  end
 end
