@@ -887,7 +887,8 @@ li {
 }
 
 .deedNav {
-  margin: 10px 0 20px 2%;
+  margin: 10px 2% 20px 2%;
+  width: 96%;
 }
 
 .listTypes li {
@@ -902,6 +903,10 @@ li {
 .listTypes li:first-child {
   border-left: none;
   padding-left: 0;
+}
+
+.addDeedModal {
+  float: right;
 }
 
 .deed {

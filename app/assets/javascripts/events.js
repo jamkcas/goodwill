@@ -499,7 +499,8 @@ var assignEvents = function() {
   /*********************************/
 
   // When the add a deed button is clicked the new deed form is displayed in the modal
-  $('.addDeedLink').on('click', function() {
+  $('.container').on('click', '.addDeedLink', function() {
+    $('.window').empty();
     var template = JST['templates/add_deed'];
     $('.window').append(template);
     modalSize(0.7);
@@ -662,6 +663,7 @@ var assignEvents = function() {
     }
   });
 
+  // Event to hide and clear the modal when user cancels the new form process
   $('.overlayWindow').on('click', '#cancel', function(e) {
     hideModal();
   });
