@@ -10,7 +10,7 @@ class CreateDeeds < ActiveRecord::Migration
       t.string :email
       t.string :phone
       t.string :url
-      t.string :picture
+      t.text :picture
       t.integer :user_id
 
       t.timestamps

@@ -89,10 +89,12 @@ class Deed < ActiveRecord::Base
     # Formatting the phone number if given
     phone = (params[:phone].scan(/\d+/)).join if params[:phone] != ''
     # Formatting the phone_number
-    if phone.length == 11
-      phone_number = '(' + phone.slice(1,3) + ') ' + phone.slice(4,3) + '-' + phone.slice(7,4)
-    else
-      phone_number = '(' + phone.slice(0,3) + ') ' + phone.slice(3,3) + '-' + phone.slice(6,4)
+    if phone
+      if phone.length == 11
+        phone_number = '(' + phone.slice(1,3) + ') ' + phone.slice(4,3) + '-' + phone.slice(7,4)
+      else
+        phone_number = '(' + phone.slice(0,3) + ') ' + phone.slice(3,3) + '-' + phone.slice(6,4)
+      end
     end
     # Setting the category and deed type
     if params[:category] == 'local'

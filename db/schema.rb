@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131212194539) do
+ActiveRecord::Schema.define(:version => 20140103084240) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
     t.string   "email"
     t.string   "phone"
     t.string   "url"
-    t.string   "picture"
+    t.text     "picture"
     t.integer  "user_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -49,6 +49,15 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
   create_table "favorites", :force => true do |t|
     t.integer  "deed_id"
     t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "photos", :force => true do |t|
+    t.binary   "data"
+    t.string   "filename"
+    t.string   "mime_type"
+    t.integer  "deed_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

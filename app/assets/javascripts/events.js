@@ -591,7 +591,6 @@ var assignEvents = function() {
           category: category
         }
       }).done(function(data) {
-        console.log(data);
         hideModal();
       });
     } else {
@@ -663,6 +662,10 @@ var assignEvents = function() {
     }
   });
 
+  $('.overlayWindow').on('click', '#cancel', function(e) {
+    hideModal();
+  });
+
 
   /************************************/
   /******* Add Picture Handlers *******/
@@ -681,7 +684,7 @@ var assignEvents = function() {
   // Event to clear any error messages when trying to upload a new file
   $('.overlayWindow').on('click', '#deedPicture', function() {
     // Clearing any existing error messages
-    $('.imageDeedErrors').empty();
+    clearMessage($(this));
     $('.dimensions span').css('color', '#838488');
   });
 
