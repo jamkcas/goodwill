@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140103084240) do
+ActiveRecord::Schema.define(:version => 20131212194539) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id"
@@ -53,15 +53,6 @@ ActiveRecord::Schema.define(:version => 20140103084240) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "photos", :force => true do |t|
-    t.binary   "data"
-    t.string   "filename"
-    t.string   "mime_type"
-    t.integer  "deed_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "posts", :force => true do |t|
     t.string   "title"
     t.text     "content"
@@ -84,6 +75,7 @@ ActiveRecord::Schema.define(:version => 20140103084240) do
     t.datetime "oauth_expires_at"
     t.string   "google_token"
     t.string   "profile_pic"
+    t.boolean  "new_user"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
   end

@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.datetime :oauth_expires_at
       t.string :google_token
       t.string :profile_pic
+      t.boolean :new_user
 
       t.timestamps
     end

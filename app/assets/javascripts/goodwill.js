@@ -86,26 +86,42 @@ var mapPoints = function(data) {
   drawLines(setLocations(data));
 };
 
+// Populating the world map with last 100 recently done deeds
+var worldMapPoints = function() {
+  $.get('/posts/recent').done(function(data) {
+    _.each(data.slice(0, 100), function(post) {
+      var location = new google.maps.LatLng(post.lat, post.lon);
+      var mapIcon = 'marker_heart.png';
+      placeMarker(location, post, mapIcon);
+    });
+  });
+};
+
 // Creating an intial map
 var mapInit = function() {
   if(navigator.geolocation) {
     browserSupportFlag = true;
+    var initialLocation = new google.maps.LatLng(38.959409, -96.855469);
+    var mapOptions = {
+      center: initialLocation,
+      zoom: 4
+    };
+    // Creating a new map and displaying the whole US
+    map = new google.maps.Map($('#map-canvas')[0], mapOptions);
+    // Getting the user's current location and centering the map to it and zooming in
     navigator.geolocation.getCurrentPosition(function(position) {
-      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      var mapOptions = {
-        center: initialLocation,
-        zoom: 8
-      };
-      // Creating a new map with current location as center
-      map = new google.maps.Map($('#map-canvas')[0], mapOptions);
-      // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
-      if(gon.logged_in === true) {
-        fetchCurrent('map', mapPoints);
-      }
+      map.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
+      map.setZoom(10);
     });
+    // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
+    if(gon.logged_in === true) {
+      fetchCurrent('map', mapPoints);
+    } else {
+      // If there is no user the map is populated with recent deeds worldwide
+      worldMapPoints();
+    }
   }
 }
-
 
 
 /*******************************/
@@ -157,7 +173,6 @@ var capitalize = function(word) {
 /********************************/
 /******* On load function *******/
 /********************************/
-
 
 // Start of Javascript when page loads
 $(function() {

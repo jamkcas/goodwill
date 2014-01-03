@@ -12,7 +12,9 @@ var makePostModal = function(currentDeed) {
 var setCurrent = function(data) {
   // If not currently on a thread, a new button is appended
   if(data.id === 'null') {
-    $('.thread').append("<p class='startThread button'>START A THREAD</p>")
+    $('.thread').append("<p class='startThread button'>START A THREAD</p>");
+    // Populating the world map with recently done deeds if not on a current thread
+    worldMapPoints();
   } else {
     // If on a current thread the post details are displayed
     var template = JST['templates/current_deed']({current: data});
@@ -207,6 +209,7 @@ var fetchContacts = function() {
       addContacts(data);
       $('.google').remove();
       setEmailSize();
+      $('.contacts').css('border', '1px solid #E8EAEB');
     }
   });
 }

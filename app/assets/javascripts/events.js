@@ -138,10 +138,6 @@ var assignEvents = function() {
     /*** This is for the multi-person invite flow in the future ***/
     /**************************************************************/
 
-    // // Hiding the invite button and giving inital send message
-    // current.parent().append('<h4 class="sent">Invite being sent!</h4>');
-    // current.hide();
-
     /**************************************************************/
     /*** This is for the multi-person invite flow in the future ***/
     /**************************************************************/
@@ -330,8 +326,7 @@ var assignEvents = function() {
                 lon: initialLocation.ob
               }
       }).done(function(data) {
-        // The modal is hidden
-        hideModal();
+
         // If a false status is returned then an error message is returned
         if(data === false) {
           // Removes any previous error messages
@@ -348,6 +343,8 @@ var assignEvents = function() {
         }
       });
     });
+    // The modal is hidden
+        hideModal();
   });
 
   $('.localFeatured').on('click', '.featuredStart', function() {
@@ -507,6 +504,11 @@ var assignEvents = function() {
     showModal();
   });
 
+  // Event to set the checked property of the Cateogory input
+  $('.overlayWindow').on('click', '.deedCategory', function() {
+    $(this).attr('checked', 'checked');
+  });
+
   // Event for saving a new deed
   $('.overlayWindow').on('click', '#submitDeed', function() {
     // Initializing all statuses as true. If any get changed to false then an error has occurred and the deed wont be saved
@@ -577,8 +579,16 @@ var assignEvents = function() {
       var url = $('#deedUrl').val();
       var location = $('#deedLocation').val();
       var picture = $('.croppedImage').attr('src');
-      var email = $('#deedEmail').val()
-      var category = $('#deedCategory').val();
+      var email = $('#deedEmail').val();
+      var category;
+      if($('#deedCat1')[0].checked) {
+        category = $('#deedCat1').val();
+      } else if($('#deedCat2')[0].checked) {
+        category = $('#deedCat2').val();
+      } else {
+        category = $('#deedCat3').val();
+      }
+
       $.ajax('/deeds', {
         method: 'POST',
         data: {
@@ -592,6 +602,7 @@ var assignEvents = function() {
           category: category
         }
       }).done(function(data) {
+        console.log(data)
         hideModal();
       });
     } else {
