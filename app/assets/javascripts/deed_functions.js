@@ -43,26 +43,283 @@ var emptyPage = function() {
   $('.suggestedDeeds').empty();
 }
 
-// Function to attach the input file to the picture canvas
-var readURL = function(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
 
-    reader.onload = function(e) {
-      // Setting the source of the picture canvas image
-      $('.inputImage').attr('src', e.target.result);
+/********************************/
+/******* Canvas functions *******/
+/********************************/
 
-      var width = $('.window').width();
-      var height = $('.window').height();
-      // Checking to see whether the window size should be determined by the image width or height
-      if(Math.abs($('.inputImage').height() - height) > Math.abs($('.inputImage').width() - width)) {
-        $('.inputImage').css('height', '100%');
-      } else {
-        $('.inputImage').css('width', '100%');
+var loadImage = function() {
+  var input, file, fr, img, ctx, canvas, theSelection, errors = [];
+  // Grabbing the file input
+  input = document.getElementById('deedPicture');
+  // Grabbing the input value
+  file = input.files[0];
+  // Creating a new file
+  fr = new FileReader();
+  // When the new file is loaded a new image is created with the formatted file data
+  fr.onload = createImage;
+  // Formutting the file data to create an image source
+  fr.readAsDataURL(file);
+
+  function createImage() {
+    // Creating a new image and setting the source to the image that is uploaded
+    img = new Image();
+    img.onload = imageLoaded;
+    img.src = fr.result;
+    if(img.width < 325) {
+      errors.push("Width is too small");
+    }
+    if(img.width > 900) {
+      errors.push("Width is too big");
+    }
+    if(img.height < 183) {
+      errors.push("Height is too small");
+    }
+    if(img.height > 510) {
+      errors.push("Height is too big");
+    }
+  }
+
+  var imageLoaded = function() {
+    // Checking if there are any errors
+    if(errors.length > 0) {
+      // Clearing the uploaded file value
+      $('#deedPicture').val('');
+      _.each(errors, function(err) {
+        // Displaying the error messages
+        $('.imageDeedErrors').append('<p>' + err + '</p>');
+        // Highlighting the errors, so user knows specifically what to change
+        if(err.match(/Width/) && err.match(/small/)) {
+          $('.minW').css('color', 'red');
+        }
+        if(err.match(/Width/) && err.match(/big/)) {
+          $('.maxW').css('color', 'red');
+        }
+        if(err.match(/Height/) && err.match(/small/)) {
+          $('.minH').css('color', 'red');
+        }
+        if(err.match(/Height/) && err.match(/big/)) {
+          $('.maxH').css('color', 'red');
+        }
+      });
+      // Emptying the canvas
+      $('.addCanvas').empty();
+    } else {
+      // Displaying the canvas
+      $('.addCanvas').css('display', 'block');
+      // Increasing modal size if the image is bigger than the current modal size
+      if(img.width > 819) {
+        modalSize(0.9);
       }
-    };
+      // Grabbing the canvas and setting its' dimensions
+      canvas = document.getElementById("panel");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      // Setting the context of the canvas
+      ctx = canvas.getContext("2d");
+      // Creating a new selection
+      theSelection = new Selection(0, 0, 325, 183);
+      // Draw the canvas
+      drawScene();
+      // Hiding the deed details to only show the canvas
+      $('.deedInputInfo').hide();
+      $('.deedImage').hide();
+      $('.newDeedHeader').hide();
+    }
 
-    reader.readAsDataURL(input.files[0]);
+    // Event for when selection or scalar status is true and user moves the mouse
+    $('.overlayWindow').on('mousemove', '#panel', function(e) {
+      var canvasOffset = $(canvas).offset();
+      // Getting the x and y coordinates of the mousemove in relation to the canvas
+      iMouseX = Math.floor(e.pageX - canvasOffset.left);
+      iMouseY = Math.floor(e.pageY - canvasOffset.top);
+
+      // In case of dragging the whole selection window
+      if(theSelection.bDragAll) {
+        // Setting the new x offset on mouse move on the horizontal axis
+        theSelection.x = iMouseX - theSelection.px;
+        // If the x offset is less than zero then the x offset is set to zero to prevent selection window from going off the canvas
+        if(theSelection.x < 0) {
+          theSelection.x = 0;
+        }
+        // If the x offset and the selection window width is greater than canvas width then the x offset is set to canvas width minus the selection width to prevent selection window from going off the canvas
+        if(theSelection.x + theSelection.w > canvas.width) {
+          theSelection.x = canvas.width - theSelection.w;
+        }
+
+        // Setting the new x offset on mouse move on the horizontal axis
+        theSelection.y = iMouseY - theSelection.py;
+        // If the y offset is less than zero then the y offset is set to zero to prevent selection window from going off the canvas
+        if(theSelection.y < 0) {
+          theSelection.y = 0;
+        }
+        // If the y offset and the selection window height is greater than canvas height then the y offset is set to canvas height minus the selection height to prevent selection window from going off the canvas
+        if(theSelection.y + theSelection.h > canvas.height) {
+          theSelection.y = canvas.height - theSelection.h;
+        }
+      }
+      // Clearing the Scalar hover status to false initially
+      theSelection.hov = false;
+      // Resetting the Scalar box size
+      for(i = 0; i < 4; i++) {
+        theSelection.iCSize[i] = theSelection.csize;
+      }
+
+      // When hovering over the Scalar, the hover status of the Scalar is set to true and the size of the Scalar increases
+      if(iMouseX > theSelection.x + theSelection.w-theSelection.csizeh && iMouseX < theSelection.x + theSelection.w + theSelection.csizeh && iMouseY > theSelection.y + theSelection.h-theSelection.csizeh && iMouseY < theSelection.y + theSelection.h + theSelection.csizeh) {
+
+        theSelection.hov = true;
+        theSelection.iCSize[2] = theSelection.csizeh;
+      }
+
+      // If Scalar status is true then the selection window is scaled
+      var iFW, iFH, newHeight;
+      if(theSelection.scalar) {
+        var iFX = theSelection.x;
+        var iFY = theSelection.y;
+        // Setting the new width
+        iFW = iMouseX - theSelection.px - iFX;
+        // Accounting for is the user tries to pull the scalar off the right side of the canvas
+        if(iFW + theSelection.x > canvas.width) {
+          iFW = canvas.width - iFX;
+        }
+        if(iFW < 325) {
+          iFW = 325;
+        }
+        // Keeping the ratio the same when scaling
+        newHeight = theSelection.h/theSelection.w * iFW;
+        // Accounting for if the user tries to pull scalar off the bottom of the canvas
+        if(newHeight + theSelection.y > canvas.height) {
+          var yHeight = canvas.height - iFY;
+          var xWidth = yHeight * iFW / newHeight;
+          iFW = xWidth;
+          newHeight = yHeight;
+        }
+        // Setting the new height
+        iFH = newHeight;
+      }
+      // Setting the width and height of the selection window if the window is bigger than the Scalar cube
+      if(iFW > theSelection.csizeh * 2 && iFH > theSelection.csizeh * 2) {
+        theSelection.w = iFW;
+        theSelection.h = iFH;
+
+        theSelection.x = iFX;
+        theSelection.y = iFY;
+      }
+      // Redrawing the scene with new window selection placement or size
+      drawScene();
+    });
+
+    // Event for when user mouses down on the canvas
+    $('.overlayWindow').on('mousedown', '#panel', function(e) {
+      var canvasOffset = $(canvas).offset();
+      // Getting the x and y coordinates of the mouseclick in relation to the canvas
+      iMouseX = Math.floor(e.pageX - canvasOffset.left);
+      iMouseY = Math.floor(e.pageY - canvasOffset.top);
+
+      // Finding and setting the difference between the mouse click and the current selections x and y position
+      theSelection.px = iMouseX - theSelection.x;
+      theSelection.py = iMouseY - theSelection.y;
+      // Taking in account the selection width and height when user clicks on the Scalar
+      if(theSelection.hov) {
+        theSelection.px = iMouseX - theSelection.x - theSelection.w;
+        theSelection.py = iMouseY - theSelection.y - theSelection.h;
+      }
+
+      // Allows for selection window to be draggable if the user clicks within the selection window
+      if(iMouseX > theSelection.x + theSelection.csizeh && iMouseX < theSelection.x+theSelection.w - theSelection.csizeh && iMouseY > theSelection.y + theSelection.csizeh && iMouseY < theSelection.y+theSelection.h - theSelection.csizeh) {
+
+        theSelection.bDragAll = true;
+      }
+
+      // Allowing the Scalar to draggable only if the user is hovering over the Scalar cube when they mousedown
+      if(theSelection.hov) {
+        theSelection.scalar = true;
+      }
+    });
+
+    // Event for when user mouses up on the canvas
+    $('.overlayWindow').on('mouseup', '#panel', function(e) {
+      // Resetting the drag status of the whole selection window to false
+      theSelection.bDragAll = false;
+
+      // Resetting the drag status of the scalar to false
+      theSelection.scalar = false;
+
+      theSelection.px = 0;
+      theSelection.py = 0;
+    });
+  }
+
+  $('.overlayWindow').on('click', '.crop', function(e) {
+    getResults();
+    $('.deedInputInfo').show();
+    $('.deedImage').show();
+    $('.newDeedHeader').show();
+    $('.addCanvas').empty();
+    $('.addCanvas').css('display', 'none');
+  });
+
+  var drawScene = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
+    // Draw the image
+    ctx.drawImage(img,0,0);
+
+    // Grey out image
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    // Add the selection window
+    theSelection.draw();
+  }
+
+  // define Selection constructor
+  var Selection = function(x, y, w, h) {
+    this.x = x; // initial positions
+    this.y = y;
+    this.w = w; // and size
+    this.h = h;
+
+    this.px = x; // extra variables to dragging calculations
+    this.py = y;
+
+    this.csize = 6; // Scalar size
+    this.csizeh = 10; // Scalar hover size
+
+    this.hov = false; // Scalar hover status
+    this.iCSize = [this.csize, this.csize, this.csize, this.csize]; // resize cubes sizes
+    this.scalar = false; // Scalar scale status
+    this.bDragAll = false; // Entire selection drag status
+  }
+
+  // define Selection draw method
+  Selection.prototype.draw = function() {
+    // Outline of the selected part of the image
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(this.x, this.y, this.w, this.h);
+
+    // Redrawing the selected part of the image
+    if(this.w > 0 && this.h > 0) {
+      ctx.drawImage(img, this.x, this.y, this.w, this.h, this.x, this.y, this.w, this.h);
+    }
+
+    // Scalar cube
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(this.x + this.w - this.iCSize[2], this.y + this.h - this.iCSize[2], this.iCSize[2] * 2, this.iCSize[2] * 2);
+  }
+
+  // Function to set the form display image to the cropped image from the canvas
+  function getResults() {
+    var temp_ctx, temp_canvas;
+    temp_canvas = document.createElement('canvas');
+    temp_ctx = temp_canvas.getContext('2d');
+    temp_canvas.width = theSelection.w;
+    temp_canvas.height = theSelection.h;
+    temp_ctx.drawImage(img, theSelection.x, theSelection.y, theSelection.w, theSelection.h, 0, 0, theSelection.w, theSelection.h);
+    var vData = temp_canvas.toDataURL();
+    $('.croppedImage').attr('src', vData);
+    // $('#results h2').text('Well done, we have prepared our cropped image, now you can save it if you wish');
   }
 }
 

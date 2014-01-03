@@ -503,19 +503,6 @@ var assignEvents = function() {
     var template = JST['templates/add_deed'];
     $('.window').append(template);
     modalSize(0.7);
-
-    // Setting the size of the input to be that of the div containing it(so the entire div is clickable for file input)
-    var width = $('.upload').width();
-    var height = $('.upload').height();
-    $('#deedPicture').css('width', width);
-    $('#deedPicture').css('height', height);
-
-    // Setting the image height and margin of the the uload button to center it on the image
-    var imageHeight = $('.deedImage').width() * 0.61;
-    $('.deedImage').css('height', imageHeight);
-    var margin = (imageHeight / 2) - (height / 2);
-    $('.upload').css('margin-top', margin);
-
     showModal();
   });
 
@@ -588,7 +575,7 @@ var assignEvents = function() {
       var phone = $('#deedPhone').val();
       var url = $('#deedUrl').val();
       var location = $('#deedLocation').val();
-      var picture = $('#deedPicture').val() || '/category_animals.png';
+      var picture = $('.croppedImage').attr('src');
       var email = $('#deedEmail').val()
       var category = $('#deedCategory').val();
       $.ajax('/deeds', {
@@ -676,18 +663,42 @@ var assignEvents = function() {
     }
   });
 
+
+  /************************************/
+  /******* Add Picture Handlers *******/
+  /************************************/
+
   // Event to add input picture to the picture canvas window for cropping
   $('.overlayWindow').on('change', '#deedPicture', function() {
     // Adding and displaying the picture canvas
     var template = JST['templates/picture_canvas'];
-    $('.window').append(template);
-    // Setting the height of the pucture canvas
-    var width = $('.window').width();
-    var height = $('.window').height();
-    $('.pictureCanvas').css('width', width);
-    $('.pictureCanvas').css('height', height);
+    $('.addCanvas').append(template);
+
     // Attaching the inputted file to the canvas
-    readURL($(this)[0]);
+    loadImage();
   });
 
+  // Event to clear any error messages when trying to upload a new file
+  $('.overlayWindow').on('click', '#deedPicture', function() {
+    // Clearing any existing error messages
+    $('.imageDeedErrors').empty();
+    $('.dimensions span').css('color', '#838488');
+  });
+
+  // Event to reshow the deed details and clear file selection and canvas when user cancels the image upload process
+  $('.overlayWindow').on('click', '.cancel', function() {
+    // Reshowing the deed details
+    $('.deedInputInfo').show();
+    $('.deedImage').show();
+    $('.newDeedHeader').show();
+    // Clearing the uploaded file selection
+    $('#deedPicture').val('');
+    // Destroying the canvas
+    $('.addCanvas').empty();
+    $('.addCanvas').css('display', 'none');
+  });
+
+  // Event to remove the button when image is successfully uploaded and cropped
 };
+
+

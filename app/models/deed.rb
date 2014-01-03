@@ -80,10 +80,20 @@ class Deed < ActiveRecord::Base
     deed
   end
 
+  #######################################
+  ##### Method to save deed details #####
+  #######################################
+
   def self.save_deed(params, current_user)
     deed = {}
     # Formatting the phone number if given
     phone = (params[:phone].scan(/\d+/)).join if params[:phone] != ''
+    # Formatting the phone_number
+    if phone.length == 11
+      phone_number = '(' + phone.slice(1,3) + ') ' + phone.slice(4,3) + '-' + phone.slice(7,4)
+    else
+      phone_number = '(' + phone.slice(0,3) + ') ' + phone.slice(3,3) + '-' + phone.slice(6,4)
+    end
     # Setting the category and deed type
     if params[:category] == 'local'
       category = 'local'
@@ -98,7 +108,7 @@ class Deed < ActiveRecord::Base
     # Creating a deed hash tp be saved
     deed[:title] = params[:title]
     deed[:description] = params[:description]
-    deed[:phone] = phone if phone
+    deed[:phone] = phone_number if phone_number
     deed[:email] = params[:email] if params[:email] != ''
     deed[:picture] = params[:picture]
     deed[:url] = params[:url] if params[:url] != ''

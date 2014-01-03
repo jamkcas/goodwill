@@ -48,7 +48,7 @@
 
         <p>Welcome, <%= current_user.name %></p>
 
-        <%= link_to "Sign out", signout_path, id: "signout" %>
+        <%= link_to "Sign out", signout_path, id: "signout", tabindex: '-1' %>
       <% else %>
         <!-- Makes a call to /auth/facebook to get oauth token which redirects back to /auth/facebook/callback -->
         <a href='/auth/facebook' id='signin'>Sign in with Facebook</a>

@@ -1,69 +1,81 @@
 <header class='newDeedHeader'>
   <h3>Submit a New Good Deed</h3>
-</header>
+</header> <!-- end newDeedHeader -->
 
 <div class='deedImage'>
-  <img src='' class=''>
+  <div class='imageFrame'>
+    <img src='image_ph.jpg' class='croppedImage'>
+  </div> <!-- end imageFrame -->
+
+  <div class='imageDeedErrors'></div>
+
   <div class='upload'>
-    <p class='uploadButton button'>Upload Image</p>
-    <input type='file' id='deedPicture' class='box' />
-  </div>
-  <div class='deedError'></div>
-</div>
+    <input type='file' id='deedPicture' tabindex='9' />
+
+    <div class='dimensions'>
+      <p>Max Size:</p>
+      <p><span class='maxW'>900px</span> <span class='times'>x</span> <span class='minW'>325px</span></p>
+      <p>Min Size:</p>
+      <p><span class='maxH'>510px</span> <span class='times'>x</span>  <span class='minH'>183px</span></p>
+    </div> <!-- end dimensions -->
+  </div> <!-- end upload -->
+</div> <!-- end deedImage -->
 
 <div class='deedInputInfo'>
   <div class='deedInput'>
-    <input type="radio" class='deedCategory' name='deedCategory' value='service' checked>Service
+    <input type="radio" class='deedCategory' name='deedCategory' value='service' checked tabindex='10'>Service
     <input type="radio" class='deedCategory' name='deedCategory' value='donation'>Donation
     <input type="radio" class='deedCategory' name='deedCategory' value='local'>Local Cause
-  </div>
+  </div> <!-- end deedInput -->
 
   <div class='deedInput clearfix'>
-    <input type='text' id='deedTitle' class='mandatory box' placeholder='Title' />
+    <input type='text' id='deedTitle' class='mandatory box' placeholder='Title' autofocus tabindex='1' />
     <div class='deedError'></div>
-  </div>
+  </div> <!-- end deedInput -->
 
   <div class='deedInput clearfix'>
-    <textarea id='deedDescription' class='mandatory' placeholder='Description'></textarea>
+    <textarea id='deedDescription' class='mandatory' placeholder='Description' tabindex='2' ></textarea>
     <div class='deedError'></div>
-  </div>
+  </div> <!-- end deedInput -->
 
   <div class='deedInput clearfix'>
-    <input type='text' id='deedPhone' placeholder='Phone Number (optional)' class='box' />
+    <input type='text' id='deedPhone' placeholder='Phone Number (optional)' class='box' tabindex='3' />
     <div class='deedError'></div>
     <div class='formInfo'>
       <p>If there is a phone number associated with this good deed, you can enter it here.</p>
-    </div>
-  </div>
+    </div> <!-- end formInfo -->
+  </div> <!-- end deedInput -->
 
   <div class='deedInput clearfix'>
-    <input type='text' id='deedEmail' placeholder='Email (optional)' class='box' />
+    <input type='text' id='deedEmail' placeholder='Email (optional)' class='box' tabindex='4' />
     <div class='deedError'></div>
     <div class='formInfo'>
       <p>If there is an email associated with this good deed, you can enter it here.</p>
-    </div>
-  </div>
+    </div> <!-- end formInfo -->
+  </div> <!-- end deedInput -->
 
   <div class='deedInput clearfix'>
-    <input type='text' id='deedUrl' placeholder='URL (optional)' class='box' />
+    <input type='text' id='deedUrl' placeholder='URL (optional)' class='box' tabindex='5' />
     <div class='deedError'></div>
     <div class='formInfo'>
       <p>If there is a website associated with this good deed, you can enter it here.</p>
-    </div>
-  </div>
+    </div> <!-- end formInfo -->
+  </div> <!-- end deedInput -->
 
   <div class='deedInput clearfix'>
-    <input type='text' id='deedLocation' placeholder='Zip Code (optional)' class='box' maxlength='5' />
+    <input type='text' id='deedLocation' placeholder='Zip Code (optional)' class='box' maxlength='5' tabindex='6' />
     <div class='deedError'></div>
     <div class='formInfo'>
       <p>If this good deed is location-specific, you can enter the zip code here.</p>
-    </div>
-  </div>
+    </div> <!-- end formInfo -->
+  </div> <!-- end deedInput -->
 
   <div class='newDeedButtons'>
-    <p class='button' id='submitDeed'>Submit Deed</p>
-    <p class='button' id='cancel'>Cancel</p>
-  </div>
-</div>
+    <p class='button' id='submitDeed' tabindex='7' >Submit Deed</p>
+    <p class='button' id='cancel' tabindex='8' >Cancel</p>
+  </div> <!-- end newDeedButtons -->
+</div> <!-- end deedInputInfo -->
+
+<div class='addCanvas'></div>
 
 

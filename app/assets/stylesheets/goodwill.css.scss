@@ -49,7 +49,7 @@ a {
   color: inherit;
 }
 
-a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back, .submitPost, .deedClickable, .leftArrow, .rightArrow, .featuredStart, .addDeedLink {
+a, button, .postComplete, .startThread, .currentDeed, .changeDeed, .googleContacts, .invite, .updatePost, .accept, .decline, .upVote, .downVote, .deedEntry, .next, .prev, .listNav, .back, .submitPost, .deedClickable, .leftArrow, .rightArrow, .featuredStart, .addDeedLink, #deedPicture, .cancel, .crop {
   cursor: pointer;
 }
 
@@ -497,8 +497,46 @@ li {
 
 .deedImage {
   width: 22%;
-  background: #F3F3FB;
   float: left;
+}
+
+.deedImage img {
+  width: 100%;
+  border: 1px solid #d6d6d6;
+}
+
+.imageDeedErrors {
+  margin-top: 10px;
+  width: 100%;
+  color: red;
+  text-align: left;
+  padding-left: 5px;
+}
+
+.upload {
+  margin-top: 10px;
+}
+
+#deedPicture {
+  width: 100%;
+}
+
+.dimensions {
+  width: 100%;
+  text-align: left;
+  padding-left: 2px;
+}
+
+.dimensions p:nth-child(odd) {
+  margin-top: 10px;
+}
+
+.dimensions p:nth-child(even) {
+  margin-top: 5px;
+}
+
+.times {
+  font-size: 10px;
 }
 
 .deedInputInfo {
@@ -506,31 +544,27 @@ li {
   width: 73%;
   margin-left: 5%;
   text-align: left;
-}
-
-.upload {
-  overflow: hidden;
-  display: inline-block;
   position: relative;
 }
 
-.uploadButton  {
-  margin-top: 0;
-}
-
-#deedPicture {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  opacity: 0;
-}
-
 .pictureCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
+  border: 1px solid black;
   z-index: 2000;
+  margin: auto;
+}
+
+.cropButtons {
+  width: 100%;
+}
+
+.crop, .cancel {
+  margin: 10px;
+  display: inline-block;
+}
+
+.addCanvas {
+  width: 100%;
+  display: none;
 }
 
 .deedInput {
