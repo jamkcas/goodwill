@@ -1,21 +1,45 @@
 <header class='modalHeader'>
-  <h3>Please select a deed or cause to commit to:</h3>
+  <h3>Please select a deed or cause to commit to</h3>
 </header> <!-- end modalHeader -->
 
 <div class='modalMain'>
   <div class='entryDetails'></div>
 
   <nav class='deedNav clearfix'>
-    <ul class='listTypes'>
+    <ul class='listTypes clearfix'>
       <li class='listNav donations active' data-type='donation'>Donations</li>
       <li class='listNav services' data-type='service'>Services</li>
       <li class='listNav localCause' data-type='local'>Local Causes</li>
-    </ul>
+    </ul> <!-- end listTypes -->
 
-    <p class='addDeedModal'>Don't like these deeds? <span class='addDeedLink'>Add your own!</span></p>
+    <div class='searchResults'>
+      <p class='searchKeywords'></p>
+      <p class='clearResults'>Clear Search <span>x</span></p>
+    </div> <!-- end searchResults -->
+
+
+    <input type='text' id='search' placeholder='Search for a good deed' />
+
+    <div class='filterContents'>
+      <div class='filterWindow clearfix'>
+        <p class='filterResult'>Filter</p>
+        <p class='filter'>{<p class='searchButton'>L</p></p>
+      </div> <!-- end filterWindow -->
+
+      <ul class='filterOptions'>
+        <li class='allOption selected'><p>All</p></li>
+        <li class='donationOption'><p>Donations</p></li>
+        <li class='serviceOption'><p>Services</p></li>
+        <li class='localOption'><p>Local</p></li>
+      </ul> <!-- end filterOptions -->
+    </div>
   </nav> <!-- end deedNav -->
 
   <div class='lists'>
     <ul class='list clearfix'></ul>
   </div> <!-- end localList -->
+
+  <footer class='modalFooter clearfix'>
+    <p class='addDeedModal'>Don't like these deeds? <span class='addDeedLink'>Add your own!</span></p>
+  </footer> <!-- end modalFooter -->
 </div> <!-- end modalMain -->

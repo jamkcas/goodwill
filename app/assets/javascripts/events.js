@@ -223,6 +223,71 @@ var assignEvents = function() {
     showChoices();
   });
 
+  // Event to show search filter options when hovering on the filter options arrow
+  $('.overlayWindow').on('mouseenter', '.filter', function() {
+    showOptions();
+  });
+
+  // Event to show search filter options when hovering on the options menu
+  $('.overlayWindow').on('mouseenter', '.filterOptions', function() {
+    showOptions();
+  });
+
+  // Event to hide search filter options when no longer hovering on the filter options arrow
+  $('.overlayWindow').on('mouseleave', '.filter', function() {
+    hideOptions();
+  });
+
+  // Event to hide search filter options when no longer hovering on the options menu
+  $('.overlayWindow').on('mouseleave', '.filterOptions', function() {
+    hideOptions();
+  });
+
+  // Event for when an option is selected from the menu
+  $('.overlayWindow').on('click', '.filterOptions li', function() {
+    // Setting the Filter window to the currently selected option
+    var selection = $(this).children()[0].innerText;
+    $('.filterResult')[0].textContent = selection;
+    // Setting the current option to selected state and removing selected state from all the rest
+    $('.filterOptions li').removeClass('selected');
+    $(this).addClass('selected');
+
+    // If there is a search value then a new search query is made with the newly selected option
+    if($('#search').val() != '') {
+      deedCounter = 0;
+      results = [];
+      var pattern = $('#search').val();
+      getSearchResults(pattern);
+    }
+    hideOptions();
+  });
+
+  // Event for tracking the user input as they type
+  $('.overlayWindow').on('keyup', '#search', function() {
+    // If there is value after user presses a key then the clear function is called
+    if($('#search').val() === '') {
+      clearSearchResults();
+    } else {
+      // If there is a value then a search query is made with the search parameters from the currently selected filter
+      deedCounter = 0;
+      results = [];
+      var pattern = $('#search').val();
+      getSearchResults(pattern);
+      // The searchResults dialog is shown
+      $('.searchResults').show();
+    }
+  });
+
+  // Event for clearing the search results when the clear results button is pressed
+  $('.overlayWindow').on('click', '.clearResults', function() {
+    // Clearing the search value and filter window, resetting the search filter default to all, and running the clearSearchResults function to reset the default deed list
+    $('#search').val('');
+    $('.filterResult')[0].textContent = 'Filter';
+    $('.filterOptions li').removeClass('selected');
+    $('.allOption').addClass('selected');
+    clearSearchResults();
+  });
+
   // Event for paginating deeds
   $('.overlayWindow').on('click', '.paginate', function() {
     // Grabbing the current button
@@ -235,8 +300,10 @@ var assignEvents = function() {
           populate(deeds[0], deedCounter, deedCounter + 8, 'd');
         } else if(button.hasClass('s')) {
           populate(deeds[1], deedCounter, deedCounter + 8, 's');
-        } else {
+        } else if(button.hasClass('l')) {
           populate(deeds[2], deedCounter, deedCounter + 8, 'l');
+        } else {
+          populate(results, deedCounter, deedCounter + 8, 'r');
         }
       } else {
         // Populating the list with the previous 8 messages and fading them in
@@ -244,8 +311,10 @@ var assignEvents = function() {
           populate(deeds[0], deedCounter - 16, deedCounter - 8, 'd');
         } else if(button.hasClass('s')) {
           populate(deeds[1], deedCounter - 16, deedCounter - 8, 's');
-        } else {
+        } else if(button.hasClass('l')) {
           populate(deeds[2], deedCounter - 16, deedCounter - 8, 'l');
+        } else {
+          populate(results, deedCounter - 16, deedCounter - 8, 'r');
         }
       }
     });
@@ -293,6 +362,7 @@ var assignEvents = function() {
       $('.modalHeader').hide();
       $('.deedNav').hide();
       $('.lists').hide();
+      $('.modalFooter').hide();
       // Shrinking the modal size for the details display
       modalSize(0.5);
       // Showing deed details
@@ -311,6 +381,7 @@ var assignEvents = function() {
     $('.modalHeader').show();
     $('.deedNav').show();
     $('.lists').show();
+    $('.modalFooter').show();
   })
 
   // Event for when a person first starts a post or changes to a new one
@@ -602,7 +673,6 @@ var assignEvents = function() {
           category: category
         }
       }).done(function(data) {
-        console.log(data)
         hideModal();
       });
     } else {

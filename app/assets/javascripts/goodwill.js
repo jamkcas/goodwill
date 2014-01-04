@@ -2,7 +2,7 @@
 /******* Google variables *******/
 /********************************/
 
-var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1;
+var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1, results = [];
 
 /************************************/
 /******* Google map functions *******/

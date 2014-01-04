@@ -1,11 +1,14 @@
 <li class='featuredCause' data-id='<%= data.deed.id %>'>
-  <header class='localHeader'>
+  <header class='localHeader clearfix'>
     <% if(data.deed.category === 'local') { %>
       <h4>Featured Local Cause</h4>
     <% } else if(data.deed.deed_type === 'donation') { %>
       <h4>Featured Donation</h4>
     <% } else { %>
       <h4>Featured Service</h4>
+    <% } %>
+    <% if(data.deed.location) { %>
+      <p><%= data.deed.location %></p>
     <% } %>
   </header> <!-- end localHeader -->
 

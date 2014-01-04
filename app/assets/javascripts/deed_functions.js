@@ -43,6 +43,77 @@ var emptyPage = function() {
   $('.suggestedDeeds').empty();
 }
 
+// Function to show search filter options on hover
+var showOptions = function() {
+  $('.filterOptions').css('padding', '5px 0');
+  $('.filterOptions').css('height', '100px');
+  $('.filterOptions').css('border-bottom', '1px solid #E8EAEB');
+};
+
+// Function to hide search filter options when no longer hovering
+var hideOptions = function() {
+  $('.filterOptions').css('padding', '0');
+  $('.filterOptions').css('height', '0');
+  $('.filterOptions').css('border-bottom', 'none');
+};
+
+// Function for clearing the search results and repopulating the suggested deeds list
+var clearSearchResults = function() {
+  // Resetting the deed counter and results array
+  deedCounter = 0;
+  results = [];
+  // Showing the deed category nav and hiding the search result dialog
+  $('.listTypes').show();
+  $('.searchResults').hide();
+  // Repopulating the deeds list with the default deeds
+  populate(deeds[0], deedCounter, deedCounter + 8, 'd');
+};
+
+// Function for finding and setting the deed that macth the search results
+var getSearchResults = function(pattern) {
+  var searchDeeds;
+  // Setting the deeds to be searched based on the filter selected
+  if($('.allOption').hasClass('selected')) {
+    searchDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
+  } else if($('.donationOption').hasClass('selected')) {
+    searchDeeds = deeds[0];
+  } else if($('.serviceOption').hasClass('selected')) {
+    searchDeeds = deeds[1];
+  } else {
+    searchDeeds = deeds[2];
+  }
+
+  // Searching the deed titles for the entered search parameters based on the filter applied
+  _.each(searchDeeds, function(d) {
+    // Setting the title to lowercase to avoid case sensitivity
+    var title = d.deed.title.toLowerCase();
+    // If the deed title contains the search parameter the deed is pushed into the results array
+    if(title.match(pattern)) {
+      results.push(d);
+    }
+  });
+
+  // Populating the list with the results array
+  populate(results, deedCounter, deedCounter + 8, 'r');
+
+  // Hiding the list nav and showing the results dialog
+  $('.listTypes').hide();
+  // If there is no results, then a no message result is shown. Otherwise a 'search for results...' message is shown. Both messages are limited to 25 characters for the search term display
+  if(results.length === 0) {
+    if(pattern.length > 25) {
+      $('.searchKeywords')[0].textContent = 'No results found for "' + pattern.slice(0, 25) + '..."';
+    } else {
+      $('.searchKeywords')[0].textContent = 'No results found for "' + pattern + '"';
+    }
+  } else {
+    if(pattern.length > 25) {
+      $('.searchKeywords')[0].textContent = 'Search results for "' + pattern.slice(0, 25) + '..."';
+    } else {
+      $('.searchKeywords')[0].textContent = 'Search results for "' + pattern + '"';
+    }
+  }
+};
+
 
 /********************************/
 /******* Canvas functions *******/
@@ -447,10 +518,10 @@ var populate = function(data, start, end, type) {
   $('.prev').remove();
   // Adding pagination buttons only if needed. Adding a type class for identifying which category the click event uses to populate the list when clicked
   if(data.length - end > 1) {
-    $('.lists').append('<p class="paginate next ' + type + '">Next</p>');
+    $('.modalFooter').append('<p class="paginate next ' + type + '">Next</p>');
   }
   if(start > 0) {
-    $('.lists').append('<p class="paginate prev ' + type + '">Previous</p>');
+    $('.modalFooter').append('<p class="paginate prev ' + type + '">Previous</p>');
   }
   // Setting the deedCounter to the last index position, only if the modal is open
   if($('.overlay').css('visibility') === 'visible') {
@@ -554,7 +625,9 @@ var refreshVoteTotals = function(category) {
     // Resetting the deeds list to an empty array
     deeds = [];
     // Setting the deed counter so the current pages deeds will be displayed on refresh
-    deedCounter = deedCounter - 8;
+    if(deedCounter > 0) {
+      deedCounter = deedCounter - 8;
+    }
     // Refreshing the deeds list with the new vote calculated as well as the current page the user is on
     populatePage(modalLists, category);
   }

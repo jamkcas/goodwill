@@ -128,6 +128,8 @@ var showChoices = function() {
 
   // Getting all the deeds from the db
   populatePage(modalLists, 'donation');
+
+  $('.searchResults').hide();
   showModal();
 };
 
