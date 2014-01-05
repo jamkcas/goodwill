@@ -2,7 +2,7 @@
 /******* Google variables *******/
 /********************************/
 
-var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1, results = [];
+var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1, results = [], zip = '';
 
 /************************************/
 /******* Google map functions *******/
@@ -97,6 +97,19 @@ var worldMapPoints = function() {
   });
 };
 
+ function getAddress(latlng) {
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+          var zip_index = results[0].address_components.length - 1;
+          zip = results[0].address_components[zip_index].long_name;
+          console.log(zip)
+        }
+      }
+    });
+  }
+
 // Creating an intial map
 var mapInit = function() {
   if(navigator.geolocation) {
@@ -110,8 +123,11 @@ var mapInit = function() {
     map = new google.maps.Map($('#map-canvas')[0], mapOptions);
     // Getting the user's current location and centering the map to it and zooming in
     navigator.geolocation.getCurrentPosition(function(position) {
-      map.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
+      var current_loc = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      map.setCenter(current_loc);
       map.setZoom(10);
+      getAddress(current_loc);
+
     });
     // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
     if(gon.logged_in === true) {

@@ -756,9 +756,12 @@ var assignEvents = function() {
 
   // Event to add input picture to the picture canvas window for cropping
   $('.overlayWindow').on('change', '#deedPicture', function() {
-    // Adding and displaying the picture canvas
-    var template = JST['templates/picture_canvas'];
-    $('.addCanvas').append(template);
+    // If the canvas doesnt exist the canvas is added and displayed
+    if(!($('.addCanvas').children().length > 0)) {
+      // Adding and displaying the picture canvas
+      var template = JST['templates/picture_canvas'];
+      $('.addCanvas').append(template);
+    }
 
     // Attaching the inputted file to the canvas
     loadImage();
@@ -782,6 +785,7 @@ var assignEvents = function() {
     // Destroying the canvas
     $('.addCanvas').empty();
     $('.addCanvas').css('display', 'none');
+    modalSize(0.7);
   });
 
   // Event to remove the button when image is successfully uploaded and cropped

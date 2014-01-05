@@ -152,6 +152,12 @@ var loadImage = function() {
   }
 
   var imageLoaded = function() {
+    // Grabbing the canvas
+    canvas = document.getElementById("panel");
+    // Setting the context of the canvas
+    ctx = canvas.getContext("2d")
+    // Creating a new selection
+    theSelection = new Selection(0, 0, 325, 183);
     // Checking if there are any errors
     if(errors.length > 0) {
       // Clearing the uploaded file value
@@ -173,25 +179,24 @@ var loadImage = function() {
           $('.maxH').css('color', 'red');
         }
       });
-      // Emptying the canvas
-      $('.addCanvas').empty();
     } else {
       // Displaying the canvas
       $('.addCanvas').css('display', 'block');
       // Increasing modal size if the image is bigger than the current modal size
-      if(img.width > 819) {
+      if(img.width > 740 && img.width <= 860) {
+        modalSize(0.8);
+      }
+      if(img.width > 860) {
         modalSize(0.9);
       }
-      // Grabbing the canvas and setting its' dimensions
-      canvas = document.getElementById("panel");
+
+      // Setting canvas dimensions
       canvas.width = img.width;
       canvas.height = img.height;
-      // Setting the context of the canvas
-      ctx = canvas.getContext("2d");
-      // Creating a new selection
-      theSelection = new Selection(0, 0, 325, 183);
+
       // Draw the canvas
       drawScene();
+
       // Hiding the deed details to only show the canvas
       $('.deedInputInfo').hide();
       $('.deedImage').hide();
@@ -329,6 +334,7 @@ var loadImage = function() {
     $('.newDeedHeader').show();
     $('.addCanvas').empty();
     $('.addCanvas').css('display', 'none');
+    modalSize(0.7);
   });
 
   var drawScene = function() {
