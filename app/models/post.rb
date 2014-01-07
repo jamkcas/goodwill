@@ -1,5 +1,5 @@
 class Post < ActiveRecord::Base
-  attr_accessible :complete, :content, :deed_id, :picture, :thread_id, :title, :user_id, :lat, :lon
+  attr_accessible :complete, :content, :deed_id, :picture, :thread_id, :title, :user_id, :lat, :lon, :anon
 
   belongs_to :user
   belongs_to :deed
@@ -58,9 +58,17 @@ class Post < ActiveRecord::Base
     # Creating a new array of post hashes adding the the poster's name to each hash
     new_posts = []
     posts.each do |p|
+      # Checking to see if poster posted as anonymous and setting the name and image accordingly
+      if p.anon
+        pic = '/anon.png'
+        name = 'Anonymous'
+      else
+        pic = p.user.profile_pic
+        name = p.user.name
+      end
       new_hash = {
-        name: p.user.name,
-        pic: p.user.profile_pic,
+        name: name,
+        pic: pic,
         title: p.title,
         content: p.content,
         lat: p.lat,
@@ -87,12 +95,15 @@ class Post < ActiveRecord::Base
     # Getting the new title and content if given
     content = params[:details] unless params[:details] == ''
     title = params[:title] unless params[:title] == ''
+    anon = params[:anon]
 
     # Fetching the post to update
     post = Post.find(id)
     # Updating the content only if title and content were given
     post.update_attributes(title: title) if title
     post.update_attributes(content: content) if content
+    # Updating user anonymous status if needed
+    post.update_attributes(anon: anon) if anon
     # Updating the user's location
     post.update_attributes(lat: params[:lat]) if params[:lat]
     post.update_attributes(lon: params[:lon]) if params[:lon]

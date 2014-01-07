@@ -47,7 +47,7 @@ var updateCurrent = function() {
 };
 
 // Update post as complete in db function
-var postAsComplete = function(current_id, title, details, type) {
+var postAsComplete = function(current_id, title, details, type, anon) {
   navigator.geolocation.getCurrentPosition(function(position) {
     initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
     $.ajax('/posts/finish_post/' + current_id, {
@@ -57,7 +57,8 @@ var postAsComplete = function(current_id, title, details, type) {
         details: details,
         lat: initialLocation.nb,
         lon: initialLocation.ob,
-        updateType: type
+        updateType: type,
+        anon: anon
       }
     }).done(function(data) {
       if(type === 'complete') {
@@ -77,12 +78,14 @@ var finishPost = function(current) {
   var title = $('#postTitle').val();
   // Getting the id of the current post
   var id = $('.currentDeed').data('id');
+  // Checking to see if the user wants to post as anonymous
+  var anon = $('#anon').is(':checked') ? true : false;
   // Creating and displaying a completed modal
   var template = JST['templates/thanks']({title: 'Thanks for participating!', msg: 'Congratulations on finishing your deed! Your post has been updated. You should feel good about yourself!'});
   $('.window').empty();
   $('.window').append(template);
   // Getting the user's current location then making an update to the db to complete the post
-  postAsComplete(id, title, details, 'complete');
+  postAsComplete(id, title, details, 'complete', anon);
   // Resetting the invite counter
   inviteCounter = 0;
 };

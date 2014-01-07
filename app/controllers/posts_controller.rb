@@ -42,7 +42,7 @@ class PostsController < ApplicationController
       # Updating the post if there is a current user
       post = Post.update_post(params)
       # Post to facebook unless updateType is 'invite'
-      Post.post_to_fb(post, current_user) if post.complete == true && params[:updateType] == 'complete' || params[:updateType] == 'post'
+      Post.post_to_fb(post, current_user) if post.complete == true && post.anon == false && params[:updateType] == 'complete' || params[:updateType] == 'post'
     end
 
     render text: 'ok'

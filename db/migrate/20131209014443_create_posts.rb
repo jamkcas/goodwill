@@ -10,6 +10,7 @@ class CreatePosts < ActiveRecord::Migration
       t.integer :deed_id
       t.float :lat
       t.float :lon
+      t.boolean :anon, default: false
 
       t.timestamps
     end

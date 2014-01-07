@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
     t.integer  "deed_id"
     t.float    "lat"
     t.float    "lon"
+    t.boolean  "anon",       :default => false
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
