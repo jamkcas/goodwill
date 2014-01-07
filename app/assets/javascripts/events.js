@@ -103,6 +103,11 @@ var assignEvents = function() {
     getDeed(id, 'current');
   });
 
+  // Event to close the Thank you message modal
+  $('.overlayWindow').on('click', '.closeFinished', function() {
+    hideModal();
+  });
+
 
   /*******************************/
   /******* Invite Handlers *******/
@@ -673,7 +678,10 @@ var assignEvents = function() {
           category: category
         }
       }).done(function(data) {
-        hideModal();
+        // Creating and displaying a completed modal
+        var template = JST['templates/thanks']({title: 'Thanks for your submission!', msg: 'Thanks for suggesting a new good deed for people to do. Hopefully someone will benefit because you took the time to create this suggestion!'});
+        $('.window').empty();
+        $('.window').append(template);
       });
     } else {
       // Event listener to reset the webkit animation name to nothing when the animation ends

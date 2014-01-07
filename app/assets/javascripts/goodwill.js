@@ -97,18 +97,18 @@ var worldMapPoints = function() {
   });
 };
 
- function getAddress(latlng) {
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'latLng': latlng}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        if (results[0]) {
-          var zip_index = results[0].address_components.length - 1;
-          zip = results[0].address_components[zip_index].long_name;
-          console.log(zip)
-        }
+function getAddress(latlng) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({'latLng': latlng}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results[0]) {
+        var zip_index = results[0].address_components.length - 1;
+        zip = results[0].address_components[zip_index].long_name;
+        console.log(zip)
       }
-    });
-  }
+    }
+  });
+}
 
 // Creating an intial map
 var mapInit = function() {
@@ -127,7 +127,6 @@ var mapInit = function() {
       map.setCenter(current_loc);
       map.setZoom(10);
       getAddress(current_loc);
-
     });
     // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
     if(gon.logged_in === true) {

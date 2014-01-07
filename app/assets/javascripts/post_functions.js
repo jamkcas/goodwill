@@ -77,8 +77,10 @@ var finishPost = function(current) {
   var title = $('#postTitle').val();
   // Getting the id of the current post
   var id = $('.currentDeed').data('id');
-  // Hiding the popup modal
-  hideModal();
+  // Creating and displaying a completed modal
+  var template = JST['templates/thanks']({title: 'Thanks for participating!', msg: 'Congratulations on finishing your deed! Your post has been updated. You should feel good about yourself!'});
+  $('.window').empty();
+  $('.window').append(template);
   // Getting the user's current location then making an update to the db to complete the post
   postAsComplete(id, title, details, 'complete');
   // Resetting the invite counter

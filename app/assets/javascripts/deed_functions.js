@@ -327,6 +327,7 @@ var loadImage = function() {
     });
   }
 
+  // Event to crop the photo
   $('.overlayWindow').on('click', '.crop', function(e) {
     getResults();
     $('.deedInputInfo').show();
