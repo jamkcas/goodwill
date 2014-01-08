@@ -6,3 +6,4 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+Deed.create(category: 'suggested', deed_type: 'service', title: "Errands",  description: "Run an errand for someone. Come on, who wouldn't like that done for themselves?", picture: '/errands.jpg', user_id: 1)
