@@ -76,17 +76,9 @@ var assignEvents = function() {
     showModal();
   });
 
-  $('.overlayWindow').on('click', '.updatePost', function(e) {
-    e.preventDefault();
-    // Clearing any existing errors
-    $('.postErrors').empty();
-    // Making sure at least one invite is sent
-    if(inviteCounter === 0) {
-      $('.postErrors').append('<p>Sorry! You must invite someone to complete your post. Thanks!</p>')
-    } else {
-      // Getting the current post and passing in a function to update the finished post
-      fetchCurrent('null', finishPost);
-    }
+  $('.overlayWindow').on('click', '.updatePost', function() {
+    // Getting the current post and passing in a function to update the finished post
+    fetchCurrent('null', finishPost);
   });
 
   // Puts an event on the signin button so it can be auto-triggered (for when joining a thread via email link)
@@ -124,39 +116,37 @@ var assignEvents = function() {
     // Getting the id of the contact, as well as the id of the thread the user is currently on
     var friend_id = current.data('id');
     var thread_id = $('.currentDeed').data('id');
-    // Setting initail calue of addedEmail
+    // Setting initail value of addedEmail
     var email = 'null';
-
-    // Grabbing the email if one is entered manually
-    if(current.hasClass('addedEmail')) {
-      email = $('#email').val();
-    }
+    var valid = true;
 
     // Clearing error messages
-    $('.postErrors').empty();
+    $('.inviteMessage').empty();
 
-    // Hiding the invite options and giving the initial invite message
-    $('.inviteMessage').append('<h4 class="sent">Invite being sent!</h4>');
-    $('.inviteWindow').hide();
+    // Grabbing the email if one is entered manually and checking for valid format
+    if(current.hasClass('addedEmail')) {
+      if(checkEmail($('#email').val())) {
+        email = $('#email').val();
+      } else {
+        $('.inviteMessage').append('<h4 class="sentError">Invalid email address!</h4>');
+        valid = false;
+      }
+    }
 
-    /**************************************************************/
-    /*** This is for the multi-person invite flow in the future ***/
-    /**************************************************************/
+    if(valid) {
+      // Giving the initial invite message
+      $('.inviteMessage').append('<h4 class="sent">Invite being sent!</h4>');
 
-    /**************************************************************/
-    /*** This is for the multi-person invite flow in the future ***/
-    /**************************************************************/
+      // Making the ajax call to send the email for this person
+      $.ajax('/posts/invite', {
+        data: {
+                thread: thread_id,
+                friend: friend_id,
+                email: email
+              }
+      }).done(function(data) {
+        // If the invite is successfully sent a post is made to update post as complete
 
-    // Making the ajax call to send the email for this person
-    $.ajax('/posts/invite', {
-      data: {
-              thread: thread_id,
-              friend: friend_id,
-              email: email
-            }
-    }).done(function(data) {
-      // If the invite is successfully sent a post is made to update post as complete
-      if(data === 'ok') {
         // Getting the values of the form fields in case the user changed these values
         var details = $('#deedDetails').val();
         var title = $('#postTitle').val();
@@ -164,13 +154,24 @@ var assignEvents = function() {
         var current_id = $('.modalMain').data('id');
         // Making call to update the post as complete, but NOT post to facebook
         postAsComplete(current_id, title, details, 'invite');
-        // Removing the invite button and adding a sent message once the invitation was sent (need to check for success still)
-        $('.sent').text('Invite sent!');
-        // current.remove(); /*** Also for multi person invites in the future ***/
+        // Clearing invite messages
+        $('.inviteMessage').empty();
+
+        // Hiding the invite dialog and showing the submit post dialog with new titles
+        $('.completeHeader h1').text('Invite Sent!');
+        $('.completeHeader h4').text('You can now edit your post to Goodwill Tracker or feel free to leave it as it is.');
+        $('.inviteWindow').hide();
+        $('.nextScreen').show();
+        $('#postTitle').focus();
+
         // Updating the counter so the post can be submitted as complete to facebook
         inviteCounter += 1;
-      }
-    });
+      }).fail(function() {
+        // If invite fails then error message is shown
+        $('.inviteMessage').empty();
+        $('.inviteMessage').append('<h4 class="sentError">Sorry, your invite was not able to be sent.</h4>');
+      });
+    }
   });
 
 
@@ -201,8 +202,8 @@ var assignEvents = function() {
           method: 'POST',
           data: {
                   data_id: id,
-                  lat: initialLocation.nb,
-                  lon: initialLocation.ob
+                  lat: initialLocation.b,
+                  lon: initialLocation.d
                 }
         }).done(function(data) {
           // The modal is hidden
@@ -398,8 +399,8 @@ var assignEvents = function() {
         method: 'POST',
         data: {
                 data_id: id,
-                lat: initialLocation.nb,
-                lon: initialLocation.ob
+                lat: initialLocation.b,
+                lon: initialLocation.d
               }
       }).done(function(data) {
 

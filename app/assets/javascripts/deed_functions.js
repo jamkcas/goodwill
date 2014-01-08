@@ -540,6 +540,9 @@ var populate = function(data, start, end, type) {
 var modalLists = function(data, type) {
   // Assigning the global variables with the deeds for use while modal is open
   deeds = data;
+  // Setting the local causes to only be those that are local
+  var locals = _.where(deeds[2], {loc: zip});
+  deeds[2] = locals;
   // Resetting the counter if navigating from email link
   if(gon.queue === true) {
     deedCounter = 0;
@@ -550,7 +553,9 @@ var modalLists = function(data, type) {
   } else if(type === 'service') {
     populate(deeds[1], deedCounter, deedCounter + 8, 's');
   } else {
-    populate(deeds[2], deedCounter, deedCounter + 8, 's');
+    if(deeds[2].length > 0) {
+      populate(deeds[2], deedCounter, deedCounter + 8, 's');
+    }
   }
   // Emptying all the lists
   emptyPage();
@@ -572,11 +577,15 @@ var featuredLists = function(data) {
   // Sorting all the deed based on popularity
   var sortedDonation = sortVotes(data[0])[0];
   var sortedService = sortVotes(data[1])[0];
-  var sortedLocal = sortVotes(data[2])[0];
+  if(data[2].length > 0) {
+    var sortedLocal = sortVotes(data[2])[0];
+  }
   // Emptying old featured when refreshing
   $('.featuredLocal').empty();
   // Adding the featured deeds to the list
-  addFeaturedToList(sortedLocal, '.featuredLocal');
+  if(sortedLocal) {
+    addFeaturedToList(sortedLocal, '.featuredLocal');
+  }
   addFeaturedToList(sortedDonation, '.featuredLocal');
   addFeaturedToList(sortedService, '.featuredLocal');
   // Hiding the deeds initially
@@ -601,8 +610,10 @@ var showActiveFeature = function() {
     showFeatured.addClass('activeFeatured');
     current.removeClass('activeFeatured');
   });
+  // Setting the max length of the array index
+  var max = $('.featuredLocal li').length;
   // Adjustig the featuredIndex
-  if(featuredIndex === 3) {
+  if(featuredIndex === max) {
     featuredIndex = 1
   } else {
     featuredIndex += 1;

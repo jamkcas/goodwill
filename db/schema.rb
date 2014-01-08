@@ -76,9 +76,10 @@ ActiveRecord::Schema.define(:version => 20131212194539) do
     t.datetime "oauth_expires_at"
     t.string   "google_token"
     t.string   "profile_pic"
-    t.boolean  "new_user"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.boolean  "new_user",         :default => true
+    t.string   "location"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "votes", :force => true do |t|

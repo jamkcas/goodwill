@@ -118,24 +118,22 @@ class Post < ActiveRecord::Base
   #####################################
 
   def self.post_to_fb(post, current_user)
-    p ('* ') * 50
-    p 'did it'
 
     # Posts to facebook the current users good deed
-    # api = Koala::Facebook::API.new(current_user.oauth_token)
-    # # Need to change the link for production
-    # api.put_wall_post("Just completed the good deed: #{post.title}\n#{post.content}!", {
-    #   "name" => "Goodwill Tracking",
-    #  "link"=> "http://goodwill-tracker.herokuapp.com",
-    #  "caption"=> "Keep the kindness going!",
-    #  "description"=> "Visit Goodwill Tracking and commit to doing a good deed today!"}, "me")
+    api = Koala::Facebook::API.new(current_user.oauth_token)
+    # Need to change the link for production
+    api.put_wall_post("Just completed the good deed: #{post.title}\n#{post.content}!", {
+      "name" => "Goodwill Tracking",
+     "link"=> "http://goodwill-tracker.herokuapp.com",
+     "caption"=> "Keep the kindness going!",
+     "description"=> "Visit Goodwill Tracking and commit to doing a good deed today!"}, "me")
   end
 
   #################################
   ##### Method to send invite #####
   #################################
 
-  def self.send_invite(params)
+  def self.send_invite(params, current_user)
     thread = Post.find(params[:thread]).thread_id
 
     if params[:email] == 'null'
@@ -144,8 +142,9 @@ class Post < ActiveRecord::Base
       friend = params[:email]
     end
 
+    name = current_user.name
     # Send email passing in the user's current thread and the contact's email
-    invite = InviteMailer.invite(friend, thread).deliver
+    invite = InviteMailer.invite(friend, thread, name).deliver
   end
 
   ###################################

@@ -32,8 +32,8 @@ class Deed < ActiveRecord::Base
       new_deed = {}
       # Adding the deed details
       new_deed[:deed] = d
-      # new_deed[:category] = d.category
-      # new_deed[:type] = d.deed_type
+      # Adding location if the deed has a location
+      new_deed[:loc] = d.location if d.location
       # Initializing the user's vote status to true if there is no current user to prevent voting options from being shown, otherwise setting vote status to false
       new_deed[:voted] = current_user ? false : true
       # Initializing vote counts
@@ -52,7 +52,6 @@ class Deed < ActiveRecord::Base
       new_deed[:down] = down
       # Setting the total score
       new_deed[:score] = up - down
-      # new_deed[:logged] = current_user ? 'in' : 'out'
       # Shoving the new deed into the proper category
       if d.category == 'suggested' && d.deed_type == 'donation'
         donations.push new_deed

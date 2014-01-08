@@ -32,7 +32,7 @@ class PostsController < ApplicationController
 
   def invite_friend
     # Call method to send out the invitation
-    Post.send_invite(params)
+    Post.send_invite(params, current_user)
     # Need to figure out error message handling for action mailer
     render text: 'ok'
   end
@@ -54,14 +54,6 @@ class PostsController < ApplicationController
 
     redirect_to root_path
   end
-
-  # def populate_map
-  #   # Getting all the locations with the current thread id
-  #   locations = get_locations if current_user
-
-  #   # Returning the locations
-  #   render json: locations
-  # end
 
   def reset_queue
     clear_queue

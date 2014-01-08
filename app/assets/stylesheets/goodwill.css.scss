@@ -714,7 +714,8 @@ li {
 
 .completeHeader h4 {
   font-size: 18px;
-  margin-top: 15px;
+  padding: 25px 10px 10px 10px;
+  text-align: left;
 }
 
 .dark {
@@ -730,6 +731,8 @@ li {
 #postTitle {
   width: 100%;
   padding: 3px;
+  border: 1px solid #E8EAEB;
+  color: #838488;
 }
 
 .postTitle {
@@ -742,6 +745,8 @@ li {
   height: 50px;
   overflow: auto;
   padding: 3px;
+  border: 1px solid #E8EAEB;
+  color: #838488
 }
 
 .updatePost {
@@ -840,9 +845,14 @@ li {
   margin: 2px 0 6px 0;
   width: 100%;
   padding: 3px;
+  border: 1px solid #E8EAEB;
 }
 
-.postErrors, .error {
+.enterInvite {
+  margin-bottom: 10px;
+}
+
+.postErrors, .error, .sentError {
   color: red;
 }
 

@@ -104,7 +104,13 @@ function getAddress(latlng) {
       if (results[0]) {
         var zip_index = results[0].address_components.length - 1;
         zip = results[0].address_components[zip_index].long_name;
-        console.log(zip)
+        populatePage(modalLists);
+        $.ajax('/users/location', {
+          method: 'PUT',
+          data: {
+            location: zip
+          }
+        });
       }
     }
   });
@@ -126,7 +132,9 @@ var mapInit = function() {
       var current_loc = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       map.setCenter(current_loc);
       map.setZoom(10);
-      getAddress(current_loc);
+      if(gon.loc === null) {
+        getAddress(current_loc);
+      }
     });
     // Initiating the get current function if a current user exists, to get current thread and its corresponding locations to place markers on map and connect them
     if(gon.logged_in === true) {
@@ -193,13 +201,15 @@ var capitalize = function(word) {
 $(function() {
   // Assigning event handlers
   assignEvents();
-
   // Add the map to the map canvas
   google.maps.event.addDomListener(window, 'load', mapInit);
 
   // Setting the current thread
   if(gon.logged_in === true) {
     fetchCurrent('thread', setCurrent);
+    if(gon.loc != null) {
+      zip = gon.loc;
+    }
   }
 
   // If user follows a redirect link this will trigger sign-in/sign-up process

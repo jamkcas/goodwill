@@ -2,6 +2,7 @@ module GoodwillHelper
   def checkUser
     # Setting status of the current user
     gon.logged_in = true if current_user
+    gon.watch.loc = current_user.location if current_user
   end
 
   def checkQueue

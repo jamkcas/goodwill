@@ -18,6 +18,8 @@ GoodwillTracker::Application.routes.draw do
   resources :goodwill, only: :index
   resources :deeds, only: [:index, :show, :create]
 
+  put '/users/location', to: 'users#update_loc'
+
   # Posts controller routes
   get '/posts/current', to: 'posts#get_current'
   get '/posts/invite', to: 'posts#invite_friend'

@@ -6,6 +6,9 @@
 var makePostModal = function(currentDeed) {
   var template = JST['templates/post_complete']({current: currentDeed});
   $('.window').append(template);
+  // Hiding the next screen and the email invite message
+  $('.nextScreen').hide();
+  $('.enterInvite').hide();
 };
 
 // Setting current thread details or a button if not currently on a thread
@@ -55,8 +58,8 @@ var postAsComplete = function(current_id, title, details, type, anon) {
       data: {
         title: title,
         details: details,
-        lat: initialLocation.nb,
-        lon: initialLocation.ob,
+        lat: initialLocation.b,
+        lon: initialLocation.d,
         updateType: type,
         anon: anon
       }
@@ -66,6 +69,10 @@ var postAsComplete = function(current_id, title, details, type, anon) {
         $('.thread').empty();
         // Adding the start a new thread on the window
         updateCurrent();
+        // Update the recent post list
+        populatePosts();
+        // Repopulating the map
+        worldMapPoints();
       }
     });
   });
@@ -170,6 +177,9 @@ var setEmailSize = function() {
 var addContacts = function(data) {
   var template = JST['templates/contacts_entry']({contacts: data});
   $('.contactsList').append(template);
+  // Changing the invite messages
+  $('.contactsMessage').text('Invite from Google contacts');
+  $('.enterInvite').show();
 };
 
 // Function to fetch contacts after a google token request

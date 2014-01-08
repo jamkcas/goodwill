@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :google_token, :new_user
+  attr_accessible :google_token, :new_user, :location
 
   has_many :deeds
   has_many :posts
@@ -26,7 +26,6 @@ class User < ActiveRecord::Base
       user.oauth_token = auth.credentials.token
       user.oauth_expires_at = Time.at(auth.credentials.expires_at)
       user.profile_pic = auth.info.image
-      user.new_user = true
     end
   end
 end

@@ -9,42 +9,46 @@
   <div class='inviteMessage'></div>
 
   <div class='inviteWindow clearfix'>
-    <h4>Invite your friends to take part...</h4>
+    <h4 class='contactsMessage'>Invite your friends to take part...</h4>
     <div class='contacts'>
       <ul class='contactsList'></ul>
     </div> <!-- end contacts -->
 
     <div class='google'></div>
 
+    <p class='enterInvite'>Enter an email address</p>
+
     <div class='addEmail'>
-      <input type='text' id='email' placeholder='Type in an email...' />
+      <input type='text' id='email' placeholder='Type in an email...' autofocus />
       <p class='addedEmail invite button'>Invite</p>
     </div> <!-- end addEmail -->
   </div> <!-- end inviteWindow -->
 
-  <div class='detailsWindow clearfix'>
-    <div class='leftCol'>
-      <h5>Post Title:</h5>
-    </div> <!-- end leftCol -->
+  <div class='nextScreen'>
+    <div class='detailsWindow clearfix'>
+      <div class='leftCol'>
+        <h5>Post Title:</h5>
+      </div> <!-- end leftCol -->
 
-    <div class='rightCol postTitle'>
-      <input type='text' id='postTitle' value='<%= current.details.title %>' />
-    </div> <!-- end rightCol -->
+      <div class='rightCol postTitle'>
+        <input type='text' id='postTitle' value='<%= current.details.title %>' />
+      </div> <!-- end rightCol -->
 
-    <div class='leftCol'>
-      <h5>Post Description:</h5>
-    </div> <!-- end leftCol -->
+      <div class='leftCol'>
+        <h5>Post Description:</h5>
+      </div> <!-- end leftCol -->
 
-    <div class='rightCol'>
-      <textarea id='deedDetails'><%= current.details.description %></textarea>
-    </div> <!-- end rightCol-->
-  </div> <!-- end detailsWindow -->
+      <div class='rightCol'>
+        <textarea id='deedDetails'><%= current.details.description %></textarea>
+      </div> <!-- end rightCol-->
+    </div> <!-- end detailsWindow -->
 
-  <div class='postErrors'></div>
+    <div class='postErrors'></div>
 
-  <div class='postDone'>
-    <p class='button updatePost'>Submit Deed As Complete</p>
-  </div> <!-- end postDone -->
+    <div class='postDone'>
+      <p class='button updatePost'>Submit Deed As Complete</p>
+    </div> <!-- end postDone -->
 
-  <input type='checkbox' id='anon' /><p class='anon'>Post as anonymous</p>
+    <input type='checkbox' id='anon' /><p class='anon'>Post as anonymous</p>
+  </div>
 </div> <!-- end modalMain -->
