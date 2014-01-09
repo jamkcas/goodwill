@@ -65,6 +65,8 @@ var clearSearchResults = function() {
   // Showing the deed category nav and hiding the search result dialog
   $('.listTypes').show();
   $('.searchResults').hide();
+  $('.listNav').removeClass('active');
+  $('.donations').addClass('active');
   // Repopulating the deeds list with the default deeds
   populate(deeds[0], deedCounter, deedCounter + 8, 'd');
 };
