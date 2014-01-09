@@ -25,6 +25,10 @@ class ContactsController < ApplicationController
 
     # Capturing the access token provided in the response
     google = response['access_token']
+
+    p ('*') * 50
+    p current_user
+
     # Saving the current users access token to their account so they dont have to repeat this call again
     current_user.update_attributes(google_token: google)
 
