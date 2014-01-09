@@ -136,7 +136,7 @@ var assignEvents = function() {
     if(valid) {
       // Giving the initial invite message
       $('.inviteMessage').append('<h4 class="sent">Invite being sent!</h4>');
-
+      $('.inviteWindow').hide();
       // Making the ajax call to send the email for this person
       $.ajax('/posts/invite', {
         data: {
@@ -170,6 +170,7 @@ var assignEvents = function() {
         // If invite fails then error message is shown
         $('.inviteMessage').empty();
         $('.inviteMessage').append('<h4 class="sentError">Sorry, your invite was not able to be sent.</h4>');
+        $('.inviteWindow').show();
       });
     }
   });
