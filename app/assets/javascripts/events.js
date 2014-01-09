@@ -502,10 +502,10 @@ var assignEvents = function() {
     // Combining the deed list arrays to one list
     var totalDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
     // Setting the next deed
-    if(deedIndex + 5 > totalDeeds.length - 1) {
-      var deed = totalDeeds[0 + (deedIndex + 5) - (totalDeeds.length - 1)];
+    if(deedIndex + 6 > totalDeeds.length - 1) {
+      var deed = totalDeeds[0 + (deedIndex + 6) - (totalDeeds.length - 1)];
     } else {
-      var deed = totalDeeds[deedIndex + 5];
+      var deed = totalDeeds[deedIndex + 6];
     }
     // Cloning the deed, bringing it to the front, and positioning it so it can be animated
     var deedList = $('.suggestedDeeds').clone();
@@ -532,10 +532,10 @@ var assignEvents = function() {
     // Combining the deed list arrays to one list
     var totalDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
     // Setting the next deed
-    if(deedIndex - 1 < 0) {
-      var deed = totalDeeds[totalDeeds.length - 1];
+    if(deedIndex  < 0) {
+      var deed = totalDeeds[totalDeeds.length];
     } else {
-      var deed = totalDeeds[deedIndex];
+      var deed = totalDeeds[deedIndex - 1];
     }
     // Cloning the deed, bringing it to the front, and positioning it so it can be animated
     var deedList = $('.suggestedDeeds').clone();
