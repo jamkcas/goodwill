@@ -504,7 +504,7 @@ var assignEvents = function() {
     var totalDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
     // Setting the next deed
     if(deedIndex + 6 > totalDeeds.length - 1) {
-      var deed = totalDeeds[0 + (deedIndex + 6) - (totalDeeds.length - 1)];
+      var deed = totalDeeds[0 + (deedIndex + 5) - (totalDeeds.length - 1)];
     } else {
       var deed = totalDeeds[deedIndex + 6];
     }
@@ -533,8 +533,8 @@ var assignEvents = function() {
     // Combining the deed list arrays to one list
     var totalDeeds = deeds[0].concat(deeds[1]).concat(deeds[2]);
     // Setting the next deed
-    if(deedIndex  < 0) {
-      var deed = totalDeeds[totalDeeds.length];
+    if(deedIndex === 0) {
+      var deed = totalDeeds[totalDeeds.length - 1];
     } else {
       var deed = totalDeeds[deedIndex - 1];
     }
