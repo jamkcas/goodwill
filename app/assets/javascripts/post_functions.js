@@ -153,6 +153,7 @@ var showChoices = function() {
 // Function to populate the recent posts
 var populatePosts = function() {
   $.get('/posts/recent').done(function(data) {
+    $('.recentList').empty();
     _.each(data.slice(0, 5), function(post) {
       var template = JST['templates/recent_post']({ data: post });
       $('.recentList').append(template);
