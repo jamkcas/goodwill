@@ -19,6 +19,7 @@ GoodwillTracker::Application.routes.draw do
   resources :deeds, only: [:index, :show, :create]
 
   put '/users/location', to: 'users#update_loc'
+  put '/users/status', to: 'users#update_status'
 
   # Posts controller routes
   get '/posts/current', to: 'posts#get_current'

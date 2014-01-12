@@ -162,6 +162,87 @@ li {
 }
 
 
+/******************/
+/**** New User ****/
+/******************/
+
+.newUser {
+  background: #f1efe9;
+  margin-top: 3px;
+}
+
+.newUserHeader {
+  font-size: 28px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.newUserHeader h3 {
+  display: inline-block;
+}
+
+.clearInstructions {
+  float: right;
+  font-size: 16px;
+  display: inline-block;
+  color: $link;
+  cursor: pointer;
+}
+
+.newUserHeader span {
+  border-radius: 3px;
+  border: 1px solid $link;
+  padding: 0 4px;
+}
+
+.directions {
+  margin-bottom: 20px;
+}
+
+.directions li {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+.directions li:first-child {
+  padding-left: 20px;
+}
+
+.directions li:last-child {
+  padding-right: 20px;
+}
+
+.num {
+  display: inline;
+  float: left;
+}
+
+.spacer {
+  float: left;
+  display: inline;
+  width: 90%;
+  margin-left: 5px;
+}
+
+.instructionImage {
+  width: 80%;
+  margin: auto;
+}
+
+.odd {
+  margin-top: 20px;
+}
+
+.even {
+  margin-bottom: 20px;
+}
+
+.instructionImage img {
+  width: 100%;
+}
+
+
 /************************/
 /**** Current Thread ****/
 /************************/
@@ -267,7 +348,7 @@ li {
 }
 
 .recentContainer {
-  margin-bottom: 10px;
+  margin-bottom: 25px;
 }
 
 .recentEntry {

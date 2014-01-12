@@ -798,7 +798,20 @@ var assignEvents = function() {
     modalSize(0.7);
   });
 
-  // Event to remove the button when image is successfully uploaded and cropped
+
+  /*********************************/
+  /******* New User Handlers *******/
+  /*********************************/
+
+  $('.newUser').on('click', '.clearInstructions', function() {
+    $.ajax('/users/status', {
+      method: 'PUT',
+      data: {
+        ajax: 'This is an ajax request'
+      }
+    });
+    $('.newUser').empty();
+  });
 };
 
 

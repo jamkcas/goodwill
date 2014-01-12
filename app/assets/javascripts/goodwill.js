@@ -197,12 +197,28 @@ var capitalize = function(word) {
 /******* On load function *******/
 /********************************/
 
+var addInstructions = function() {
+  var template = JST['templates/new_user'];
+  $('.newUser').append(template);
+};
+
+
+
+/********************************/
+/******* On load function *******/
+/********************************/
+
 // Start of Javascript when page loads
 $(function() {
   // Assigning event handlers
   assignEvents();
   // Add the map to the map canvas
   google.maps.event.addDomListener(window, 'load', mapInit);
+
+  // Adding instructions if the user has a new user status
+  if(gon.new_user === true) {
+    addInstructions();
+  }
 
   // Setting the current thread
   if(gon.logged_in === true) {
