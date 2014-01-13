@@ -303,13 +303,13 @@ li {
 }
 
 .oldThreadList li, .backToCurrent {
-  padding: 5px 15px;
+  padding: 5px 20px;
+  cursor: pointer;
 }
 
 .oldThreadList li:hover {
   background: #8A8B8F;
   color: white;
-  cursor: pointer;
 }
 
 .activeThread {

@@ -196,8 +196,12 @@ class Post < ActiveRecord::Base
     threads = []
 
     posts.each do |p|
-      # Adding the thread id to the threads array
-      threads.push(p.thread_id)
+      # Adding the thread id and the date of completion for display to the threads array
+      post = {
+        thread_id: p.thread_id,
+        date: p.updated_at
+      }
+      threads.push(post)
     end
     # Returning the threads associated with this user
     threads
@@ -207,5 +211,23 @@ class Post < ActiveRecord::Base
     id = params[:thread_id]
     # Finding and returning all the thread_posts associated with the given thread id
     thread_posts = Post.find_all_by_thread_id(id)
+    new_thread_posts = []
+
+    thread_posts.each do |t|
+      # Adding the name of the person who completed it to each thread post
+      name = User.find(t.user_id).name
+      post = {
+        title: t.title,
+        description: t.content,
+        updated_at: t.updated_at,
+        name: name,
+        complete: t.complete,
+        lat: t.lat,
+        lon: t.lon
+      }
+      new_thread_posts.push(post)
+    end
+
+    new_thread_posts
   end
 end

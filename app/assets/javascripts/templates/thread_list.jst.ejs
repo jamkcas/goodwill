@@ -1,12 +1,13 @@
 <ul class='threadList'>
   <% if(lists.length > 0) { %>
     <% _.each(lists, function(l) { %>
-      <li data-id='<%= l %>'><%= l %></li>
+      <% var date = new Date(l.date).toDateString(); %>
+      <li data-id='<%= l.thread_id %>'><%= date %></li>
     <% }); %>
   <% } else { %>
     <li>You have no past threads</li>
   <% } %>
 </ul>
 <% if(lists.length > 0) { %>
-  <p class='backToCurrent'>Back to Current Thread</p>
+  <p class='backToCurrent'>Back to Current</p>
 <% } %>

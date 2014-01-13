@@ -187,7 +187,9 @@ var hideThreads = function() {
   $('.oldThreadList').delay(400).hide(0);
 };
 
-var getThreadPosts = function(thread_id) {
+var getThreadPosts = function(thread_id, title) {
+  // Setting the current map title
+  $('.currentHeader h3').text(title);
   $.ajax('/posts/thread_posts', {
     method: 'GET',
     data: {

@@ -836,16 +836,20 @@ var assignEvents = function() {
   // Event to populate map with an old thread
   $('.oldThreadList').on('click', '.threadList li', function() {
     var id = $(this).data('id');
+    // Getting the date to set as current map title
+    var title = $(this).text();
     // Clearing the current map points
     clearMarkers();
     // Mapping all the threads with this thread id
-    getThreadPosts(id);
+    getThreadPosts(id, title);
   });
 
   // Event to repopulate map with current thread markers
   $('.oldThreadList').on('click', '.backToCurrent', function() {
     // Clearing the current map points
     clearMarkers();
+    // Resetting the map title
+    $('.currentHeader h3').text('My Current Thread');
     // Showing the current thread markers
     $.ajax('/posts/current', {
       method: 'GET',

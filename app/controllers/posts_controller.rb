@@ -61,7 +61,7 @@ class PostsController < ApplicationController
   end
 
   def get_threads
-    # Getting all the thread_ids associated with this user
+    # Getting all the thread ids and their completion dates associated with this user
     threads = Post.fetch_threads(current_user) if current_user
 
     if params[:ajax]
