@@ -812,6 +812,50 @@ var assignEvents = function() {
     });
     $('.newUser').empty();
   });
+
+
+  /***********************************/
+  /******* Old Thread Handlers *******/
+  /***********************************/
+
+  // Event to show the old thread id list
+  $('.oldThreads h5').on('click', function() {
+    showThreads();
+  });
+
+  // Event to sustain the old thrread list display
+  $('.oldThreadList').on('mouseenter', function() {
+    showThreads();
+  });
+
+  // Event to hide the old thread list
+  $('.oldThreadList').on('mouseleave', function() {
+    hideThreads();
+  });
+
+  // Event to populate map with an old thread
+  $('.oldThreadList').on('click', '.threadList li', function() {
+    var id = $(this).data('id');
+    // Clearing the current map points
+    clearMarkers();
+    // Mapping all the threads with this thread id
+    getThreadPosts(id);
+  });
+
+  // Event to repopulate map with current thread markers
+  $('.oldThreadList').on('click', '.backToCurrent', function() {
+    // Clearing the current map points
+    clearMarkers();
+    // Showing the current thread markers
+    $.ajax('/posts/current', {
+      method: 'GET',
+      data: {
+              type: 'map',
+              ajax: 'This is an ajax request' // To prevent page from being displayed if not rendered by an ajax call
+            }
+    }).done(function(data) {
+      // Function to populate the current thread window and populate the map
+      drawLines(setLocations(data));
+    });
+  });
 };
-
-

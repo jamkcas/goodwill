@@ -146,6 +146,61 @@ var showChoices = function() {
 };
 
 
+/***********************************/
+/******* Old thread functons *******/
+/***********************************/
+
+var getThreads = function() {
+  $.ajax('/posts/threads', {
+    method: 'GET',
+    data: {
+      ajax: 'This is an ajax request'
+    }
+  }).done(function(data) {
+    var template = JST['templates/thread_list']({lists: data});
+    $('.oldThreadList').append(template);
+  });
+};
+
+// Function to show thread list
+var showThreads = function() {
+  $('.oldThreadList').show(0, function() {
+    $('.oldThreadList').css('padding', '10px 0');
+  if($('.threadList').children().length >= 4) {
+    $('.oldThreadList').css('height', '140px');
+  } else if($('.threadList').children().length === 3) {
+    $('.oldThreadList').css('height', '120px');
+  } else if($('.threadList').children().length === 2) {
+    $('.oldThreadList').css('height', '100px');
+  } else {
+    $('.oldThreadList').css('height', '70px');
+  }
+  $('.oldThreadList').css('border', '1px solid #838488');
+  });
+};
+
+// Function to hide thread list
+var hideThreads = function() {
+  $('.oldThreadList').css('padding', '0');
+  $('.oldThreadList').css('height', '0');
+  $('.oldThreadList').css('border-bottom', 'none');
+  $('.oldThreadList').delay(400).hide(0);
+};
+
+var getThreadPosts = function(thread_id) {
+  $.ajax('/posts/thread_posts', {
+    method: 'GET',
+    data: {
+      ajax: 'This is an ajax request',
+      thread_id: thread_id
+    }
+  }).done(function(data) {
+    // Drawing the map with new points
+    drawLines(setLocations(data, 'old'));
+  });
+};
+
+
 /************************************/
 /******* Recent post functons *******/
 /************************************/

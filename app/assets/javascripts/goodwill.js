@@ -1,8 +1,8 @@
 /********************************/
-/******* Google variables *******/
+/******* Global variables *******/
 /********************************/
 
-var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1, results = [], zip = '';
+var map, inviteCounter = 0, deedCounter = 0, deeds = [], deedIndex = 0, featuredIndex = 1, results = [], zip = '', paths = [], markers = [];
 
 /************************************/
 /******* Google map functions *******/
@@ -16,8 +16,20 @@ var placeMarker = function(loc, data, mapIcon) {
     title: data.name,
     icon: mapIcon
   });
+  markers.push(marker);
   var msg = makeMessage(data);
   attachMessage(marker, msg);
+};
+
+var clearMarkers = function() {
+  _.each(markers, function(m) {
+    m.setMap(null);
+  });
+  _.each(paths, function(p) {
+    p.setMap(null);
+  });
+  markers = [];
+  paths = [];
 };
 
 // Formats the info to be displayed in the info window on the map
@@ -38,12 +50,17 @@ function attachMessage(marker, msg) {
 }
 
 // Creating locations and placing markers
-var setLocations = function(data) {
+var setLocations = function(data, location_type) {
   var mapIcon;
   // array for locations for polylines
   var locations = [];
+  if(location_type === 'old') {
+    locs = data;
+  } else {
+    locs = data.posts;
+  }
   // Setting the map icon based on whether deed is current or already completed
-  _.each(data.posts, function(d) {
+  _.each(locs, function(d) {
     if(d.complete === true) {
       mapIcon = 'marker_heart.png';
     } else {
@@ -68,7 +85,7 @@ var drawLines = function(locations) {
     // Grabbing the 2 corresponding locs to connect
     var locs = [locations[i], locations[i + 1]];
     // Setting the path for the polyline
-    var paths = new google.maps.Polyline({
+    var path = new google.maps.Polyline({
       path: locs,
       strokeColor: "#de00ff",
       geodesic: true,
@@ -76,8 +93,9 @@ var drawLines = function(locations) {
       strokeWeight: 3
     });
     // Adding the polyline to the map
-    paths.setMap(map);
-    i += 1
+    path.setMap(map);
+    paths.push(path);
+    i += 1;
   }
 };
 
@@ -193,9 +211,9 @@ var capitalize = function(word) {
 }
 
 
-/********************************/
-/******* On load function *******/
-/********************************/
+/*************************************/
+/******* Instructions function *******/
+/*************************************/
 
 var addInstructions = function() {
   var template = JST['templates/new_user'];
@@ -220,12 +238,15 @@ $(function() {
     addInstructions();
   }
 
+  $('.oldThreadList').hide();
+
   // Setting the current thread
   if(gon.logged_in === true) {
     fetchCurrent('thread', setCurrent);
     if(gon.loc != null) {
       zip = gon.loc;
     }
+    getThreads();
   }
 
   // If user follows a redirect link this will trigger sign-in/sign-up process

@@ -179,7 +179,6 @@ class Post < ActiveRecord::Base
     post
   end
 
-
   def self.fetch_recent
     # Finding all the completed posts
     posts = Post.where(complete: true)
@@ -187,5 +186,26 @@ class Post < ActiveRecord::Base
     all_posts = new_posts(posts)
     # Returning the posts sorted by time completed
     sorted = (all_posts.sort_by { |post| post[:updated_at] }).reverse
+  end
+
+  def self.fetch_threads(current_user)
+    # Getting all the post thread_ids associated with the current_user
+    posts = current_user.posts
+
+    # Collecting all the posts associated with each thread id
+    threads = []
+
+    posts.each do |p|
+      # Adding the thread id to the threads array
+      threads.push(p.thread_id)
+    end
+    # Returning the threads associated with this user
+    threads
+  end
+
+  def self.fetch_thread_posts(params)
+    id = params[:thread_id]
+    # Finding and returning all the thread_posts associated with the given thread id
+    thread_posts = Post.find_all_by_thread_id(id)
   end
 end

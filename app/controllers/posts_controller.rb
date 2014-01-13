@@ -59,4 +59,26 @@ class PostsController < ApplicationController
     clear_queue
     render text: 'ok'
   end
+
+  def get_threads
+    # Getting all the thread_ids associated with this user
+    threads = Post.fetch_threads(current_user) if current_user
+
+    if params[:ajax]
+      render json: threads
+    else
+      render text: 'Access Forbidden'
+    end
+  end
+
+  def get_thread_posts
+    # Getting all the posts associated with the thread_id
+    thread_posts = Post.fetch_thread_posts(params) if params[:thread_id] && current_user
+
+    if params[:ajax]
+      render json: thread_posts
+    else
+      render text: 'Access Forbidden'
+    end
+  end
 end

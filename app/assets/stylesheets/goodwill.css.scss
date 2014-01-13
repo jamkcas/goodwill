@@ -271,16 +271,53 @@ li {
   margin-left: 10px;
 }
 
-.currentHeader h5 {
+.oldThreads {
   float: right;
   font-size: 14px;
   line-height: 14px;
   margin-right: 10px;
   margin-top: 4px;
+  position: relative;
 }
 
-.currentHeader h5 span {
+.oldThreads span {
   font-family: 'web_symbolsregular';
+  border: 1px solid #838488;
+  padding: 2px 5px;
+}
+
+.oldThreadList {
+  position: absolute;
+  right: 0px;
+  top: 16px;
+  background: white;
+  z-index: 10;
+  height: 0;
+  overflow: scroll;
+  border-top: 1px solid #838488;
+  border-left: 1px solid #838488;
+  border-right: 1px solid #838488;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+.oldThreadList li, .backToCurrent {
+  padding: 5px 15px;
+}
+
+.oldThreadList li:hover {
+  background: #8A8B8F;
+  color: white;
+  cursor: pointer;
+}
+
+.activeThread {
+  background: #E8EAEB;
+}
+
+.backToCurrent {
+  color: $link;
 }
 
 .currentDeed {
@@ -1085,7 +1122,7 @@ li {
 .filterOptions li:hover {
   background: #8A8B8F;
   color: white;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .searchButton {
