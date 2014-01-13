@@ -134,7 +134,8 @@ var queueReset = function() {
 var showChoices = function() {
   var template = JST['templates/new_post'];
   $('.window').append(template);
-
+  // Loading image for when deeds are loading
+  $('.list').append('<img src="loading-animation-1.gif" class="loading">');
   // Setting the modal size and positioning
   modalSize(0.7);
 

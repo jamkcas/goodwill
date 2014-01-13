@@ -579,6 +579,7 @@ var assignEvents = function() {
     var template = JST['templates/add_deed'];
     $('.window').append(template);
     modalSize(0.7);
+
     showModal();
   });
 

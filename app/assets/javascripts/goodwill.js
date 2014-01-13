@@ -210,7 +210,7 @@ var showModal = function() {
   $('.overlay').css('visibility', 'visible');
   // Getting the position for the modal to move too based on window position
   var top = $(window).scrollTop() - 50;
-  $('.overlayWindow').css('max-height', ($(window).height() * 0.9))
+  $('.overlayWindow').css('max-height', ($(window).height() * 0.9));
   $('.overlayWindow').fadeIn(500).animate({'top': top}, {duration: 300, queue: false});
 };
 
