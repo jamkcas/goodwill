@@ -14,7 +14,8 @@ var placeMarker = function(loc, data, mapIcon) {
     position: loc,
     map: map,
     title: data.name,
-    icon: mapIcon
+    icon: mapIcon,
+    animation: google.maps.Animation.DROP
   });
   markers.push(marker);
   var msg = makeMessage(data);
@@ -64,7 +65,7 @@ var setLocations = function(data, location_type) {
     if(d.complete === true) {
       mapIcon = 'marker_heart.png';
     } else {
-      mapIcon = 'current_marker_heart2.png';
+      mapIcon = 'current_marker_heart.png';
     }
     // Setting the location where deed was or is being done
     var location = new google.maps.LatLng(d.lat, d.lon)
@@ -90,7 +91,7 @@ var drawLines = function(locations) {
       strokeColor: "#de00ff",
       geodesic: true,
       strokeOpacity: 1.0,
-      strokeWeight: 3
+      strokeWeight: 2
     });
     // Adding the polyline to the map
     path.setMap(map);
@@ -138,13 +139,49 @@ function getAddress(latlng) {
 var mapInit = function() {
   if(navigator.geolocation) {
     browserSupportFlag = true;
+
+    // Creating the style for the map
+    var styles = [
+      {
+        stylers: [
+          { hue: "#a1c4ff" },
+          { saturation: -20 }
+        ]
+      },{
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [
+          { lightness: 100 },
+          { visibility: "simplified"}
+        ]
+      },{
+        featureType: "road",
+        elementType: "labels",
+        stylers: [
+          { visibility: "off" }
+        ]
+      }
+    ];
+
+
+    // Creating the styled map called Goodwill Map, using the styles array
+    var goodwillMap = new google.maps.StyledMapType(styles, {name: 'Goodwill_Map'});
+
     var initialLocation = new google.maps.LatLng(38.959409, -96.855469);
     var mapOptions = {
       center: initialLocation,
-      zoom: 4
+      zoom: 4,
+      mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+    }
     };
     // Creating a new map and displaying the whole US
     map = new google.maps.Map($('#map-canvas')[0], mapOptions);
+
+    //Setting the goodwill map to dispaly
+    map.mapTypes.set('map_style', goodwillMap);
+    map.setMapTypeId('map_style');
+
     // Getting the user's current location and centering the map to it and zooming in
     navigator.geolocation.getCurrentPosition(function(position) {
       var current_loc = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
