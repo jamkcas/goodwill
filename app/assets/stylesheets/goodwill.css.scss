@@ -250,7 +250,7 @@ li {
 .thread {
   background: #F3F3FB;
   padding: 10px;
-  height: 85px;
+  text-align: center;
 }
 
 .currentThread {
@@ -321,23 +321,25 @@ li {
 }
 
 .currentDeed {
-  display: block;
   color: #5b656f;
+  width: 100%;
 }
 
 .currentDeed h3 {
   font-size: 30px;
   line-height: 30px;
   display: inline-block;
+  float: left;
+  clear: left;
 }
 
 .currentDeed h5 {
   font-size: 16px;
   line-height: 16px;
+  float: left;
 }
 
-.currentdetails {
-  display: inline;
+.currentDetails {
   float: left;
 }
 
@@ -364,7 +366,7 @@ li {
 .changeDeed {
   display: inline-block;
   float: left;
-  clear: both;
+  clear: left;
 }
 
 
