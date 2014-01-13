@@ -189,8 +189,6 @@ var hideThreads = function() {
 };
 
 var getThreadPosts = function(thread_id, title) {
-  // Setting the current map title
-  $('.currentHeader h3').text(title);
   $.ajax('/posts/thread_posts', {
     method: 'GET',
     data: {
@@ -198,8 +196,12 @@ var getThreadPosts = function(thread_id, title) {
       thread_id: thread_id
     }
   }).done(function(data) {
-    // Drawing the map with new points
-    drawLines(setLocations(data, 'old'));
+    if(data.length > 0) {
+      // Setting the current map title
+      $('.currentHeader h3').text(title);
+      // Drawing the map with new points
+      drawLines(setLocations(data, 'old'));
+    }
   });
 };
 
