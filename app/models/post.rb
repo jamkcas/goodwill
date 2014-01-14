@@ -218,7 +218,7 @@ class Post < ActiveRecord::Base
       name = User.find(t.user_id).name
       post = {
         title: t.title,
-        description: t.content,
+        content: t.content,
         updated_at: t.updated_at,
         name: name,
         complete: t.complete,
