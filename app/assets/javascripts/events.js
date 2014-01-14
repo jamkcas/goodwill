@@ -443,7 +443,9 @@ var assignEvents = function() {
     var vote_id = $(this).data('id');
     // Setting the vote instance variable for use in the ajax callback
     var current_vote = $(this);
-    var category = $('.active').data('type');
+    var category = current_vote.data('category');
+    var deedType = current_vote.data('type');
+
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
@@ -462,7 +464,7 @@ var assignEvents = function() {
       current_vote.removeClass('upVote');
       current_vote.next().removeClass('downVote');
       // Refreshing the votes on the page
-      refreshVoteTotals(category);
+      refreshVoteTotals(category, deedType, vote_id, 1);
     });
   });
 
@@ -471,7 +473,9 @@ var assignEvents = function() {
     var vote_id = $(this).data('id');
     // Setting the vote instance varaible for use in the ajax callback
     var current_vote = $(this);
-    var category = $('.active').data('type');
+    var category = current_vote.data('category');
+    var deedType = current_vote.data('type');
+
     $.ajax('/votes/save_vote', {
       method: 'POST',
       data: {
@@ -490,7 +494,7 @@ var assignEvents = function() {
       current_vote.prev().removeClass('upVote');
       current_vote.removeClass('downVote');
       // Refreshing the votes on the page
-      refreshVoteTotals(category);
+      refreshVoteTotals(category, deedType, vote_id, -1);
     });
   });
 

@@ -439,6 +439,12 @@ li {
   background: #F3F3FB;
   height: 320px;
   position: relative;
+  text-align: center;
+}
+
+.featuredLoading {
+  width: 20px;
+  margin-top: 160px;
 }
 
 .localHeader {
@@ -567,6 +573,12 @@ li {
 
 .suggestedDeeds {
   width: 100%;
+  text-align: center;
+}
+
+.suggestedLoading {
+  width: 20px;
+  margin-top: 60px;
 }
 
 .suggestedDeeds li {

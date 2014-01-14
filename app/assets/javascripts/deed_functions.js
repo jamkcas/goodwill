@@ -505,6 +505,9 @@ var invalid = function(elem, message) {
 
 // Fetching all the deeds and using the passed in the proper list populating function
 var populatePage = function(list, type) {
+  // Loading animations
+  $('.suggestedDeeds').append('<img class="suggestedLoading" src="loading-animation-1.gif">');
+  $('.featuredLocal').append('<img class="featuredLoading" src="loading-animation-1.gif">');
   // Getting all the deeds from the db
   $.get('/deeds').done(function(data) {
     list(data, type);
@@ -651,17 +654,48 @@ var suggestedList = function(data) {
   });
 };
 
-// Vote refresh function
-var refreshVoteTotals = function(category) {
-  if(deeds.length > 0) {
-    // Resetting the deeds list to an empty array
-    deeds = [];
-    // Setting the deed counter so the current pages deeds will be displayed on refresh
-    if(deedCounter > 0) {
-      deedCounter = deedCounter - 8;
+// Function to change the score both on the page and in the global deeds variable
+var changeScore = function(index, score, id) {
+  _.each(deeds[index], function(d) {
+    if(id === d.deed.id) {
+      d.voted = true;
+      d.score += score;
+      if(score === 1) {
+        d.up += 1;
+      } else {
+        d.down += 1
+      }
     }
-    // Refreshing the deeds list with the new vote calculated as well as the current page the user is on
-    populatePage(modalLists, category);
+  });
+};
+
+// Vote refresh function
+var refreshVoteTotals = function(category, deedType, id, score) {
+  // Updating score based on the category and type of the deed
+  if(category === 'suggested' && deedType === 'donation') {
+    changeScore(0, score, id);
+  } else if(category === 'suggested' && deedType === 'service') {
+    changeScore(1, score, id);
+  } else {
+    changeScore(2, score, id);
+  }
+  // If the vote is done in the modal window, this function updates the deed on the page if it is currently visible
+  if($('.overlay').css('visibility') === 'visible') {
+    // Getting all the displayed deeds
+    var suggested = $('.suggestedDeeds li');
+    _.each(suggested, function(s) {
+      if(parseInt(s.firstElementChild.getAttribute('data-id')) === id) {
+        // Removing the upvote, downVote classes so user cant vote again
+        s.firstElementChild.childNodes[5].childNodes[3].classList.remove('upVote');
+        s.firstElementChild.childNodes[5].childNodes[7].classList.remove('downVote');
+        // Changing the vote totals on the page
+        if(score === 1) {
+          s.firstElementChild.childNodes[5].childNodes[3].firstElementChild.innerHTML = parseInt(s.firstElementChild.childNodes[5].childNodes[3].firstElementChild.innerHTML) + score;
+        } else {
+          s.firstElementChild.childNodes[5].childNodes[7].firstElementChild.innerHTML = parseInt(s.firstElementChild.childNodes[5].childNodes[3].firstElementChild.innerHTML) + Math.abs(score);
+        }
+      }
+    });
   }
 };
 

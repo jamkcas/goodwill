@@ -25,14 +25,14 @@
     <div class='voteTotals'>
       <!-- Only shows up vote button if the current user hasnt voted on it yet -->
       <% if(data.voted === false) { %>
-        <p class='vote upVote' data-id='<%= data.deed.id %>' data-type='<%= data.deed.category %>'>Like: <span><%= data.up %></span></p>
+        <p class='vote upVote' data-id='<%= data.deed.id %>' data-category='<%= data.deed.category %>' data-type='<%= data.deed.deed_type %>'>Like: <span><%= data.up %></span></p>
       <% } else { %>
         <p class='vote'>Like: <span><%= data.up %></span></p>
       <% }; %>
 
       <!-- Only shows down vote button if the current user hasnt voted on it yet -->
       <% if(data.voted === false) { %>
-        <p class='vote downVote' data-id='<%= data.deed.id %>' data-type='<%= data.deed.category %>'>Dislike: <span><%= data.down %></span></p>
+        <p class='vote downVote' data-id='<%= data.deed.id %>' data-category='<%= data.deed.category %>' data-type='<%= data.deed.deed_type %>'>Dislike: <span><%= data.down %></span></p>
       <% } else { %>
         <p class='vote'>Dislike: <span><%= data.down %></span></p>
       <% }; %>
