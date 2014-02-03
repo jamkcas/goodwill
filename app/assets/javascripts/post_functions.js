@@ -151,6 +151,7 @@ var showChoices = function() {
 /******* Old thread functons *******/
 /***********************************/
 
+// Function to get previous deed threads
 var getThreads = function() {
   $.ajax('/posts/threads', {
     method: 'GET',
@@ -188,6 +189,7 @@ var hideThreads = function() {
   $('.oldThreadList').delay(400).hide(0);
 };
 
+// Function to get posts of previous deed threads
 var getThreadPosts = function(thread_id, title) {
   $.ajax('/posts/thread_posts', {
     method: 'GET',
